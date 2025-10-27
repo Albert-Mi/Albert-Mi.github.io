@@ -1,9 +1,13 @@
-# Pages placed under these sections will be shown on homepage and archive page.
-mainSections = ["post"]
-rssFullContent = true
-favicon = "/favicon.png"
+# === params.toml (Stack v3 兼容；三栏：左侧栏 + 中栏 + 右侧栏) ===
 
-layout = "three-columns"
+# 首页/归档展示的主栏目
+mainSections = ["post"]
+
+# RSS 全文
+rssFullContent = true
+
+# 站点图标
+favicon = "/favicon.png"
 
 [footer]
 since = 2020
@@ -13,8 +17,8 @@ customText = ""
 published = "Jan 02, 2006"
 lastUpdated = "Jan 02, 2006 15:04 MST"
 
+# -------- 左侧栏（作者信息/导航） --------
 [sidebar]
-enable = true
 emoji = "🍥"
 subtitle = "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
 
@@ -23,20 +27,41 @@ enabled = true
 local = true
 src = "img/avatar.png"
 
-[widgets]
-enable = true
-home = ["search", "archives", "categories", "tag-cloud"]
-page = ["toc"]
-
+# -------- 文章区设置 --------
 [article]
 headingAnchor = false
-math = false
+math = false          # 需要数学公式时再开 true
 readingTime = true
 
 [article.license]
 enabled = true
 default = "Licensed under CC BY-NC-SA 4.0"
 
+# -------- 右侧栏 Widgets：主页用 --------
+## 注意：Stack v3 采用 array-of-tables 语法；不要写成 [widgets] 或 enable=true
+[[widgets.homepage]]
+type = "search"
+
+[[widgets.homepage]]
+type = "archives"
+  [widgets.homepage.params]
+  limit = 5
+
+[[widgets.homepage]]
+type = "categories"
+  [widgets.homepage.params]
+  limit = 10
+
+[[widgets.homepage]]
+type = "tag-cloud"
+  [widgets.homepage.params]
+  limit = 10
+
+# -------- 右侧栏 Widgets：文章页/列表页用 --------
+[[widgets.page]]
+type = "toc"
+
+# -------- Open Graph / Twitter --------
 [opengraph.twitter]
 site = ""
 card = "summary_large_image"
@@ -46,16 +71,88 @@ enabled = false
 local = false
 src = ""
 
+# -------- 颜色/主题 --------
 [colorScheme]
 toggle = true
 default = "auto"
 
+# -------- 图片处理 --------
 [imageProcessing.cover]
 enabled = true
 
 [imageProcessing.content]
 enabled = true
 
+# -------- 评论（按需开启一种即可）--------
 [comments]
 enabled = true
 provider = "disqus"
+
+[comments.disqusjs]
+shortname = ""
+apiUrl = ""
+apiKey = ""
+admin = ""
+adminLabel = ""
+
+[comments.utterances]
+repo = ""
+issueTerm = "pathname"
+label = ""
+
+[comments.remark42]
+host = ""
+site = ""
+locale = ""
+
+[comments.vssue]
+platform = ""
+owner = ""
+repo = ""
+clientId = ""
+clientSecret = ""
+autoCreateIssue = false
+
+[comments.waline]
+serverURL = ""
+lang = ""
+visitor = ""
+avatar = ""
+emoji = ["https://cdn.jsdelivr.net/gh/walinejs/emojis/weibo"]
+requiredMeta = ["name", "email", "url"]
+placeholder = ""
+  [comments.waline.locale]
+  admin = "Admin"
+
+[comments.twikoo]
+envId = ""
+region = ""
+path = ""
+lang = ""
+
+[comments.cactus]
+defaultHomeserverUrl = "https://matrix.cactus.chat:8448"
+serverName = "cactus.chat"
+siteName = ""
+
+[comments.giscus]
+repo = ""
+repoID = ""
+category = ""
+categoryID = ""
+mapping = ""
+lightTheme = ""
+darkTheme = ""
+reactionsEnabled = 1
+emitMetadata = 0
+
+[comments.gitalk]
+owner = ""
+admin = ""
+repo = ""
+clientID = ""
+clientSecret = ""
+
+[comments.cusdis]
+host = ""
+id = ""
