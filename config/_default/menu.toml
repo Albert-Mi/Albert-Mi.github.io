@@ -76,14 +76,3 @@ weight = 4
 
 [main.params]
 icon = "search"
-
-# 外部链接页（例如友情链接）
-[[main]]
-identifier = "links"
-name = "Links"
-url = "/links/"
-weight = 5
-
-[main.params]
-icon = "link"
-
