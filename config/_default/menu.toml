@@ -10,7 +10,7 @@
 [[social]]
 identifier = "github"
 name = "GitHub"
-url = "https://github.com/CaiJimmy/hugo-theme-stack"
+url = "https://albert-mi.github.io/"
 
 [social.params]
 icon = "brand-github"
@@ -22,3 +22,11 @@ url = "https://twitter.com"
 
 [social.params]
 icon = "brand-twitter"
+
+[[Overleaf]]
+identifier = "Overleaf"
+name = "Overleaf"
+url = "https://www.overleaf.com/project"
+
+[social.params]
+icon = "brand-Overleaf"
