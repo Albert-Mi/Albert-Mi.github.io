@@ -7,13 +7,22 @@
 #icon = "home"
 #newtab = true
 
+# =============================================
+# Hugo Theme Stack - Left Sidebar Menu Config
+# Author: Albert-Mi
+# =============================================
+
+###########################
+# 1. Social Icons Section #
+###########################
+
 [[social]]
 identifier = "github"
 name = "GitHub"
-url = "https://albert-mi.github.io/"
-  
+url = "https://github.com/Albert-Mi"
+
 [social.params]
-icon = "brand-github"
+icon = "brand-github"   # 官方 GitHub 图标
 
 [[social]]
 identifier = "twitter"
@@ -21,4 +30,84 @@ name = "Twitter"
 url = "https://twitter.com"
 
 [social.params]
-icon = "brand-twitter"
+icon = "brand-twitter"  # 官方 Twitter 图标
+
+[[social]]
+identifier = "linkedin"
+name = "LinkedIn"
+url = "https://www.linkedin.com/in/albert-mi"
+
+[social.params]
+icon = "brand-linkedin"  # 官方 LinkedIn 图标
+
+[[social]]
+identifier = "scholar"
+name = "Google Scholar"
+url = "https://scholar.google.com/"
+
+[social.params]
+icon = "graduation-cap"  # 学术图标（Lucide）
+
+[[social]]
+identifier = "overleaf"
+name = "Overleaf"
+url = "https://www.overleaf.com/"
+
+[social.params]
+icon = "book-open-check"  # Overleaf 用类似“文档”图标
+
+
+##########################
+# 2. Main Menu Section   #
+##########################
+
+# 首页
+[[main]]
+identifier = "home"
+name = "Home"
+url = "/"
+weight = 1
+
+[main.params]
+icon = "home"
+
+# 书签页（Bookmarks）
+[[main]]
+identifier = "bookmarks"
+name = "Bookmarks"
+url = "/bookmarks/"
+weight = 2
+
+[main.params]
+icon = "bookmark"
+
+# 归档页
+[[main]]
+identifier = "archives"
+name = "Archives"
+url = "/archives/"
+weight = 3
+
+[main.params]
+icon = "archive"
+
+# 搜索页
+[[main]]
+identifier = "search"
+name = "Search"
+url = "/search/"
+weight = 4
+
+[main.params]
+icon = "search"
+
+# 外部链接页（例如友情链接）
+[[main]]
+identifier = "links"
+name = "Links"
+url = "/links/"
+weight = 5
+
+[main.params]
+icon = "link"
+
