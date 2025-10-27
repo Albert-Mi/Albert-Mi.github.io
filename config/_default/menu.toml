@@ -38,14 +38,14 @@ icon = "brand-twitter"  # 官方 Twitter 图标
 ##########################
 
 # 首页
-[[main]]
-identifier = "home"
-name = "Home"
-url = "/"
-weight = 1
+# [[main]]
+# identifier = "home"
+# name = "Home"
+# url = "/"
+# weight = 1
 
-[main.params]
-icon = "home"
+# [main.params]
+# icon = "home"
 
 # 书签页（Bookmarks）
 [[main]]
