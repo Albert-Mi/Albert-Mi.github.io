@@ -11,22 +11,19 @@
 identifier = "github"
 name = "GitHub"
 url = "https://albert-mi.github.io/"
-
-[social.params]
-icon = "brand-github"
+  [social.params]
+  icon = "brand-github"
 
 [[social]]
 identifier = "twitter"
 name = "Twitter"
 url = "https://twitter.com"
+  [social.params]
+  icon = "brand-twitter"
 
-[social.params]
-icon = "brand-twitter"
-
-[[Overleaf]]
-identifier = "Overleaf"
+[[social]]
+identifier = "overleaf"
 name = "Overleaf"
 url = "https://www.overleaf.com/project"
-
-[social.params]
-icon = "brand-Overleaf"
+  [social.params]
+  icon = "brand-overleaf"
