@@ -11,22 +11,6 @@ draft: false
   --transition-speed: 0.25s;
 }
 
-#search-box {
-  width: 90%;
-  max-width: 600px;
-  margin: 0 auto 20px auto;
-  display: block;
-  padding: 10px 16px;
-  border: 1.5px solid #ccc;
-  border-radius: 10px;
-  font-size: 1rem;
-  transition: box-shadow 0.2s;
-}
-#search-box:focus {
-  outline: none;
-  box-shadow: 0 0 6px rgba(53,126,221,0.4);
-}
-
 .bookmark-section {
   border: 1.5px solid rgba(255,255,255,0.25);
   border-radius: 14px;
@@ -116,7 +100,6 @@ button.add-btn {
 </style>
 
 <div>
-  <input id="search-box" type="text" placeholder="🔍 Search bookmarks by name or domain...">
   <button class="add-btn" onclick="addBookmark()">+ Add Bookmark</button>
   <div id="bookmark-container"></div>
 </div>
@@ -130,7 +113,7 @@ const categories = [
   { key: "tools", name: "工具 / Tools" }
 ];
 
-// ======== 高清 favicon 加载 ========
+// ======== 高清 favicon 加载逻辑 ========
 function getIcon(url) {
   try {
     const domain = new URL(url).hostname;
@@ -171,8 +154,8 @@ async function fetchBookmarks() {
   }));
 }
 
-// ======== 渲染函数（带搜索过滤） ========
-async function render(filterText = "") {
+// ======== 渲染函数 ========
+async function render() {
   const container = document.getElementById("bookmark-container");
   container.innerHTML = "";
 
@@ -182,16 +165,9 @@ async function render(filterText = "") {
     localStorage.setItem("bookmarksData", JSON.stringify(bookmarks));
   }
 
-  const filtered = filterText
-    ? bookmarks.filter(b =>
-        b.title.toLowerCase().includes(filterText.toLowerCase()) ||
-        b.url.toLowerCase().includes(filterText.toLowerCase())
-      )
-    : bookmarks;
-
   const grouped = {};
   categories.forEach(cat => grouped[cat.key] = []);
-  filtered.forEach(b => grouped[classify(b.title, b.url)].push(b));
+  bookmarks.forEach(b => grouped[classify(b.title, b.url)].push(b));
 
   for (const cat of categories) {
     const section = document.createElement("div");
@@ -273,7 +249,7 @@ async function render(filterText = "") {
   }
 }
 
-// ======== 拖拽辅助函数 ========
+// ======== 计算拖拽插入位置 ========
 function getDragAfterElement(container, x, y) {
   const draggableElements = [...container.querySelectorAll(".bookmark-item:not(.dragging):not(.placeholder)")];
   return draggableElements.reduce(
@@ -287,7 +263,7 @@ function getDragAfterElement(container, x, y) {
   ).element;
 }
 
-// ======== 操作函数 ========
+// ======== 基础操作 ========
 function editBookmark(b) {
   const newName = prompt("Edit name:", b.title);
   const newUrl = prompt("Edit URL:", b.url);
@@ -297,7 +273,7 @@ function editBookmark(b) {
     if (idx !== -1) {
       bookmarks[idx] = { title: newName, url: newUrl };
       localStorage.setItem("bookmarksData", JSON.stringify(bookmarks));
-      render(document.getElementById("search-box").value);
+      render();
     }
   }
 }
@@ -307,7 +283,7 @@ function deleteBookmark(b) {
     let bookmarks = JSON.parse(localStorage.getItem("bookmarksData"));
     bookmarks = bookmarks.filter(x => x.url !== b.url);
     localStorage.setItem("bookmarksData", JSON.stringify(bookmarks));
-    render(document.getElementById("search-box").value);
+    render();
   }
 }
 
@@ -318,7 +294,7 @@ function addBookmark() {
     let bookmarks = JSON.parse(localStorage.getItem("bookmarksData")) || [];
     bookmarks.push({ title: name, url: url });
     localStorage.setItem("bookmarksData", JSON.stringify(bookmarks));
-    render(document.getElementById("search-box").value);
+    render();
   }
 }
 
@@ -327,14 +303,8 @@ function moveBookmark(bookmark, newCategory) {
   bookmarks = bookmarks.filter(b => b.url !== bookmark.url);
   bookmarks.push(bookmark);
   localStorage.setItem("bookmarksData", JSON.stringify(bookmarks));
-  render(document.getElementById("search-box").value);
+  render();
 }
-
-// ======== 实时搜索事件绑定 ========
-document.getElementById("search-box").addEventListener("input", (e) => {
-  const text = e.target.value;
-  render(text);
-});
 
 render();
 </script>
