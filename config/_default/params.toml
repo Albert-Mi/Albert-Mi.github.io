@@ -27,7 +27,7 @@ avatarShape = "circle"                 # "circle" 或 "square"
 [sidebar.avatar]
 enabled = true
 local = true
-src = "img/smail.png"
+src = "img/Portrait.png"
 
 # -------- 文章区设置 --------
 [article]
