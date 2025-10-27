@@ -32,30 +32,6 @@ url = "https://twitter.com"
 [social.params]
 icon = "brand-twitter"  # 官方 Twitter 图标
 
-[[social]]
-identifier = "linkedin"
-name = "LinkedIn"
-url = "https://www.linkedin.com/in/albert-mi"
-
-[social.params]
-icon = "brand-linkedin"  # 官方 LinkedIn 图标
-
-[[social]]
-identifier = "scholar"
-name = "Google Scholar"
-url = "https://scholar.google.com/"
-
-[social.params]
-icon = "graduation-cap"  # 学术图标（Lucide）
-
-[[social]]
-identifier = "overleaf"
-name = "Overleaf"
-url = "https://www.overleaf.com/"
-
-[social.params]
-icon = "book-open-check"  # Overleaf 用类似“文档”图标
-
 
 ##########################
 # 2. Main Menu Section   #
