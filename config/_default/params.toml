@@ -73,6 +73,10 @@ enabled = false
 local = false
 src = ""
 
+# -------- 数学公式 --------
+[params.math]
+enable = true
+
 # -------- 颜色/主题 --------
 [colorScheme]
 toggle = true
