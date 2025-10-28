@@ -13,10 +13,10 @@ image: cover.png   # 可选：放一张配图，路径在同文件夹内
 ## Bosonic Modes
 
 Bosonic quantum error–correcting codes live in the infinite–dimensional Hilbert space of a single harmonic oscillator
-(microwave cavity, optical mode, phononic resonator, \emph{etc.}).
+(microwave cavity, optical mode, phononic resonator, $\emph{etc.}$).
 Throughout these notes
-1.  $\hat a$ and $\hat a^{\dagger}$ are the \emph{annihilation} and \emph{creation} operators, obeying $[\hat a,\hat a^{\dagger}] \;=\; 1 .$
-2.  $\hat n = \hat a^{\dagger}\hat a$ counts photons; its eigenstates $|n\rangle$ are called \emph{Fock states} $\hat n |n\rangle \;=\; n |n\rangle, \quad n = 0,1,2,\dots$.
+1.  $\hat a$ and $\hat a^{\dagger}$ are the $\emph{annihilation}$ and $\emph{creation}$ operators, obeying $[\hat a,\hat a^{\dagger}] \;=\; 1 .$
+2.  $\hat n = \hat a^{\dagger}\hat a$ counts photons; its eigenstates $|n\rangle$ are called $\emph{Fock states}$: $\hat n |n\rangle \;=\; n |n\rangle, \quad n = 0,1,2,\dots$.
 3.  By setting $[\hat q,\hat p]=i\hbar$, the position and momentum quadratures are
     $$
     \begin{aligned}
@@ -42,13 +42,13 @@ Cat codes use a clever encoding method that makes the logical qubits inherently 
 
 | **Characteristic** | **Cat-state Encoding** | **Surface Code** |
 | --- | --- | --- |
-| **Physical Qubit Carrier** | A \textbf{microwave resonator} (continuous-variable system) | Multiple \textbf{superconducting Transmon qubits}, etc. (discrete-variable systems) |
-| **Hilbert Space** | \textbf{Infinite-dimensional} (can have 0, 1, 2, ... infinitely many photons) | \textbf{Two-dimensional} (only has $|0\rangle$ and $|1\rangle$ basis states) |
-| **Information Encoding Method** | Encode \textbf{one logical qubit} in \textbf{one cat state} of the resonator. For example: $|0_L\rangle = |\alpha\rangle + |-\alpha\rangle$, $|1_L\rangle = |\alpha\rangle - |-\alpha\rangle$ | Encode \textbf{one logical qubit} in the \textbf{entangled state} of multiple physical qubits. (e.g., specific entanglement of all data qubits in the surface code lattice) |
-| **Core Error Correction Mechanism** | \textbf{Utilize infinite-dimensional space for autonomous stability}. Photon loss errors cause \textbf{parity flips} rather than direct information annihilation, making them easy to detect and correct. | \textbf{Achieve active error correction through stabilizer measurements}. Requires continuous measurement of correlations between adjacent physical qubits (XXXX or ZZZZ measurements to detect errors). |
-| **Resource Overhead** | \textbf{Low}. One logical qubit $\approx$ \textbf{1 resonator + 1 auxiliary Transmon}. | \textbf{Extremely high}. One logical qubit requires \textbf{hundreds to thousands} of physical Transmon qubits. |
-| **Error Types** | Inherently strong robustness against \textbf{energy decay (photon loss)}. | Equally handles \textbf{bit-flip errors} and \textbf{phase-flip errors}. |
-| **Logical Operations** | Operations are complex, typically requiring implementation through \textbf{nonlinear interactions with auxiliary qubits}. | Mature theory for logical gate operations (e.g., \textbf{lattice surgery}), but operations are complex when performed on the encoded level. |
+| **Physical Qubit Carrier** | A \textbf{microwave resonator} (continuous-variable system) | Multiple $\textbf{superconducting Transmon qubits}$, etc. (discrete-variable systems) |
+| **Hilbert Space** | $\textbf{Infinite-dimensional}$ (can have 0, 1, 2, ... infinitely many photons) | $\textbf{Two-dimensional}$ (only has $|0\rangle$ and $|1\rangle$ basis states) |
+| **Information Encoding Method** | Encode $\textbf{one logical qubit}$ in $\textbf{one cat state}$ of the resonator. For example: $|0_L\rangle = |\alpha\rangle + |-\alpha\rangle$, $|1_L\rangle = |\alpha\rangle - |-\alpha\rangle$ | Encode $\textbf{one logical qubit}$ in the $\textbf{entangled state}$ of multiple physical qubits. (e.g., specific entanglement of all data qubits in the surface code lattice) |
+| **Core Error Correction Mechanism** | $\textbf{Utilize infinite-dimensional space for autonomous stability}$. Photon loss errors cause $\textbf{parity flips}$ rather than direct information annihilation, making them easy to detect and correct. | $\textbf{Achieve active error correction through stabilizer measurements}$. Requires continuous measurement of correlations between adjacent physical qubits (XXXX or ZZZZ measurements to detect errors). |
+| **Resource Overhead** | $\textbf{Low}$. One logical qubit $\approx$ $\textbf{1 resonator + 1 auxiliary Transmon}$. | $\textbf{Extremely high}$. One logical qubit requires $\textbf{hundreds to thousands}$ of physical Transmon qubits. |
+| **Error Types** | Inherently strong robustness against $\textbf{energy decay (photon loss)}$. | Equally handles $\textbf{bit-flip errors}$ and $\textbf{phase-flip errors}$. |
+| **Logical Operations** | Operations are complex, typically requiring implementation through $\textbf{nonlinear interactions with auxiliary qubits}$. | Mature theory for logical gate operations (e.g., $\textbf{lattice surgery}$), but operations are complex when performed on the encoded level. |
 
 %---------------------------------------------------------------------------
 ## Cat Codes
