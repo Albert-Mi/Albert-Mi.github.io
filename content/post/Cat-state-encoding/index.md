@@ -1,7 +1,7 @@
 ---
 title: "Cat State Encoding"
 date: 2025-10-27
-tags: ["科研"]
+tags: ["Quantum Physics"]
 categories: ["Research"]
 description: "An overview of Cat state encoding in hybrid quantum systems."
 draft: false
