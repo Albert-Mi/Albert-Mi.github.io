@@ -13,10 +13,10 @@ image: cover.png   # 可选：放一张配图，路径在同文件夹内
 ## Bosonic Modes
 
 Bosonic quantum error–correcting codes live in the infinite–dimensional Hilbert space of a single harmonic oscillator
-(microwave cavity, optical mode, phononic resonator, $\emph{etc.}$).
+(microwave cavity, optical mode, phononic resonator, etc.).
 Throughout these notes
-1.  $\hat a$ and $\hat a^{\dagger}$ are the $\emph{annihilation}$ and $\emph{creation}$ operators, obeying $[\hat a,\hat a^{\dagger}] \;=\; 1 .$
-2.  $\hat n = \hat a^{\dagger}\hat a$ counts photons; its eigenstates $|n\rangle$ are called $\emph{Fock states}$: $\hat n |n\rangle \;=\; n |n\rangle, \quad n = 0,1,2,\dots$.
+1.  $\hat a$ and $\hat a^{\dagger}$ are the annihilation and creation operators, obeying $[\hat a,\hat a^{\dagger}] \;=\; 1 .$
+2.  $\hat n = \hat a^{\dagger}\hat a$ counts photons; its eigenstates $|n\rangle$ are called Fock states: $\hat n |n\rangle \;=\; n |n\rangle, \quad n = 0,1,2,\dots$.
 3.  By setting $[\hat q,\hat p]=i\hbar$, the position and momentum quadratures are
     $$
     \begin{aligned}
@@ -908,7 +908,7 @@ $$
 
 ### Logical Codewords
 
-Given integers $N$ (\emph{order}) and $S$ (\emph{spacing}), define
+Given integers $N$ (order) and $S$ (spacing), define
 $$
 \begin{align}
   |+_L\rangle &=
@@ -945,7 +945,7 @@ Higher–order binomial codes also handle multiple loss, gain, and dephasing err
 >     \end{align}
 >     $$
 > 2.  \textbf{Syndrome measurement.}\, Measure photon number modulo $2$. 
->     Both $|3\rangle$ and $|1\rangle$ are \emph{odd}, signalling one loss.
+>     Both $|3\rangle$ and $|1\rangle$ are odd, signalling one loss.
 > 3.  \textbf{Recovery.}\, A unitary controlled on the syndrome adds one photon:
 >     $$
 >     \begin{align}
