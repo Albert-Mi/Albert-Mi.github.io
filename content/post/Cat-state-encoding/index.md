@@ -19,10 +19,10 @@ Throughout these notes
 2.  $\hat n = \hat a^{\dagger}\hat a$ counts photons; its eigenstates $|n⟩$ are called *Fock states*: $\hat n |n\rangle = n |n\rangle, \quad n = 0,1,2,\dots$.
 3.  By setting $[\hat q,\hat p]=i\hbar$, the position and momentum quadratures are
     $$
-    \begin{aligned}
+    \begin{align}
         \hat q =\frac{\hat a^{\dagger} + \hat a}{\sqrt{2}},\quad
           \hat p =\frac{\hat a^{\dagger} - \hat a}{i\sqrt{2}}
-    \end{aligned}
+    \end{align}
     $$
 
 To understand cat state codes (bosonic code), one must first understand the core problem they aim to solve: the fragility of qubits.
