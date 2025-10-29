@@ -1,41 +1,33 @@
-/* ===== Two Figures (Responsive Fixed Version) ===== */
-
-/* 默认：小屏幕纵向排列 */
+/* ===== Two-Figure Layout (Reusable Component) ===== */
 .twofigures {
   display: flex;
-  flex-direction: column;      /* 竖排 */
+  flex-wrap: nowrap;
+  justify-content: center;
   align-items: center;
   gap: 1rem;
   margin: 1.5rem 0;
 }
 
-/* 图片和视频的通用样式 */
 .twofigures img,
 .twofigures video {
-  display: block;
-  width: 100%;                 /* 小屏全宽 */
-  height: auto;
+  width: 48%;
   border-radius: 6px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-  box-sizing: border-box;
 }
 
-/* 桌面端（>700px）：横向并排 */
-@media (min-width: 700px) {
+/* On mobile, automatically stack vertically */
+@media (max-width: 700px) {
   .twofigures {
-    flex-direction: row;       /* 横排 */
-    justify-content: center;
-    align-items: flex-start;
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
   }
 
   .twofigures img,
   .twofigures video {
-    width: 48%;                /* 每张占约一半 */
+    width: 90%;
   }
 }
 
-/* 可选悬浮效果 */
+/* Optional: smooth hover scale for aesthetic effect */
 .twofigures img:hover,
 .twofigures video:hover {
   transform: scale(1.02);
