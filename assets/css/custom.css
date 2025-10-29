@@ -1,41 +1,47 @@
-/* ===== Reusable Responsive Two-Figure Layout ===== */
-.twofigures {
+/* ===== Two Figures (final) ===== */
+/* 默认：小屏/窄容器，垂直排列 */
+figure.twofigures {
   display: flex;
-  flex-wrap: nowrap;
-  justify-content: center;
+  flex-direction: column;      /* 竖排 */
   align-items: center;
   gap: 1rem;
   margin: 1.5rem 0;
 }
 
-.twofigures img,
-.twofigures video {
-  width: 48%;
+figure.twofigures img,
+figure.twofigures video {
+  display: block;
+  width: 100%;                 /* 窄屏全宽 */
+  height: auto;
   border-radius: 6px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  box-sizing: border-box;
 }
 
-/* Mobile layout: stacked */
-@media (max-width: 700px) {
-  .twofigures {
-    flex-wrap: wrap;
+/* 桌面端/宽容器：并排两张 */
+@media (min-width: 640px) {
+  figure.twofigures {
+    flex-direction: row;       /* 横排 */
+    flex-wrap: nowrap;         /* 禁止换行 */
+    justify-content: center;
+    align-items: flex-start;
+    gap: 1rem;
   }
-
-  .twofigures img,
-  .twofigures video {
-    width: 90%;
+  figure.twofigures img,
+  figure.twofigures video {
+    width: 48%;                /* 每张占一半（预留 gap） */
   }
 }
 
-/* Optional hover zoom effect */
-.twofigures img:hover,
-.twofigures video:hover {
+/* 可选：轻微悬浮放大效果 */
+figure.twofigures img:hover,
+figure.twofigures video:hover {
   transform: scale(1.02);
   transition: transform 0.25s ease-in-out;
 }
 
-/* ===== Figure Caption Numbering ===== */
-.figcaption {
+/* 自动编号（如你之前使用的 .figcaption） */
+p.figcaption {
   counter-increment: figure;
   text-align: center;
   font-style: italic;
@@ -43,12 +49,8 @@
   color: #555;
   margin-top: -0.5rem;
 }
-
-.figcaption::before {
+p.figcaption::before {
   content: "Figure " counter(figure) ": ";
   font-weight: bold;
 }
-
-body {
-  counter-reset: figure;
-}
+body { counter-reset: figure; }
