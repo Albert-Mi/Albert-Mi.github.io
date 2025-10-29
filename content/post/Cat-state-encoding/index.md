@@ -93,9 +93,17 @@ It is crucial to distinguish between two fundamental bases which are named after
     \end{aligned}\right. \end{align}
     $$
 
-![Bloch sphere representation of a cat qubit](bloch.png) ![Wigner representation of the $| \pm \rangle$(ab) and $| 0/1 \rangle$(cd)](<state projections.png>)
+<!-- ==== Figure 1: Cat Qubit Representations ==== -->
+<figure style="display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 1rem; margin: 1.5rem 0;">
+  <img src="bloch.png" alt="Bloch sphere representation of a cat qubit" style="width: 48%; min-width: 280px; border-radius: 6px; box-shadow: 0 2px 6px rgba(0,0,0,0.15);">
+  <img src="state_projections.png" alt="Wigner representation of cat states" style="width: 48%; min-width: 280px; border-radius: 6px; box-shadow: 0 2px 6px rgba(0,0,0,0.15);">
+</figure>
 
-*Figure 1: Different Presentation of logical states |±⟩ and computational states |0/1⟩*
+<p style="text-align:center; font-style:italic; margin-top:-0.5rem;">
+<b>Figure 1:</b> Bloch sphere representation of a cat qubit (left) and Wigner representation of the 
+$|\pm\rangle$ (a,b) and $|0/1\rangle$ (c,d) states — different visualizations of logical and computational bases.
+</p>
+
 
 The **even $|+_L⟩$ / odd $|-_L⟩$ cat code** embeds one qubit in two superpositions of coherent states $|\alpha⟩$ and $|-\alpha⟩$ with the normalization factor 
 $$
