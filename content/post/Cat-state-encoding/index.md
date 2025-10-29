@@ -15,8 +15,8 @@ image: cover.png   # 可选：放一张配图，路径在同文件夹内
 Bosonic quantum error–correcting codes live in the infinite–dimensional Hilbert space of a single harmonic oscillator
 (microwave cavity, optical mode, phononic resonator, *etc.*).
 Throughout these notes
-1.  $\hat a$ and $\hat a^{\dagger}$ are the *annihilation* and *creation* operators, obeying $[\hat a,\hat a^{\dagger}] \;=\; 1 .$
-2.  $\hat n = \hat a^{\dagger}\hat a$ counts photons; its eigenstates $|n⟩$ are called *Fock states*: $\hat n |n\rangle \;=\; n |n\rangle, \quad n = 0,1,2,\dots$.
+1.  $\hat a$ and $\hat a^{\dagger}$ are the *annihilation* and *creation* operators, obeying $[\hat a,\hat a^{\dagger}] =1 .$
+2.  $\hat n = \hat a^{\dagger}\hat a$ counts photons; its eigenstates $|n⟩$ are called *Fock states*: $\hat n |n\rangle = n |n\rangle, \quad n = 0,1,2,\dots$.
 3.  By setting $[\hat q,\hat p]=i\hbar$, the position and momentum quadratures are
     $$
     \begin{aligned}
@@ -105,11 +105,7 @@ $|\pm\rangle$ (a,b) and $|0/1\rangle$ (c,d) states.
 
 
 The **even $|+_L⟩$ / odd $|-_L⟩$ cat code** embeds one qubit in two superpositions of coherent states $|\alpha⟩$ and $|-\alpha⟩$ with the normalization factor 
-$$
-\begin{aligned}
-\mathcal N_{\pm} = \frac{1}{\sqrt{2\left(1 \pm e^{-2|\alpha|^{2}}\right)}}
-\end{aligned}
-$$:
+$\mathcal N_{\pm} = \frac{1}{\sqrt{2\left(1 \pm e^{-2|\alpha|^{2}}\right)}}$:
 $$
 \begin{align}
 \left\{
