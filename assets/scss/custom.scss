@@ -36,3 +36,21 @@
   transform: scale(1.02);
   transition: transform 0.25s ease-in-out;
 }
+
+/* ===== Secret Entrance Styles ===== */
+#secret-trigger {
+    transition: opacity 0.3s ease;
+}
+
+/* 调试模式：取消下面的注释可以看到触发区域 */
+/*
+#secret-trigger:hover {
+    opacity: 0.1 !important;
+    background: red;
+}
+*/
+
+/* 隐藏secret页面在菜单中的显示（如果不小心显示了） */
+a[href*="/secret/"] {
+    display: none !important;
+}
