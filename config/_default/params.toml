@@ -77,9 +77,6 @@ src = ""
 [params.math]
 enable = true
 
-[params.assets]
-    favicon = "favicon.ico"  # 如果有的话保留
-    customCSS = ["css/custom.css"]  # 添加这行
 
 # -------- 颜色/主题 --------
 [colorScheme]
