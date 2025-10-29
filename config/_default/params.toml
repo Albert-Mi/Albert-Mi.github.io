@@ -78,7 +78,7 @@ src = ""
 enable = true
 
 [params]
-  customCSS = ["css/custom.css"]
+  customCSS = ["/css/custom.css"]
 
 # -------- 颜色/主题 --------
 [colorScheme]
