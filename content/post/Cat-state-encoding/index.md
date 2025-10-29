@@ -96,7 +96,7 @@ It is crucial to distinguish between two fundamental bases which are named after
 <!-- ==== Figure 1: Cat Qubit Representations ==== -->
 <figure style="display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 1rem; margin: 1.5rem 0;">
   <img src="bloch.png" alt="Bloch sphere representation of a cat qubit" style="width: 48%; min-width: 280px; border-radius: 6px; box-shadow: 0 2px 6px rgba(0,0,0,0.15);">
-  <img src="state_projections.png" alt="Wigner representation of cat states" style="width: 48%; min-width: 280px; border-radius: 6px; box-shadow: 0 2px 6px rgba(0,0,0,0.15);">
+  <img src="state projections.png" alt="Wigner representation of cat states" style="width: 48%; min-width: 280px; border-radius: 6px; box-shadow: 0 2px 6px rgba(0,0,0,0.15);">
 </figure>
 
 <p style="text-align:center; font-style:italic; margin-top:-0.5rem;">
