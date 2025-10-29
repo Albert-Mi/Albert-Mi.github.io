@@ -13,10 +13,10 @@ image: cover.png   # 可选：放一张配图，路径在同文件夹内
 ## Bosonic Modes
 
 Bosonic quantum error–correcting codes live in the infinite–dimensional Hilbert space of a single harmonic oscillator
-(microwave cavity, optical mode, phononic resonator, etc.).
+(microwave cavity, optical mode, phononic resonator, *etc.*).
 Throughout these notes
-1.  $\hat a$ and $\hat a^{\dagger}$ are the annihilation and creation operators, obeying $[\hat a,\hat a^{\dagger}] \;=\; 1 .$
-2.  $\hat n = \hat a^{\dagger}\hat a$ counts photons; its eigenstates $|n\rangle$ are called Fock states: $\hat n |n\rangle \;=\; n |n\rangle, \quad n = 0,1,2,\dots$.
+1.  $\hat a$ and $\hat a^{\dagger}$ are the *annihilation* and *creation* operators, obeying $[\hat a,\hat a^{\dagger}] \;=\; 1 .$
+2.  $\hat n = \hat a^{\dagger}\hat a$ counts photons; its eigenstates $|n⟩$ are called *Fock states*: $\hat n |n\rangle \;=\; n |n\rangle, \quad n = 0,1,2,\dots$.
 3.  By setting $[\hat q,\hat p]=i\hbar$, the position and momentum quadratures are
     $$
     \begin{aligned}
@@ -30,25 +30,25 @@ In quantum computing, the information storage of a qubit relies on quantum state
 These states are extremely susceptible to environmental noise, leading to decoherence, and consequently, computational errors.
 There are two main types of errors:
 
-1.  \textbf{Bit-flip error:} Similar to the classical computer error where $0$ turns into $1$ or $1$ turns into $0$. In the quantum realm, this means the $\vert 0 \rangle$ state flips into the $\vert 1 \rangle$ state, and vice versa.
-2.  \textbf{Phase-flip error:} This is an error unique to quantum mechanics. The phase of a quantum superposition state $\alpha\vert 0 \rangle + \beta\vert 1 \rangle$ flips, becoming $\alpha\vert 0 \rangle - \beta\vert 1 \rangle$. This destroys the coherence of the superposition, which is critical for quantum computation.
+1.  **Bit-flip error:** Similar to the classical computer error where $0$ turns into $1$ or $1$ turns into $0$. In the quantum realm, this means the |0⟩ state flips into the |1⟩ state, and vice versa.
+2.  **Phase-flip error:** This is an error unique to quantum mechanics. The phase of a quantum superposition state $\alpha\vert 0 \rangle + \beta\vert 1 \rangle$ flips, becoming $\alpha\vert 0 \rangle - \beta\vert 1 \rangle$. This destroys the coherence of the superposition, which is critical for quantum computation.
 
 Traditional quantum error correction codes (such as surface codes) can simultaneously correct both types of errors, but they typically require a large number of physical qubits to encode one logical qubit, and the error correction process itself is very complex, requiring frequent measurements and feedback, placing extremely high demands on hardware.
-\textbf{The breakthrough of cat codes lies in this:} They specifically target a particular, very common noise source—energy decay (or amplitude damping).
-In superconducting qubit systems and others, energy decay ($\vert 1 \rangle$ spontaneously decaying back to $\vert 0 \rangle$) is the main cause of both bit-flip and phase-flip errors.
+**The breakthrough of cat codes lies in this:** They specifically target a particular, very common noise source—energy decay (or amplitude damping).
+In superconducting qubit systems and others, energy decay (|1⟩ spontaneously decaying back to |0⟩) is the main cause of both bit-flip and phase-flip errors.
 Cat codes use a clever encoding method that makes the logical qubits inherently robust against this main error source of energy decay.
 
 **Table 1:** Fundamental Differences in Physical Qubits
 
 | **Characteristic** | **Cat-state Encoding** | **Surface Code** |
 | --- | --- | --- |
-| **Physical Qubit Carrier** | A \textbf{microwave resonator} (continuous-variable system) | Multiple $\textbf{superconducting Transmon qubits}$, etc. (discrete-variable systems) |
-| **Hilbert Space** | $\textbf{Infinite-dimensional}$ (can have 0, 1, 2, ... infinitely many photons) | $\textbf{Two-dimensional}$ (only has $|0\rangle$ and $|1\rangle$ basis states) |
-| **Information Encoding Method** | Encode $\textbf{one logical qubit}$ in $\textbf{one cat state}$ of the resonator. For example: $|0_L\rangle = |\alpha\rangle + |-\alpha\rangle$, $|1_L\rangle = |\alpha\rangle - |-\alpha\rangle$ | Encode $\textbf{one logical qubit}$ in the $\textbf{entangled state}$ of multiple physical qubits. (e.g., specific entanglement of all data qubits in the surface code lattice) |
-| **Core Error Correction Mechanism** | $\textbf{Utilize infinite-dimensional space for autonomous stability}$. Photon loss errors cause $\textbf{parity flips}$ rather than direct information annihilation, making them easy to detect and correct. | $\textbf{Achieve active error correction through stabilizer measurements}$. Requires continuous measurement of correlations between adjacent physical qubits (XXXX or ZZZZ measurements to detect errors). |
-| **Resource Overhead** | $\textbf{Low}$. One logical qubit $\approx$ $\textbf{1 resonator + 1 auxiliary Transmon}$. | $\textbf{Extremely high}$. One logical qubit requires $\textbf{hundreds to thousands}$ of physical Transmon qubits. |
-| **Error Types** | Inherently strong robustness against $\textbf{energy decay (photon loss)}$. | Equally handles $\textbf{bit-flip errors}$ and $\textbf{phase-flip errors}$. |
-| **Logical Operations** | Operations are complex, typically requiring implementation through $\textbf{nonlinear interactions with auxiliary qubits}$. | Mature theory for logical gate operations (e.g., $\textbf{lattice surgery}$), but operations are complex when performed on the encoded level. |
+| **Physical Qubit Carrier** | A **microwave resonator** (continuous-variable system) | Multiple **superconducting Transmon qubits**, etc. (discrete-variable systems) |
+| **Hilbert Space** | **Infinite-dimensional** (can have 0, 1, 2, ... infinitely many photons) | **Two-dimensional** (only has |0⟩ and |1⟩ basis states) |
+| **Information Encoding Method** | Encode **one logical qubit** in **one cat state** of the resonator. For example: $|0_L⟩ = |\alpha⟩ + |-\alpha⟩$, $|1_L⟩ = |\alpha⟩ - |-\alpha⟩$ | Encode **one logical qubit** in the **entangled state** of multiple physical qubits. (e.g., specific entanglement of all data qubits in the surface code lattice) |
+| **Core Error Correction Mechanism** | **Utilize infinite-dimensional space for autonomous stability**. Photon loss errors cause **parity flips** rather than direct information annihilation, making them easy to detect and correct. | **Achieve active error correction through stabilizer measurements**. Requires continuous measurement of correlations between adjacent physical qubits (XXXX or ZZZZ measurements to detect errors). |
+| **Resource Overhead** | **Low**. One logical qubit $\approx$ **1 resonator + 1 auxiliary Transmon**. | **Extremely high**. One logical qubit requires **hundreds to thousands** of physical Transmon qubits. |
+| **Error Types** | Inherently strong robustness against **energy decay (photon loss)**. | Equally handles **bit-flip errors** and **phase-flip errors**. |
+| **Logical Operations** | Operations are complex, typically requiring implementation through **nonlinear interactions with auxiliary qubits**. | Mature theory for logical gate operations (e.g., **lattice surgery**), but operations are complex when performed on the encoded level. |
 
 %---------------------------------------------------------------------------
 ## Cat Codes
@@ -59,7 +59,7 @@ In quantum error corrections, logic codeword encode physical bit into logic bit 
 The cat code embeds a logical qubit into states of a harmonic oscillator.
 It is crucial to distinguish between two fundamental bases which are named after the Pauli operators whose eigenstates they are.
 
-1.  \textbf{The Computational Basis ($|0_L\rangle, |1_L\rangle$):} This is the basis used to store information, often called the \textbf{Z-basis} because its states are eigenstates of the logical $\hat{Z}_L$ operator. The states are approximately the coherent states $|\alpha\rangle$ and $|-\alpha\rangle$, which are well-separated in phase space. This separation provides physical protection against bit-flip errors.
+1.  **The Computational Basis ($|0_L⟩, |1_L⟩$):** This is the basis used to store information, often called the **Z-basis** because its states are eigenstates of the logical $\hat{Z}_L$ operator. The states are approximately the coherent states $|\alpha⟩$ and $|-\alpha⟩$, which are well-separated in phase space. This separation provides physical protection against bit-flip errors.
     $$
     \begin{align}
     \left\{\begin{aligned}
@@ -76,7 +76,7 @@ It is crucial to distinguish between two fundamental bases which are named after
     \end{aligned}\right. \end{align}
     $$
     
-2.  \textbf{The Parity Basis ($|+_L\rangle, |-_L\rangle$):} This is the basis of definite photon-number parity, often called the \textbf{X-basis} because its states are the eigenstates of the logical $\hat{X}_L$ operator (which corresponds to the physical parity operator $\hat{P}$). The states are the \textbf{even} and \textbf{odd} Schrödinger cat states. This basis is essential for detecting the most common type of error, phase-flip ($\hat{Z}_L$).
+2.  **The Parity Basis ($|+_L⟩, |-_L⟩$):** This is the basis of definite photon-number parity, often called the **X-basis** because its states are the eigenstates of the logical $\hat{X}_L$ operator (which corresponds to the physical parity operator $\hat{P}$). The states are the **even** and **odd** Schrödinger cat states. This basis is essential for detecting the most common type of error, phase-flip ($\hat{Z}_L$).
     $$
     \begin{align}
     \left\{\begin{aligned}
@@ -96,9 +96,9 @@ It is crucial to distinguish between two fundamental bases which are named after
 ![Bloch sphere representation of a cat qubit](bloch.png)
 ![Wigner representation of the $| \pm \rangle$(ab) and $| 0/1 \rangle$(cd)](state projections.png)
 
-*Figure 1: Different Presentation of logical states $| \pm \rangle$ and computational states $| 0/1 \rangle$*
+*Figure 1: Different Presentation of logical states |±⟩ and computational states |0/1⟩*
 
-The \textbf{even $|+_L\rangle$ / odd $|-_L\rangle$ cat code} embeds one qubit in two superpositions of coherent states $|\alpha\rangle$ and $|-\alpha\rangle$ with the normalization factor 
+The **even $|+_L⟩$ / odd $|-_L⟩$ cat code** embeds one qubit in two superpositions of coherent states $|\alpha⟩$ and $|-\alpha⟩$ with the normalization factor 
 $$
 \begin{aligned}
 \mathcal N_{\pm} = \frac{1}{\sqrt{2\left(1 \pm e^{-2|\alpha|^{2}}\right)}}
@@ -126,8 +126,8 @@ $$
 \langle \alpha | -\alpha \rangle = \exp(-\frac{|\alpha|^2}{2} - \frac{|\alpha|^2}{2} + \alpha^*(-\alpha)) = \exp(-2|\alpha|^2)
 \end{align}
 $$
-which means these two states are orthogonal only when photon number $\alpha\to\infty$
-For $|+_L\rangle$:
+which means these two states are orthogonal only when photon number $\alpha \to \infty$
+For $|+_L⟩$:
 $$
 \begin{align}
 \begin{aligned}
@@ -139,7 +139,7 @@ N_+ = \frac{1}{\sqrt{2 + 2e^{-2|\alpha|^2}}}
 \end{align}
 $$
 
-Similarly, for $|-_L\rangle$:
+Similarly, for $|-_L⟩$:
 $$
 \begin{align}
 \begin{aligned}
@@ -161,7 +161,7 @@ $$
 
 > **[Cat state for extreme $\alpha$]**
 >
-> When $|\alpha|$ is large, $e^{-2|\alpha|^2} \approx 0\to N_{\pm} \approx 1/\sqrt{2}$, the cat state forms logical basis states :
+> When $|\alpha|$ is large, $e^{-2|\alpha|^2} \approx 0 \to N_{\pm} \approx 1/\sqrt{2}$, the cat state forms logical basis states :
 > $$
 > \begin{align}
 > |+_L\rangle \approx \frac{1}{\sqrt{2}}(|\alpha\rangle + |-\alpha\rangle), \quad |-_L\rangle \approx \frac{1}{\sqrt{2}}(|\alpha\rangle - |-\alpha\rangle)
@@ -170,23 +170,23 @@ $$
 
 > **[Settings of $\alpha$]**
 >
-> 1.  \textbf{Role of $\alpha$:}
->     * \textbf{Overlap:} Overlap $\langle \alpha | - \alpha \rangle = e^{-2|\alpha|^2} \to |\alpha|\nearrow \to$ overlap $\searrow\to$ better distinguishability.
->     * \textbf{Decoherence:} Cat states decay at rates $\propto |\alpha|^2$. Larger $|\alpha| \to$ faster decoherence.
->     * \textbf{Error Correction:}
+> 1.  **Role of $\alpha$:**
+>     * **Overlap:** Overlap $\langle \alpha | - \alpha \rangle = e^{-2|\alpha|^2} \to |\alpha| \nearrow \to$ overlap $\searrow \to$ better distinguishability.
+>     * **Decoherence:** Cat states decay at rates $\propto |\alpha|^2$. Larger $|\alpha| \to$ faster decoherence.
+>     * **Error Correction:**
 >         * Larger $\alpha$ improves parity measurement reliability.
 >         * Normalization constants $N_{\pm} \approx 1/\sqrt{2}$ when $|\alpha| \gtrsim 2$.
 >         * Photon loss error ($a|0_L\rangle \propto |1_L\rangle$) becomes perfect bit-flip only when $|\alpha| \to \infty$.
 >
-> 2.  \textbf{Theoretical Ideal Value: } $|\alpha| \approx 2$
->     * \textbf{Overlap: }$e^{-8} \approx 0.00034$ (negligible)
->     * \textbf{decoherence: }Mean photon number $\langle n \rangle = \langle \alpha|a^\dagger a|\alpha\rangle = |\alpha|^2 = 4$ (manageable)
+> 2.  **Theoretical Ideal Value:** $|\alpha| \approx 2$
+>     * **Overlap:** $e^{-8} \approx 0.00034$ (negligible)
+>     * **decoherence:** Mean photon number $\langle n \rangle = \langle \alpha|a^\dagger a|\alpha\rangle = |\alpha|^2 = 4$ (manageable)
 >
-> 3.  \textbf{Experimental Status:}
->     * \textbf{Superconducting systems:} $|\alpha| = 2-3$ (state-of-the-art)
->     * \textbf{Optical systems:} $|\alpha| = 0.5-1.5$ (limited by photon loss)
+> 3.  **Experimental Status:**
+>     * **Superconducting systems:** $|\alpha| = 2-3$ (state-of-the-art)
+>     * **Optical systems:** $|\alpha| = 0.5-1.5$ (limited by photon loss)
 >
-> \textbf{Key Insight:} $\alpha$ controls the balance between macroscopic distinctness (good) and decoherence (bad). Current superconducting systems can achieve theoretical ideal $|\alpha| \approx 2$.
+> **Key Insight:** $\alpha$ controls the balance between macroscopic distinctness (good) and decoherence (bad). Current superconducting systems can achieve theoretical ideal $|\alpha| \approx 2$.
 
 > **[Effection of $\alpha$]**
 >
@@ -204,7 +204,7 @@ $$
 >     &= \kappa \left[ \mathrm{Tr}(a\rho a^\dagger P) - \frac{1}{2}\mathrm{Tr}(a^\dagger a \rho P) - \frac{1}{2}\mathrm{Tr}(\rho a^\dagger a P) \right]
 > \end{align}
 > $$
-> Now consider the first term. Utilizing the cyclic nature of traces $\mathrm{Tr}(ABC)=\mathrm{Tr}(BCA)$, also using $aP=−Pa\Rightarrow(Pa)^\dagger = (-aP)^\dagger \Rightarrow a^\dagger P = -P a^\dagger\Rightarrow\mathrm{Tr}(\rho a^\dagger P a) = -\mathrm{Tr}(\rho P a^\dagger a)$:
+> Now consider the first term. Utilizing the cyclic nature of traces $\mathrm{Tr}(ABC)=\mathrm{Tr}(BCA)$, also using $aP=−Pa \Rightarrow (Pa)^\dagger = (-aP)^\dagger \Rightarrow a^\dagger P = -P a^\dagger \Rightarrow \mathrm{Tr}(\rho a^\dagger P a) = -\mathrm{Tr}(\rho P a^\dagger a)$:
 > $$
 > \begin{align}
 >     \mathrm{Tr}(a\rho a^\dagger P) = \mathrm{Tr}(\rho a^\dagger P a)
@@ -226,31 +226,31 @@ $$
 >     \langle P \rangle(t) &= \langle P \rangle(0)e^{-2\kappa|\alpha|^2 t}
 > \end{align}
 > $$
-> 1.  \textbf{Photon Loss Rate is Proportional to the Square of the Amplitude}
+> 1.  **Photon Loss Rate is Proportional to the Square of the Amplitude**
 >     * Photon loss rate $= \kappa \langle n \rangle = \kappa |\alpha|^2$
->     * Larger $|\alpha|$ $\to$ larger mean photon number $|\alpha|^2$ $\to$ more photons lost per unit time.
-> 2.  \textbf{Parity Flip Mechanism}
+>     * Larger $|\alpha| \to$ larger mean photon number $|\alpha|^2 \to$ more photons lost per unit time.
+> 2.  **Parity Flip Mechanism**
 >     * Each photon loss flips the parity of the photon number.
 >     * Photon loss rate $= \kappa |\alpha|^2$
 >     * Therefore, the parity decay rate $= 2 \times$ photon loss rate $= 2\kappa |\alpha|^2$
-> 3.  \textbf{Sensitivity of Cat States}
->     * Cat states $|+_L\rangle$ and $|-_L\rangle$ are distinguished by parity.
+> 3.  **Sensitivity of Cat States**
+>     * Cat states $|+_L⟩$ and $|-_L⟩$ are distinguished by parity.
 >     * Decoherence manifests as the loss of parity information.
 >     * Larger amplitude $\alpha$, faster the parity information is lost.
 
 ### Noise Model: Why Photon Loss is a Phase-Flip Error
 
 The central idea of the cat code is to design it such that the most probable physical error corresponds to an easily detectable logical error.
-\textbf{Why is the $\hat{Z}_L$ error the one we detect, not $\hat{X}_L$?}
-* \textbf{Logical Bit-Flips ($\hat{X}_L$) are Physically Suppressed:} A logical bit-flip means the system must jump from $|0_L\rangle \approx |\alpha\rangle$ to $|1_L\rangle \approx |-\alpha\rangle$. Since these states are far apart in phase space, common local noise (like losing one photon) cannot cause this jump. Therefore, \textbf{logical bit-flips are exponentially rare}. We don't build primary detection because they almost never happen.
-* \textbf{Logical Phase-Flips ($\hat{Z}_L$) are Physically Common:} The most common physical error is \textbf{single photon loss}, represented by the operator $\hat{a}$. This operator always \textbf{flips the parity} of a state (even $\leftrightarrow$ odd). This corresponds to the transformation $|+_L\rangle \leftrightarrow |-_L\rangle$. As we will now prove, a flip in the parity basis is, by definition, a logical phase-flip ($\hat{Z}_L$).
+**Why is the $\hat{Z}_L$ error the one we detect, not $\hat{X}_L$?}
+* **Logical Bit-Flips ($\hat{X}_L$) are Physically Suppressed:** A logical bit-flip means the system must jump from $|0_L\rangle \approx |\alpha\rangle$ to $|1_L\rangle \approx |-\alpha\rangle$. Since these states are far apart in phase space, common local noise (like losing one photon) cannot cause this jump. Therefore, **logical bit-flips are exponentially rare**. We don't build primary detection because they almost never happen.
+* **Logical Phase-Flips ($\hat{Z}_L$) are Physically Common:** The most common physical error is **single photon loss**, represented by the operator $\hat{a}$. This operator always **flips the parity** of a state (even $\leftrightarrow$ odd). This corresponds to the transformation $|+_L⟩ \leftrightarrow |-_L⟩$. As we will now prove, a flip in the parity basis is, by definition, a logical phase-flip ($\hat{Z}_L$).
 
 > **[Proof: A flip in the Parity (X) Basis is a Phase-Flip (Z) Error]**
 >
-> An error is named for its action on the \textit{computational basis}.
+> An error is named for its action on the *computational basis*.
 > A $\hat{Z}_L$ error is defined by the transformation: $\hat{Z}_L|0_L\rangle = |0_L\rangle$ and $\hat{Z}_L|1_L\rangle = -|1_L\rangle$.
-> Let's see if the operator that flips the parity basis, $|+_L\rangle \leftrightarrow |-_L\rangle$, satisfies this definition.
-> * \textbf{Action on $|+_L\rangle$}:
+> Let's see if the operator that flips the parity basis, $|+_L⟩ \leftrightarrow |-_L⟩$, satisfies this definition.
+> * **Action on $|+_L⟩$**:
 >     $$
 >     \begin{aligned}
 >     \hat{Z}_L |+_L\rangle = \hat{Z}_L \left( \frac{1}{\sqrt{2}}(|0_L\rangle + |1_L\rangle) \right)
@@ -259,7 +259,7 @@ The central idea of the cat code is to design it such that the most probable phy
 >     \end{aligned}
 >     $$
 >
-> * \textbf{Action on $|-_L\rangle$}:
+> * **Action on $|-_L⟩$**:
 >     $$
 >     \begin{aligned}
 >     \hat{Z}_L |-_L\rangle = \hat{Z}_L \left( \frac{1}{\sqrt{2}}(|0_L\rangle - |1_L\rangle) \right)
@@ -268,13 +268,13 @@ The central idea of the cat code is to design it such that the most probable phy
 >     \end{aligned}
 >     $$
 >
-> 1.  \textbf{Action on $|0_L\rangle$:}
+> 1.  **Action on $|0_L⟩$:**
 >     $$
 >     \begin{aligned}
 >         \text{Flip}(|0_L\rangle) &= \text{Flip}\left(\frac{1}{\sqrt{2}}(|+_L\rangle + |-_L\rangle)\right) = \frac{1}{\sqrt{2}}(|-_L\rangle + |+_L\rangle) = |0_L\rangle
 >     \end{aligned}
 >     $$
-> 2.  \textbf{Action on $|1_L\rangle$:}
+> 2.  **Action on $|1_L⟩$:**
 >     $$
 >     \begin{aligned}
 >         \text{Flip}(|1_L\rangle) = \text{Flip}\left(\frac{1}{\sqrt{2}}(|+_L\rangle - |-_L\rangle)\right) = \frac{1}{\sqrt{2}}(|-_L\rangle - |+_L\rangle)
@@ -290,22 +290,22 @@ The central idea of the cat code is to design it such that the most probable phy
 
 The most common and detrimental error in many bosonic systems (especially microwave cavities), like Cat states here, is the spontaneous loss of photons to the environment.
 Noise model describes the decoherence from the interrection between quantum system and environment.
-This process is also known as \textbf{amplitude damping}., which can be described by annihilation operator $\hat{a}$.
+This process is also known as **amplitude damping**., which can be described by annihilation operator $\hat{a}$.
 A quantum operation that describes the interaction of a system with its environment is not, in general, a unitary evolution of the system alone.
-To model the amplitude damping, given \textbf{Lindblad master equation}:
+To model the amplitude damping, given **Lindblad master equation**:
 $$
 \begin{align}
 \frac{d\rho}{dt} = \kappa \left( a\rho a^\dagger - \frac{1}{2} a^\dagger a \rho - \frac{1}{2} \rho a^\dagger a \right)
 \end{align}
 $$
 This describes the time evolution of the density matrix under photon loss.
-Using the \textbf{operator-sum representation}, its solution, the evolution of a density matrix $\rho$, is given by:
+Using the **operator-sum representation**, its solution, the evolution of a density matrix $\rho$, is given by:
 $$
 \begin{align}
     \rho \to \rho(t) = \sum_{k=0}^\infty E_k \rho(0) E_k^\dagger
 \end{align}
 $$
-The operators $E_k$ are called \textbf{Kraus operators}, and they satisfy the completeness relation $\sum_k E_k^\dagger E_k = \mathbb{1}$ to ensure that the trace of the density matrix remains 1 (i.e., probability is conserved).
+The operators $E_k$ are called **Kraus operators**, and they satisfy the completeness relation $\sum_k E_k^\dagger E_k = \mathbb{1}$ to ensure that the trace of the density matrix remains 1 (i.e., probability is conserved).
 We can find them by solving the differential equation for the evolution.
 For a harmonic oscillator undergoing amplitude damping, the solution is known to be:
 $$
@@ -316,8 +316,8 @@ $$
 where $\kappa$ is the photon loss rate (or decay rate), $k$ represents the number of lost photons.
 Each Kraus operator corresponds to a different "path" the quantum evolution can take, conditioned on the state of the environment.
 For photon loss, the two primary paths are:
-1.  The system does \textbf{not} lose a photon.
-2.  The system loses \textbf{exactly one} photon.
+1.  The system does **not** lose a photon.
+2.  The system loses **exactly one** photon.
 
 Higher-order loss events are possible but are much less probable over a short time interval $\Delta t$.
 Thus, to first order, we only need two Kraus operators.
@@ -339,7 +339,7 @@ $$
 >     &= -i[H, \rho] + \sum_k \left( L_k \rho L_k^\dagger - \frac{1}{2}L_k^\dagger L_k \rho - \frac{1}{2}\rho L_k^\dagger L_k \right) \text{ by absorbing }\sqrt{\gamma_k} \text{ into } L_k
 > \end{align}
 > $$
-> * $L_k$ are the \textbf{Lindblad operators} (or \textbf{jump operators}), which model the dissipative interaction with the environment (e.g., photon loss, dephasing).
+> * $L_k$ are the **Lindblad operators** (or **jump operators**), which model the dissipative interaction with the environment (e.g., photon loss, dephasing).
 > * $\gamma_k$ are the rates at which these dissipative processes occur.
 >
 > The Kraus Operator-Sum Representation (Discrete Map) describes the evolution of $\rho$ as a discrete map or a "quantum channel," $\mathcal{E}$.
@@ -349,8 +349,8 @@ $$
 >     \rho(t+\Delta t) = \mathcal{E}(\rho(t)) = \sum_j E_j \rho(t) E_j^\dagger
 > \end{align}
 > $$
-> * $E_j$ are the \textbf{Kraus operators}.
-> * Satisfy the \textbf{completeness relation}, $\sum_j E_j^\dagger E_j = \mathbb{1}$, ensures that $\mathrm{Tr}(\rho) = 1$.
+> * $E_j$ are the **Kraus operators**.
+> * Satisfy the **completeness relation**, $\sum_j E_j^\dagger E_j = \mathbb{1}$, ensures that $\mathrm{Tr}(\rho) = 1$.
 >
 > First-order Taylor expansion:
 > $$
@@ -446,7 +446,7 @@ $$
 >     b(\theta) &= U^\dagger(t) b U(t) = b \cos\theta - i a \sin\theta
 >     \end{aligned}\right. \end{align}
 > $$
-> \textbf{Meaning:} The system operator $a$ evolves to a linear combination of $a$ and $b$, indicating that photons may leak from the system to the environment.
+> **Meaning:** The system operator $a$ evolves to a linear combination of $a$ and $b$, indicating that photons may leak from the system to the environment.
 > The Kraus operators describe the evolution of the system when the environment is initially in the vacuum state $|0\rangle_E$.
 > The system state and Kraus operators $E_k$ after time $t$ is:
 > $$
@@ -508,7 +508,7 @@ $$
 > \end{aligned}$
 > and recognizing that for amplitude damping $\cos^2 \theta = e^{-\kappa t}$ :
 > $$
-> \begin{align>
+> \begin{align}
 > \tan^2 \theta = \frac{1 - e^{-\kappa t}}{e^{-\kappa t}} = e^{\kappa t} (1 - e^{-\kappa t})
 > \end{align}
 > $$
@@ -534,7 +534,7 @@ $$
 > \end{align}
 > $$
 >
-> \textbf{Verification of Normalization:}
+> **Verification of Normalization:**
 >
 > Compute $\sum_k E_k^\dagger E_k$:
 > $$
@@ -611,7 +611,7 @@ The single–loss operator $E_1$ flips photon–number parity, using $\left\{\be
 \end{aligned}\right.$
 
 Let's see how the main error Kraus operator, $E_1 = \sqrt{\kappa \Delta t}\,\hat a$, affects the logical states.
-1.  \textbf{Action on $|+_L\rangle$:}
+1.  **Action on $|+_L⟩$:**
     $$
     \begin{align}
         E_1|+_L\rangle &= \sqrt{\kappa \Delta t}\,\hat a \left[ \mathcal{N}_{+} (|\alpha\rangle + |-\alpha\rangle) \right] \\
@@ -619,8 +619,8 @@ Let's see how the main error Kraus operator, $E_1 = \sqrt{\kappa \Delta t}\,\hat
         &= \alpha\sqrt{\kappa \Delta t}\,\mathcal{N}_{+} (|\alpha\rangle - |-\alpha\rangle) = \alpha\sqrt{\kappa \Delta t}\,\frac{\mathcal{N}_{+}}{\mathcal{N}_{-}}|-_L\rangle
     \end{align}
     $$
-    A single photon loss transforms $|+_L\rangle$ (even) into $|-_L\rangle$ (odd) , is a logical bit-flip error $\hat{X}_L$.
-2.  \textbf{Action on $|-_L\rangle$:}
+    A single photon loss transforms $|+_L⟩$ (even) into $|-_L⟩$ (odd) , is a logical bit-flip error $\hat{X}_L$.
+2.  **Action on $|-_L⟩$:**
     $$
     \begin{align}
         E_1|-_L\rangle &= \sqrt{\kappa \Delta t}\,\hat a \left[ \mathcal{N}_{-} (|\alpha\rangle - |-\alpha\rangle) \right] \\
@@ -628,13 +628,13 @@ Let's see how the main error Kraus operator, $E_1 = \sqrt{\kappa \Delta t}\,\hat
         &= \alpha\sqrt{\kappa \Delta t}\,\mathcal{N}_{-} (|\alpha\rangle + |-\alpha\rangle) = \alpha\sqrt{\kappa \Delta t}\,\frac{\mathcal{N}_{-}}{\mathcal{N}_{+}}|+_L\rangle
     \end{align}
     $$
-    Similarly, a photon loss transforms $|-_L\rangle$ into $|+_L\rangle$, also a logical bit-flip error $\hat{X}_L$.
+    Similarly, a photon loss transforms $|-_L⟩$ into $|+_L⟩$, also a logical bit-flip error $\hat{X}_L$.
 
 The crucial insight is that a single photon loss deterministically flips the logical state. This error is therefore detectable.
-\subsubsection{Quantum Error Correction}
+### Quantum Error Correction
 
 The QEC protocol is a three-step cycle: detect the error, diagnose it, and apply a correction.
-The logical states are constructed to be eigenstates of the \textbf{photon number parity operator}, $\hat{P} = (-1)^{\hat n} = e^{i\pi\hat a^\dagger \hat{a}}$.
+The logical states are constructed to be eigenstates of the **photon number parity operator**, $\hat{P} = (-1)^{\hat n} = e^{i\pi\hat a^\dagger \hat{a}}$.
 It "flip" state by acting on Coherent state:
 $$
 \begin{align}
@@ -645,13 +645,13 @@ $$
 \end{align}
 $$
 In turns, when acting on Cat states:
-* $|+_L\rangle$ is composed only of even Fock states, so $\hat{P}|+_L\rangle = \hat{P} \frac{1}{\sqrt{2}}(|\alpha\rangle+|-\alpha\rangle) = +1 \cdot |+_L\rangle$.
-* $|-_L\rangle$ is composed only of odd Fock states, so $\hat{P}|-_L\rangle = \hat{P} \frac{1}{\sqrt{2}}(|\alpha\rangle-|-\alpha\rangle)  = -1 \cdot |-_L\rangle$.
+* $|+_L⟩$ is composed only of even Fock states, so $\hat{P}|+_L\rangle = \hat{P} \frac{1}{\sqrt{2}}(|\alpha\rangle+|-\alpha\rangle) = +1 \cdot |+_L\rangle$.
+* $|-_L⟩$ is composed only of odd Fock states, so $\hat{P}|-_L\rangle = \hat{P} \frac{1}{\sqrt{2}}(|\alpha\rangle-|-\alpha\rangle)  = -1 \cdot |-_L\rangle$.
 
 An error $E_1 \propto \hat a$ changes the number of photons by one, thus flipping the parity of the state.
 We can detect the error by repeatedly measuring the parity $\hat{P}$.
-If the system starts in an even state (e.g., $|+_L\rangle$) and we measure an odd parity (eigenvalue -1), we know a single-photon-loss error has occurred.
-This measurement outcome is the \textbf{syndrome}.
+If the system starts in an even state (e.g., $|+_L⟩$) and we measure an odd parity (eigenvalue -1), we know a single-photon-loss error has occurred.
+This measurement outcome is the **syndrome**.
 
 Once an error is detected, we must apply a unitary operation to reverse the bit-flip.
 A simple photon addition ($\hat a^\dagger$) is not unitary and cannot be the recovery.
@@ -662,7 +662,7 @@ $$
 \end{align}
 $$
 This operation is a composition of two operators:
-1.  The \textbf{Displacement Operator} $\hat{D}(\beta) = \exp(\beta \hat{a}^{\dagger}-\beta^* \hat{a})$.
+1.  The **Displacement Operator** $\hat{D}(\beta) = \exp(\beta \hat{a}^{\dagger}-\beta^* \hat{a})$.
     This operator shifts a coherent state $|\gamma\rangle$ in phase space: $\hat{D}(\beta)|\gamma\rangle = e^{(\beta\gamma^* - \beta^*\gamma)/2}|\gamma+\beta\rangle$.
     Here, we use a small, purely imaginary displacement $\begin{aligned}
         \beta = \frac{i \pi}{2\alpha}
@@ -680,18 +680,18 @@ This operation is a composition of two operators:
         D(\beta) = e^{\beta a^\dagger - \beta^* a} = \mathbb{1} + (\beta a^\dagger - \beta^* a) + \frac{1}{2}(\beta a^\dagger - \beta^* a)^2 + \dots
     \end{align}
     $$
-    It'll be natual if we take little shift $\beta<<1$, the first order term $\beta a^\dagger$ will become a main correction term.
+    It'll be natual if we take little shift $\beta \ll 1$, the first order term $\beta a^\dagger$ will become a main correction term.
     It donimates a creation operator $a^\dagger$, offset with photon loss $a$, results $a^\dagger a|n\rangle=n|n\rangle$.
-2.  The \textbf{Parity Operator} $\hat{P}$, which reflects a state through the origin of phase space: $\hat{P}|\gamma\rangle = |-\gamma\rangle$.
+2.  The **Parity Operator** $\hat{P}$, which reflects a state through the origin of phase space: $\hat{P}|\gamma\rangle = |-\gamma\rangle$.
 
-Let's see how $U_{\text{corr}}$ acts on an errored state. Suppose we started with $|+_L\rangle$, an error occurred, and the state became proportional to errored $|-_L\rangle \propto (|\alpha\rangle - |-\alpha\rangle)$ 
+Let's see how $U_{\text{corr}}$ acts on an errored state. Suppose we started with $|+_L⟩$, an error occurred, and the state became proportional to errored $|-_L⟩ \propto (|\alpha\rangle - |-\alpha\rangle)$ 
 $$
 \begin{align}
     \text{Begin: }\left|+_L\right\rangle \xrightarrow{\text { error }}\left|-_L\right\rangle
 \end{align}
 $$
 We apply $U_{\text{corr}}$:
-1.  \textbf{Apply Displacement $\hat{D}(\beta)$:}
+1.  **Apply Displacement $\hat{D}(\beta)$:**
     $$
     \begin{align}
         \hat{D}(\beta)(|\alpha\rangle - |-\alpha\rangle) &= e^{\frac{i\pi}{2}}|\alpha+\beta\rangle - e^{-\frac{i\pi}{2}}|-\alpha+\beta\rangle 
@@ -699,7 +699,7 @@ We apply $U_{\text{corr}}$:
         &= i(|\alpha+\beta\rangle + |-\alpha+\beta\rangle)
     \end{align}
     $$
-2.  \textbf{Apply Parity $\hat{P}$:}
+2.  **Apply Parity $\hat{P}$:**
     $$
     \begin{align}
         \hat{P}\left[i(|\alpha+\beta\rangle + |-\alpha+\beta\rangle)\right] &= i(\hat{P}|\alpha+\beta\rangle + \hat{P}|-\alpha+\beta\rangle)
@@ -713,25 +713,25 @@ $$
 \text { Result: }\left|+_L\right\rangle \xrightarrow{\text { error }}\left|-_L\right\rangle \xrightarrow{\text { corr }}\left|+_L\right\rangle_{\text {disp }}
 \end{align}
 $$
-The recovery operation successfully flips the logical state back from $|-_L\rangle$ to $|+_L\rangle$.
+The recovery operation successfully flips the logical state back from $|-_L⟩$ to $|+_L⟩$.
 The entire logical state is now slightly displaced in phase space, but this is a global transformation that does not affect the encoded information and can be tracked or corrected later.
 
 ![QEC in Cat State](cat state.png)
 
-Similarly, for errored state $\left|+_L\right\rangle$ :
+Similarly, for errored state $|+_L⟩$ :
 $$
 \begin{align}
     \text{Begin: }\left|-_L\right\rangle \xrightarrow{\text { error }}\left|+_L\right\rangle
 \end{align}
 $$
-Action on the errored $\left|+_L\right\rangle$ A similar calculation yields:
+Action on the errored $|+_L⟩$ A similar calculation yields:
 $$
 \begin{align}
 U_{c o r r}(|\alpha\rangle+|-\alpha\rangle)=-i(|\alpha-\beta\rangle-|-\alpha-\beta\rangle)
 \end{align}
 $$
 
-This final state is an odd cat state displaced by $-\beta$, proportional to a displaced logical one, $|-_L\rangle$.
+This final state is an odd cat state displaced by $-\beta$, proportional to a displaced logical one, $|-_L⟩$.
 $$
 \begin{align}
 \text { Result: }\left|-_L\right\rangle \xrightarrow{\text { error }}\left|+_L\right\rangle \xrightarrow{\text { corr }}\left|-_L\right\rangle_{\text {disp }}
@@ -753,7 +753,7 @@ $$
 > $$
 > \begin{align}
 >     U_{\mathrm{corr}} |+_L\rangle \propto |-_L\rangle,\quad
->     U_{\mathrm{corr}} |-_L\rangle \propto |+_L\rangle
+>     U_{\mathrmVerticals} |-_L\rangle \propto |+_L\rangle
 > \end{align}
 > $$
 >
@@ -767,13 +767,13 @@ $$
 > \end{align}
 > $$
 >
-> The operation leaves $|0_L\rangle$ alone and maps $|1_L\rangle$ to $-|1_L\rangle$, precisely the definition of a logical $\hat{Z}_L$ gate.
+> The operation leaves $|0_L⟩$ alone and maps $|1_L⟩$ to $-|1_L⟩$, precisely the definition of a logical $\hat{Z}_L$ gate.
 
 ### Example and Summary
 
 > **[QEC for Character "wuli" using Cat-State Encoding]**
 >
-> 1.  \textbf{Classical to Logical Bits}
+> 1.  **Classical to Logical Bits**
 >
 >     First, we convert the character "w" to its binary representation using ASCII encoding:
 >     $$
@@ -783,12 +783,12 @@ $$
 >     \end{align}
 >     $$
 >
->     We protect the first bit, which is \textbf{0}.
-> 2.  \textbf{Encoding into Logical Qubits}
+>     We protect the first bit, which is **0**.
+> 2.  **Encoding into Logical Qubits**
 >
 >     We use a two-level encoding scheme for comprehensive protection:
 >
->     1.  \textbf{Cat Qubit Encoding}
+>     1.  **Cat Qubit Encoding**
 >
 >         Each classical bit is mapped to the computational basis of a single cat qubit, providing intrinsic protection against bit-flip errors $(\hat{X}_L)$:
 >         $$
@@ -797,9 +797,9 @@ $$
 >         \end{align}
 >         $$
 >
->     2.  \textbf{Repetition Code}
+>     2.  **Repetition Code**
 >
->         To protect against phase-flip errors $(\hat{Z}_L)$, we use a \textbf{length-3 repetition code} with three cat qubits.
+>         To protect against phase-flip errors $(\hat{Z}_L)$, we use a **length-3 repetition code** with three cat qubits.
 >         The initial '0' is now represented as:
 >         $$
 >         \begin{align}
@@ -812,7 +812,7 @@ $$
 >         |+_L\rangle = \frac{|0_L\rangle + |1_L\rangle}{\sqrt{2}}
 >         \end{aligned}$ is the logical plus state in the cat qubit encoding.
 >
-> 3.  \textbf{Simulating an Error}
+> 3.  **Simulating an Error**
 >
 >     Assume a single photon loss event occurs on the second cat qubit:
 >     $$
@@ -823,23 +823,23 @@ $$
 >     \end{align}
 >     $$
 >
-> 4.  \textbf{Syndrome Detection}
+> 4.  **Syndrome Detection**
 >
 >     We use stabilizer measurements to detect the error location.
->     1.  \textbf{Stabilizer Measurement Circuit (Figure 1.1)}
+>     1.  **Stabilizer Measurement Circuit (Figure 1.1)**
 >
 >         The circuit measures the joint parity of two data qubits using:
 >
 >         ![Joint-parity measurement](stabilizer_circuit.png)
 >         *Figure 1.1: Joint-parity measurement*
 >
->         Data Qubits $(|\psi_j\rangle_c, |\psi_{j+1}\rangle_c)$: Two cat qubits as CNOT controls
+>         Data Qubits $(|\psi_j⟩_c, |\psi_{j+1}⟩_c)$: Two cat qubits as CNOT controls
 >
->         Ancilla Qubit $(|+\rangle_c)$: Prepared in $|+_L\rangle$ state, as CNOT target
+>         Ancilla Qubit $(|+⟩_c)$: Prepared in $|+_L⟩$ state, as CNOT target
 >
 >         Measurement $(M_X)$: Ancilla measured in X-basis, outcome gives syndrome
 >
->     2.  \textbf{Error Detection Process for "w"}
+>     2.  **Error Detection Process for "w"**
 >         $$
 >         \begin{align}
 >         \text{Measure } S_1 = \hat{X}_{L,1} \otimes \hat{X}_{L,2}
@@ -862,7 +862,7 @@ $$
 >
 >         Syndrome signature would be $(-1, -1)$ for measurement $(S_1, S_2)$, based on common to both stabilizers, the error locates at Qubit 2
 >
-> 5.  \textbf{Error Correction}
+> 5.  **Error Correction**
 >
 >     The correction operation is applied by performing a logical Z gate ($\hat{Z}_L$) on the second qubit.
 >     After this correction, the system returns to the corrected state where all three qubits are in the logical plus state.
@@ -872,12 +872,12 @@ $$
 >
 > To Encode the information and going through QEC process:
 > 1.  Convert the the object text to 8-bit ASCII binary: like $"w" \to 01110111$
-> 2.  Encode each logical bit by Cat code (qubit first time), $0\to|0_L\rangle$ , $1\to|1_L\rangle$ 
-> 3.  Encode each qubit by repetition Cat code $|0_L\rangle\to|+_L\rangle|+_L\rangle|+_L\rangle,|1_L\rangle\to|-_L\rangle|-_L\rangle|-_L\rangle$ 
-> 4.  Syndrome check: Measure the parity operator $\hat{P}$ (errored by bit-flip $\hat{Z}_L$). Outcome $−1$ signals that error $E_1$ occurred, the state is proportional to $|-_L\rangle$.
-> 5.  After Correction $\left(U_{\text {corr}}\propto\hat{a}^\dagger\right)$ : The state recovers to $|+_L\rangle$.
+> 2.  Encode each logical bit by Cat code (qubit first time), $0 \to |0_L\rangle$ , $1 \to |1_L\rangle$ 
+> 3.  Encode each qubit by repetition Cat code $|0_L\rangle \to |+_L\rangle|+_L\rangle|+_L\rangle, |1_L\rangle \to |-_L\rangle|-_L\rangle|-_L\rangle$ 
+> 4.  Syndrome check: Measure the parity operator $\hat{P}$ (errored by bit-flip $\hat{Z}_L$). Outcome $−1$ signals that error $E_1$ occurred, the state is proportional to $|-_L⟩$.
+> 5.  After Correction $\left(U_{\text {corr}}\propto\hat{a}^\dagger\right)$ : The state recovers to $|+_L⟩$.
 > 
-> On the Bloch sphere: $|0\rangle$ is sensitive to $\hat{X}$ errors but not to $\hat{Z}$ errors: 
+> On the Bloch sphere: $|0⟩$ is sensitive to $\hat{X}$ errors but not to $\hat{Z}$ errors: 
 > $$
 > \left\{\begin{aligned}
 >     \hat{Z}|0\rangle = +1 \cdot |0\rangle
@@ -886,7 +886,7 @@ $$
 >     ,\:\hat{X}|1\rangle = |0\rangle
 > \end{aligned}\right.
 > $$
-> , while $|+\rangle$ (the equator) is sensitive to $\hat{Z}$ errors but not to $\hat{X}$ errors:
+> , while $|+⟩$ (the equator) is sensitive to $\hat{Z}$ errors but not to $\hat{X}$ errors:
 > $$
 > \left\{\begin{aligned}
 >     \hat{X}|+\rangle = +1 \cdot |+\rangle
@@ -895,8 +895,8 @@ $$
 >     ,\:\hat{Z}|-\rangle = |+\rangle
 > \end{aligned}\right. .
 > $$
-> Our two-level encoding strategy leverages this geometric property: the first level, cat-state encoding to $|0\rangle$ , physically suppresses bit-flip errors ($\hat{X}_L$), making phase-flip ($\hat{Z}_L$) the primary threat.
-> Therefore, in the second level repetition code, we actively encode information from the Z-basis ($|0_L\rangle$) to the X-basis ($|+_L\rangle$).
+> Our two-level encoding strategy leverages this geometric property: the first level, cat-state encoding to |0⟩ , physically suppresses bit-flip errors ($\hat{X}_L$), making phase-flip ($\hat{Z}_L$) the primary threat.
+> Therefore, in the second level repetition code, we actively encode information from the Z-basis ($|0_L⟩$) to the X-basis ($|+_L⟩$).
 > This crucial transformation causes $\hat{Z}_L$ errors to manifest as measurable bit-flips in the X-basis, enabling the repetition code's stabilizer measurements (e.g., $S_1 = \hat{X}_{L,1} \otimes \hat{X}_{L,2}$) to successfully detect and locate them.
 > This is essentially a strategic translation that converts the error type into a language the error-correcting code can recognize.
 > The state is restored to its correct logical form, but with one important change: Global Displacement: The entire code space has been displaced in phase space by the vector corresponding to $-\beta=-\frac{i\pi}{2 \alpha}$.
@@ -908,7 +908,7 @@ $$
 
 ### Logical Codewords
 
-Given integers $N$ (order) and $S$ (spacing), define
+Given integers $N$ (*order*) and $S$ (*spacing*), define
 $$
 \begin{align}
   |+_L\rangle &=
@@ -937,16 +937,16 @@ Higher–order binomial codes also handle multiple loss, gain, and dephasing err
 >   |-_L\rangle &= |2\rangle.
 > \end{align}
 > $$
-> 1.  \textbf{Error action.}
+> 1.  **Error action.**
 >     $$
 >     \begin{align}
 >       E_1 |+_L\rangle &\;\propto\; |3\rangle, \\
 >       E_1 |-_L\rangle &\;\propto\; |1\rangle.
 >     \end{align}
 >     $$
-> 2.  \textbf{Syndrome measurement.}\, Measure photon number modulo $2$. 
->     Both $|3\rangle$ and $|1\rangle$ are odd, signalling one loss.
-> 3.  \textbf{Recovery.}\, A unitary controlled on the syndrome adds one photon:
+> 2.  **Syndrome measurement.** Measure photon number modulo $2$. 
+>     Both $|3\rangle$ and $|1\rangle$ are *odd*, signalling one loss.
+> 3.  **Recovery.** A unitary controlled on the syndrome adds one photon:
 >     $$
 >     \begin{align}
 >       |3\rangle \;\longrightarrow\; |4\rangle, \qquad
@@ -990,14 +990,14 @@ with $|\delta q|,|\delta p|<\sqrt{\pi}/2$ for correctability.
 
 > **[Example]**
 >
-> 1.  \textbf{Error.}\, The oscillator experiences 
+> 1.  **Error.** The oscillator experiences 
 >     $$
 >     \begin{align}
 >       |\psi\rangle \;\longrightarrow\; E(\delta q,\delta p) |\psi\rangle, \qquad
 >       |\delta q|,|\delta p|<\frac{\sqrt{\pi}}{2}.
 >     \end{align}
 >     $$
-> 2.  \textbf{Syndrome measurement.}\, Measure 
+> 2.  **Syndrome measurement.** Measure 
 >     $$
 >     \begin{align}
 >       q_{\text{sy}} &= \hat q \bmod \sqrt{\pi}, \\
@@ -1005,7 +1005,7 @@ with $|\delta q|,|\delta p|<\sqrt{\pi}/2$ for correctability.
 >     \end{align}
 >     $$
 >     These two real numbers constitute the classical syndrome.
-> 3.  \textbf{Feedback.}\, Apply the opposite displacement: 
+> 3.  **Feedback.** Apply the opposite displacement: 
 >     $$
 >     \begin{align}
 >       \hat R &= e^{\,i\,p_{\text{sy}}\hat q}\,
