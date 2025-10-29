@@ -93,8 +93,7 @@ It is crucial to distinguish between two fundamental bases which are named after
     \end{aligned}\right. \end{align}
     $$
 
-![Bloch sphere representation of a cat qubit](bloch.png)
-![Wigner representation of the $| \pm \rangle$(ab) and $| 0/1 \rangle$(cd)](state projections.png)
+![Bloch sphere representation of a cat qubit](bloch.png) ![Wigner representation of the $| \pm \rangle$(ab) and $| 0/1 \rangle$(cd)](<state projections.png>)
 
 *Figure 1: Different Presentation of logical states |±⟩ and computational states |0/1⟩*
 
@@ -716,7 +715,7 @@ $$
 The recovery operation successfully flips the logical state back from $|-_L⟩$ to $|+_L⟩$.
 The entire logical state is now slightly displaced in phase space, but this is a global transformation that does not affect the encoded information and can be tracked or corrected later.
 
-![QEC in Cat State](cat state.png)
+![QEC in Cat State](<cat state.png>)
 
 Similarly, for errored state $|+_L⟩$ :
 $$
