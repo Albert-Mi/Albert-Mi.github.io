@@ -1,3 +1,38 @@
 /*
     You can add your own custom styles here.
 */
+/* ===== Two-Figure Layout (Reusable Component) ===== */
+.twofigures {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+.twofigures img,
+.twofigures video {
+  width: 48%;
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
+/* On mobile, automatically stack vertically */
+@media (max-width: 700px) {
+  .twofigures {
+    flex-wrap: wrap;
+  }
+
+  .twofigures img,
+  .twofigures video {
+    width: 90%;
+  }
+}
+
+/* Optional: smooth hover scale for aesthetic effect */
+.twofigures img:hover,
+.twofigures video:hover {
+  transform: scale(1.02);
+  transition: transform 0.25s ease-in-out;
+}
