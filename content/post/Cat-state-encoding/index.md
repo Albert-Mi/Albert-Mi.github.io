@@ -93,15 +93,15 @@ It is crucial to distinguish between two fundamental bases which are named after
     \end{aligned}\right. \end{align}
     $$
 
-<!-- ==== Two Figures Example with Auto Numbering ==== -->
+<!-- ==== Example of reusable twofigures layout ==== -->
 <figure class="twofigures">
   <img src="bloch.png" alt="Bloch sphere representation of a cat qubit">
-  <img src="state projections.png" alt="Wigner representation of cat states">
+  <img src="state projections.png" alt="Wigner function representation of cat states">
 </figure>
 
-<p class="figcaption">
-Bloch sphere representation of a cat qubit (left) and Wigner representation of the 
-$|\pm\rangle$ (a,b: logical basis) and $|0/1\rangle$ (c,d: computational bases) states (right).
+<p style="text-align:center; font-style:italic;">
+<b>Figure 1:</b> Bloch sphere representation of a cat qubit (left) and Wigner representation of the 
+$|\pm\rangle$ (a,b) and $|0/1\rangle$ (c,d) states — different visualizations of logical and computational bases.
 </p>
 
 
