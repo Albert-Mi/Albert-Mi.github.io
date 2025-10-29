@@ -3,7 +3,7 @@
     'use strict';
     
     // ========== 配置区 ==========
-    const SECRET_PASSWORD = 'mySecret2025';  // 👈 在这里修改你的密码
+    const SECRET_PASSWORD = 'password:';  // 👈 在这里修改你的密码
     const SECRET_URL = '/page/secret/';       // 隐藏页面的URL
     const CLICK_TIMEOUT = 500;                // 连续点击的时间窗口（毫秒）
     
@@ -74,7 +74,7 @@
     
     // 显示密码输入框
     function showPasswordPrompt() {
-        const password = prompt('mimimima');
+        const password = prompt('🔐 Enter password:');
         
         if (password === null) {
             return; // 用户取消
