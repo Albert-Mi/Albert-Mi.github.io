@@ -96,7 +96,7 @@ It is crucial to distinguish between two fundamental bases which are named after
 <!-- ==== Example of reusable twofigures layout ==== -->
 <figure class="twofigures">
   <img src="bloch.png" alt="Bloch sphere representation of a cat qubit">
-  <img src="state_projections.png" alt="Wigner function representation of cat states">
+  <img src="state projections.png" alt="Wigner function representation of cat states">
 </figure>
 
 <p style="text-align:center; font-style:italic;">
