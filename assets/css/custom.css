@@ -1,4 +1,4 @@
-/* ===== Two-Figure Layout (Reusable Component) ===== */
+/* ===== Reusable Responsive Two-Figure Layout ===== */
 .twofigures {
   display: flex;
   flex-wrap: nowrap;
@@ -12,10 +12,10 @@
 .twofigures video {
   width: 48%;
   border-radius: 6px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 }
 
-/* On mobile, automatically stack vertically */
+/* Mobile layout: stacked */
 @media (max-width: 700px) {
   .twofigures {
     flex-wrap: wrap;
@@ -27,9 +27,28 @@
   }
 }
 
-/* Optional: smooth hover scale for aesthetic effect */
+/* Optional hover zoom effect */
 .twofigures img:hover,
 .twofigures video:hover {
   transform: scale(1.02);
   transition: transform 0.25s ease-in-out;
+}
+
+/* ===== Figure Caption Numbering ===== */
+.figcaption {
+  counter-increment: figure;
+  text-align: center;
+  font-style: italic;
+  font-size: 0.95rem;
+  color: #555;
+  margin-top: -0.5rem;
+}
+
+.figcaption::before {
+  content: "Figure " counter(figure) ": ";
+  font-weight: bold;
+}
+
+body {
+  counter-reset: figure;
 }
