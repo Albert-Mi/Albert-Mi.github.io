@@ -77,6 +77,10 @@ src = ""
 [params.math]
 enable = true
 
+[params.assets]
+    favicon = "/favicon.png"
+    # 添加自定义 JavaScript
+    customJS = ["js/secret-entrance.js"]
 
 # -------- 颜色/主题 --------
 [colorScheme]
