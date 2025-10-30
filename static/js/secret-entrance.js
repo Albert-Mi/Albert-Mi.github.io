@@ -11,7 +11,7 @@
     const SECRET_URL = '/page/secret/';        // 隐藏页面URL
     const CLICK_TIMEOUT = 2000;                // 2秒内连击
     const REQUIRED_CLICKS = 5;                 // 需要4次点击（改成5就是5次）
-    const DEBUG_MODE = true;                  // true: 显示红色边框；false: 完全隐形
+    const DEBUG_MODE = false;                  // true: 显示红色边框；false: 完全隐形
     
     let clickCount = 0;
     let clickTimer = null;
