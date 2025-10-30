@@ -1,6 +1,6 @@
 ---
 title: "Twitter"
-slug: "twitter"              # 改成小写
+slug: "secret"              # 改成小写
 date: 2025-10-30
 description: "仅个人可见"
 hidden: true                  # 保持
