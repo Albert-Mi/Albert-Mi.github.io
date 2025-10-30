@@ -89,7 +89,7 @@
             padding: 0;
             position: relative;
             display: block;
-            ${DEBUG_MODE ? 'background: rgba(255, 0, 0, 0.3) !important;' : 'opacity: 0.1;'}
+            ${DEBUG_MODE ? 'background: rgba(255, 0, 0, 0.3) !important;' : 'opacity: 0.9;'}
             ${DEBUG_MODE ? 'border: 2px solid red !important;' : ''}
         `;
         
