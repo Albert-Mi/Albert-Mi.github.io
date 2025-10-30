@@ -10,8 +10,8 @@
     const SECRET_PASSWORD = 'mimimima';        // 密码
     const SECRET_URL = '/page/secret/';        // 隐藏页面URL
     const CLICK_TIMEOUT = 2000;                // 2秒内连击
-    const REQUIRED_CLICKS = 4;                 // 需要4次点击
-    const DEBUG_MODE = true;                   // 调试模式：显示红色边框
+    const REQUIRED_CLICKS = 5;                 // 需要4次点击
+    const DEBUG_MODE = false； # true;                   // 调试模式：显示红色边框
     
     let clickCount = 0;
     let clickTimer = null;
