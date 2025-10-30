@@ -1,4 +1,4 @@
-// Secret Entrance - Customized Version
+// Secret Entrance - Fixed Version
 // 位置：Search菜单项下方，完全隐形
 // 触发：2秒内连击4次，输入密码 mimimima
 (function() {
@@ -64,11 +64,13 @@
             height: ${itemHeight}px;
             width: 100%;
             cursor: default;
-            opacity: 0;
+            opacity: 0.01;
+            background: transparent;
             list-style: none;
             margin: 0;
             padding: 0;
             position: relative;
+            pointer-events: auto;
         `;
         
         // 创建可点击区域（填充整个li）
@@ -80,6 +82,9 @@
             top: 0;
             left: 0;
             cursor: default;
+            pointer-events: auto;
+            background: transparent;
+            z-index: 10;
         `;
         
         clickArea.addEventListener('click', handleSecretClick);
@@ -109,6 +114,7 @@
             background: rgba(255, 0, 0, 0.3);
             z-index: 9999;
             border-radius: 50%;
+            pointer-events: auto;
         `;
         
         trigger.addEventListener('click', handleSecretClick);
