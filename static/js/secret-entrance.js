@@ -11,7 +11,7 @@
     const SECRET_URL = '/page/secret/';        // 隐藏页面URL
     const CLICK_TIMEOUT = 2000;                // 2秒内连击
     const REQUIRED_CLICKS = 5;                 // 需要4次点击
-    const DEBUG_MODE = false； // true;                   // 调试模式：显示红色边框
+    const DEBUG_MODE = true;                   // 调试模式：显示红色边框
     
     let clickCount = 0;
     let clickTimer = null;
@@ -89,7 +89,7 @@
             padding: 0;
             position: relative;
             display: block;
-            ${DEBUG_MODE ? 'background: rgba(255, 0, 0, 0.3) !important;' : 'opacity: 0.01;'}
+            ${DEBUG_MODE ? 'background: rgba(255, 0, 0, 0.3) !important;' : 'opacity: 0.1;'}
             ${DEBUG_MODE ? 'border: 2px solid red !important;' : ''}
         `;
         
