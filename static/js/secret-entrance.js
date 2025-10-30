@@ -1,6 +1,6 @@
-// Secret Entrance - Complete Fixed Version
-// 位置：Search菜单项下方，与其他菜单项大小完全相同
-// 触发：2秒内连击4次，输入密码 mimimima
+// Secret Entrance - With Working DEBUG_MODE Toggle
+// 位置：Search菜单项下方
+// 触发：2秒内连击4次（可修改为5次），输入密码 mimimima
 (function() {
     'use strict';
     
@@ -10,8 +10,8 @@
     const SECRET_PASSWORD = 'mimimima';        // 密码
     const SECRET_URL = '/page/secret/';        // 隐藏页面URL
     const CLICK_TIMEOUT = 2000;                // 2秒内连击
-    const REQUIRED_CLICKS = 5;                 // 需要4次点击
-    const DEBUG_MODE = true;                   // 调试模式：显示红色边框
+    const REQUIRED_CLICKS = 5;                 // 需要4次点击（改成5就是5次）
+    const DEBUG_MODE = true;                  // true: 显示红色边框；false: 完全隐形
     
     let clickCount = 0;
     let clickTimer = null;
@@ -19,154 +19,112 @@
     // 等待DOM加载完成
     function init() {
         console.log('🚀 Initializing secret entrance...');
-        
-        // 等待左侧栏菜单加载完成
-        setTimeout(() => {
-            createSecretTrigger();
-        }, 800);  // 增加等待时间确保菜单完全加载
+        setTimeout(createSecretTrigger, 800);
     }
     
     // 创建隐秘触发器
     function createSecretTrigger() {
-        // 查找左侧栏菜单容器（尝试多个选择器）
         const menuContainer = document.querySelector('#left-sidebar .menu') ||
                             document.querySelector('.left-sidebar .menu') ||
                             document.querySelector('aside .menu') ||
-                            document.querySelector('.sidebar .menu') ||
-                            document.querySelector('.main-menu') ||
-                            document.querySelector('nav.menu');
+                            document.querySelector('.sidebar .menu');
         
         if (!menuContainer) {
             console.error('❌ Menu container not found');
-            console.log('Available elements:', document.querySelector('#left-sidebar'));
-            createFallbackTrigger();
             return;
         }
         
-        console.log('✅ Menu container found:', menuContainer);
+        console.log('✅ Menu container found');
         
-        // 获取所有菜单项
         const menuItems = menuContainer.querySelectorAll('li');
-        console.log(`📊 Found ${menuItems.length} menu items`);
+        console.log('📊 Found ' + menuItems.length + ' menu items');
         
         if (menuItems.length === 0) {
-            console.error('❌ No menu items found');
-            createFallbackTrigger();
             return;
         }
         
-        // 获取最后一个菜单项（Search）
         const lastMenuItem = menuItems[menuItems.length - 1];
-        
-        // 尝试获取菜单项内的链接元素（真正的点击区域）
         const lastMenuLink = lastMenuItem.querySelector('a') || lastMenuItem;
         
-        // 获取真实的尺寸（包括padding和margin）
         const computedStyle = window.getComputedStyle(lastMenuLink);
-        const realHeight = lastMenuLink.offsetHeight || 
-                          parseInt(computedStyle.height) || 
-                          50;  // 默认50px
-        const realWidth = menuContainer.offsetWidth || lastMenuLink.offsetWidth;
+        const realHeight = lastMenuLink.offsetHeight || 50;
         
-        console.log(`📏 Menu item real size: ${realWidth}x${realHeight}px`);
-        console.log(`📏 Computed height: ${computedStyle.height}`);
-        console.log(`📏 Offset height: ${lastMenuLink.offsetHeight}px`);
+        console.log('📏 Menu item height: ' + realHeight + 'px');
         
-        // 创建隐形触发器（作为新的菜单项）
+        // 创建触发器
         const trigger = document.createElement('li');
         trigger.id = 'secret-trigger';
         
-        // 复制最后一个菜单项的样式
-        const liComputedStyle = window.getComputedStyle(lastMenuItem);
+        const liStyle = window.getComputedStyle(lastMenuItem);
         
-        trigger.style.cssText = `
-            height: ${realHeight}px;
-            min-height: ${realHeight}px;
-            width: 100%;
-            cursor: default;
-            list-style: none;
-            margin: ${liComputedStyle.margin};
-            padding: 0;
-            position: relative;
-            display: block;
-            ${DEBUG_MODE ? 'background: rgba(255, 0, 0, 0.3) !important;' : 'opacity: 0.9;'}
-            ${DEBUG_MODE ? 'border: 2px solid red !important;' : ''}
-        `;
+        // 基础样式（无论调试与否都需要）
+        trigger.style.height = realHeight + 'px';
+        trigger.style.minHeight = realHeight + 'px';
+        trigger.style.width = '100%';
+        trigger.style.cursor = 'default';
+        trigger.style.listStyle = 'none';
+        trigger.style.margin = liStyle.margin;
+        trigger.style.padding = '0';
+        trigger.style.position = 'relative';
+        trigger.style.display = 'block';
         
-        // 创建内部链接样式的可点击区域
-        const clickArea = document.createElement('a');
-        clickArea.href = 'javascript:void(0);';
-        clickArea.style.cssText = `
-            display: block;
-            width: 100%;
-            height: 100%;
-            min-height: ${realHeight}px;
-            padding: ${computedStyle.padding};
-            cursor: default;
-            position: relative;
-            z-index: 100;
-            ${DEBUG_MODE ? 'background: rgba(0, 255, 0, 0.2) !important;' : 'background: transparent;'}
-            ${DEBUG_MODE ? 'border: 1px dashed green !important;' : ''}
-        `;
-        
-        // 添加可见的文本（仅在调试模式）
+        // 根据 DEBUG_MODE 设置不同的可见性
         if (DEBUG_MODE) {
-            clickArea.innerHTML = `
-                <div style="color: red; font-size: 12px; padding: 5px;">
-                    🔒 SECRET (${REQUIRED_CLICKS} clicks)
-                </div>
-            `;
+            // 调试模式：显示红色边框
+            trigger.style.background = 'rgba(255, 0, 0, 0.3)';
+            trigger.style.border = '2px solid red';
+            trigger.style.opacity = '1';
+        } else {
+            // 生产模式：完全隐形但可点击
+            trigger.style.background = 'transparent';
+            trigger.style.border = 'none';
+            trigger.style.opacity = '1';  // 保持1，用transparent隐藏
         }
         
-        // 绑定点击事件
-        clickArea.addEventListener('click', handleSecretClick);
+        // 创建可点击区域
+        const clickArea = document.createElement('a');
+        clickArea.href = 'javascript:void(0);';
         
-        // 阻止默认行为
-        clickArea.addEventListener('mousedown', (e) => e.preventDefault());
+        clickArea.style.display = 'block';
+        clickArea.style.width = '100%';
+        clickArea.style.height = '100%';
+        clickArea.style.minHeight = realHeight + 'px';
+        clickArea.style.padding = computedStyle.padding;
+        clickArea.style.cursor = 'default';
+        clickArea.style.position = 'relative';
+        clickArea.style.zIndex = '100';
+        clickArea.style.textDecoration = 'none';
+        
+        // 根据 DEBUG_MODE 设置点击区域的可见性
+        if (DEBUG_MODE) {
+            // 调试模式：绿色边框和文字
+            clickArea.style.background = 'rgba(0, 255, 0, 0.2)';
+            clickArea.style.border = '1px dashed green';
+            clickArea.style.color = 'red';
+            clickArea.innerHTML = '<div style="padding: 5px; font-size: 12px;">🔒 SECRET (' + REQUIRED_CLICKS + ' clicks)</div>';
+        } else {
+            // 生产模式：透明无内容
+            clickArea.style.background = 'transparent';
+            clickArea.style.border = 'none';
+            clickArea.style.color = 'transparent';
+        }
+        
+        // 绑定事件
+        clickArea.addEventListener('click', handleSecretClick);
+        clickArea.addEventListener('mousedown', function(e) {
+            e.preventDefault();
+        });
         
         trigger.appendChild(clickArea);
         
-        // 插入到Search后面
+        // 插入菜单
         if (lastMenuItem.nextSibling) {
             menuContainer.insertBefore(trigger, lastMenuItem.nextSibling);
         } else {
             menuContainer.appendChild(trigger);
         }
         
-        console.log('✅ Secret trigger created below Search!');
-        console.log('📍 Trigger element:', trigger);
-        console.log('📍 Trigger dimensions:', trigger.getBoundingClientRect());
-    }
-    
-    // 备用方案：在页面右下角创建明显的测试按钮
-    function createFallbackTrigger() {
-        const trigger = document.createElement('div');
-        trigger.id = 'secret-trigger-fallback';
-        trigger.style.cssText = `
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            width: 100px;
-            height: 100px;
-            cursor: pointer;
-            background: rgba(255, 0, 0, 0.5);
-            z-index: 99999;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 12px;
-            text-align: center;
-            font-weight: bold;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-        `;
-        trigger.innerHTML = '🔒<br>SECRET<br>CLICK 4X';
-        
-        trigger.addEventListener('click', handleSecretClick);
-        document.body.appendChild(trigger);
-        
-        console.log('⚠️ Using fallback trigger (right-bottom corner)');
+        console.log('✅ Secret trigger created! DEBUG_MODE: ' + DEBUG_MODE);
     }
     
     // 处理点击事件
@@ -174,16 +132,13 @@
         e.preventDefault();
         e.stopPropagation();
         
-        clickCount++;
-        console.log(`🖱️ Click ${clickCount}/${REQUIRED_CLICKS}`);
-        console.log(`⏰ Time window: ${CLICK_TIMEOUT}ms`);
+        clickCount = clickCount + 1;
+        console.log('🖱️ Click ' + clickCount + '/' + REQUIRED_CLICKS);
         
-        // 清除之前的计时器
         if (clickTimer) {
             clearTimeout(clickTimer);
         }
         
-        // 检查是否达到要求的点击次数
         if (clickCount >= REQUIRED_CLICKS) {
             console.log('🎯 Required clicks reached!');
             showPasswordPrompt();
@@ -191,8 +146,7 @@
             return;
         }
         
-        // 设置重置计时器
-        clickTimer = setTimeout(() => {
+        clickTimer = setTimeout(function() {
             console.log('⏱️ Timeout - reset click count');
             clickCount = 0;
         }, CLICK_TIMEOUT);
@@ -200,21 +154,21 @@
     
     // 显示密码输入框
     function showPasswordPrompt() {
-        const password = prompt('🔐 Enter the secret password:');
+        var password = prompt('🔐 Enter the secret password:');
         
         if (password === null) {
             console.log('❌ User cancelled');
             return;
         }
         
-        console.log('🔑 Password entered:', password ? '***' : '(empty)');
+        console.log('🔑 Password entered');
         
         if (password === SECRET_PASSWORD) {
             console.log('✅ Password correct! Redirecting...');
-            alert('✅ Access granted! Redirecting to secret page...');
+            alert('✅ Access granted!');
             window.location.href = SECRET_URL;
         } else {
-            console.log('❌ Wrong password. Expected:', SECRET_PASSWORD);
+            console.log('❌ Wrong password');
             alert('❌ Incorrect password. Access denied.');
         }
     }
@@ -225,12 +179,4 @@
     } else {
         init();
     }
-    
-    // 额外：监听整个菜单容器的点击（帮助调试）
-    document.addEventListener('click', function(e) {
-        if (e.target.id === 'secret-trigger' || 
-            e.target.closest('#secret-trigger')) {
-            console.log('🎯 Clicked on secret trigger!');
-        }
-    }, true);
 })();
