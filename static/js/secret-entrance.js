@@ -64,8 +64,8 @@
             height: ${itemHeight}px;
             width: 100%;
             cursor: default;
-            opacity: 0.01;
-            background: transparent;
+            opacity: 1;  // 完全可见
+            background: rgba(255, 0, 0, 0.3);  // 红色半透明
             list-style: none;
             margin: 0;
             padding: 0;
