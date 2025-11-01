@@ -222,3 +222,52 @@
         }
     }
 })();
+
+// very simple private search
+(function () {
+  // 只在 /private/ 下面才做
+  if (!location.pathname.startsWith('/private/')) return;
+
+  // 找右边那个搜索框
+  const input = document.querySelector('input[type="search"], .search-input');
+  const resultBox = document.querySelector('.widget-search-result'); // 没有就自己建
+  if (!input) return;
+
+  // 先把私密索引拉下来
+  fetch('/private/index.json')
+    .then(r => r.json())
+    .then(data => {
+      // 监听输入
+      input.addEventListener('input', function () {
+        const kw = this.value.trim().toLowerCase();
+        if (!kw) {
+          // 清空展示
+          if (resultBox) resultBox.innerHTML = '';
+          return;
+        }
+
+        const matched = data.filter(item => {
+          return (
+            (item.title && item.title.toLowerCase().includes(kw)) ||
+            (item.summary && item.summary.toLowerCase().includes(kw))
+          );
+        });
+
+        // 这里你可以按你的主题样子渲染，我先给你最简单的
+        if (resultBox) {
+          resultBox.innerHTML = matched
+            .map(
+              m =>
+                `<div class="search-hit"><a href="${m.permalink}">${m.title}</a></div>`
+            )
+            .join('');
+        } else {
+          console.log('🔎 private search matched:', matched);
+        }
+      });
+    })
+    .catch(err => {
+      console.warn('⚠️ cannot load /private/index.json', err);
+    });
+})();
+
