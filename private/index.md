@@ -3,7 +3,7 @@ title: "Twitter 账户信息"
 slug: "private"              # 改成 private
 date: 2025-10-30
 description: "仅个人可见"
-hidden: true
+hidden: false # true
 excludeFromRSS: true
 excludeFromSitemap: true
 ---
