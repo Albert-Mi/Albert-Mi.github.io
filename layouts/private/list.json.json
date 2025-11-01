@@ -1,6 +1,6 @@
 {{- /* layouts/private/list.json.json */ -}}
 [
-  {{- $pages := where .Pages "Type" "private-page" -}}
+  {{- $pages := .Pages -}}
   {{- range $i, $p := $pages -}}
     {{- if $i }},{{ end -}}
     {
