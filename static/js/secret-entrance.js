@@ -223,51 +223,71 @@
     }
 })();
 
-// very simple private search
+// very simple private search (fixed)
 (function () {
   // 只在 /private/ 下面才做
   if (!location.pathname.startsWith('/private/')) return;
 
-  // 找右边那个搜索框
-  const input = document.querySelector('input[type="search"], .search-input');
-  const resultBox = document.querySelector('.widget-search-result'); // 没有就自己建
+  const input =
+    document.querySelector('input[type="search"], .search-input, #search-input');
+
   if (!input) return;
 
-  // 先把私密索引拉下来
+  // 没有结果容器就自己建一个，放到搜索框后面
+  let resultBox = document.querySelector('#private-search-result');
+  if (!resultBox) {
+    resultBox = document.createElement('div');
+    resultBox.id = 'private-search-result';
+    resultBox.style.marginTop = '1rem';
+    resultBox.style.display = 'grid';
+    resultBox.style.gap = '0.5rem';
+    input.parentNode.appendChild(resultBox);
+  }
+
   fetch('/private/index.json')
-    .then(r => r.json())
-    .then(data => {
-      // 监听输入
+    .then((r) => {
+      if (!r.ok) {
+        throw new Error('HTTP ' + r.status);
+      }
+      return r.json();
+    })
+    .then((data) => {
+      console.log('📦 loaded private index:', data);
+
       input.addEventListener('input', function () {
         const kw = this.value.trim().toLowerCase();
         if (!kw) {
-          // 清空展示
-          if (resultBox) resultBox.innerHTML = '';
+          resultBox.innerHTML = '';
           return;
         }
 
-        const matched = data.filter(item => {
+        const matched = data.filter((item) => {
           return (
             (item.title && item.title.toLowerCase().includes(kw)) ||
             (item.summary && item.summary.toLowerCase().includes(kw))
           );
         });
 
-        // 这里你可以按你的主题样子渲染，我先给你最简单的
-        if (resultBox) {
-          resultBox.innerHTML = matched
-            .map(
-              m =>
-                `<div class="search-hit"><a href="${m.permalink}">${m.title}</a></div>`
-            )
-            .join('');
-        } else {
-          console.log('🔎 private search matched:', matched);
+        if (!matched.length) {
+          resultBox.innerHTML = '<div style="opacity:.6">No private results.</div>';
+          return;
         }
+
+        resultBox.innerHTML = matched
+          .map(
+            (m) =>
+              `<div style="background:#111;border-radius:.5rem;padding:.5rem .75rem;">
+                <a href="${m.permalink}" style="color:white;text-decoration:none;">
+                  ${m.title}
+                </a>
+              </div>`
+          )
+          .join('');
       });
     })
-    .catch(err => {
+    .catch((err) => {
       console.warn('⚠️ cannot load /private/index.json', err);
     });
 })();
+
 
