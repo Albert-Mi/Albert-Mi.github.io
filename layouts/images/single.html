@@ -1,0 +1,42 @@
+{{ define "main" }}
+
+{{/* 拿到当前页面下所有图片资源 */}}
+{{ $all := .Resources.ByType "image" }}
+
+{{/* 把图片资源转成前端能吃的数组 */}}
+{{ $images := slice }}
+{{ range $all }}
+  {{ $images = $images | append (dict
+    "src" .RelPermalink
+    "title" .Name
+  ) }}
+{{ end }}
+
+<article class="prose max-w-none">
+  <header>
+    <h1>{{ .Title }}</h1>
+    {{ with .Params.tags }}
+      <p>
+        {{ range . }}<span class="badge">{{ . }}</span> {{ end }}
+      </p>
+    {{ end }}
+    {{ with .Content }}
+      <div class="mt-4 mb-6">
+        {{ . }}
+      </div>
+    {{ end }}
+  </header>
+
+  <!-- 这里是给 JS 用的根节点 -->
+  <div
+    id="gallery-root"
+    class="gallery-root"
+    data-images='{{ $images | jsonify }}'
+    data-per-page='{{ with site.Params.gallery.perPage }}{{ . }}{{ else }}20{{ end }}'
+    data-per-row='{{ with site.Params.gallery.perRow }}{{ . }}{{ else }}5{{ end }}'
+    data-mode='{{ with site.Params.gallery.displayMode }}{{ . }}{{ else }}square{{ end }}'
+  ></div>
+
+</article>
+
+{{ end }}
