@@ -78,9 +78,11 @@ src = ""
 enable = true
 
 [params.assets]
-    favicon = "/favicon.png"
-    # 添加自定义 JavaScript
-    customJS = ["js/secret-entrance.js"]
+favicon = "/favicon.png"
+# 添加自定义JavaScript
+customJS  = ["js/secret-entrance.js", "js/gallery.js"]
+customCSS = ["css/gallery.css"]
+
 
 # -------- 颜色/主题 --------
 [colorScheme]
