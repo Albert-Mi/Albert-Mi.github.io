@@ -167,3 +167,11 @@ clientSecret = ""
 [comments.cusdis]
 host = ""
 id = ""
+
+[params.gallery]
+# 每页图片数（可全站统一）
+perPage = 20
+# 每行图片数（可全站统一）
+perRow = 5
+# 默认显示模式：square(正方形裁剪) 或 original(保持横/竖)
+displayMode = "square"
