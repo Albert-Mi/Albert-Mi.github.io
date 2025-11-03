@@ -1,5 +1,5 @@
 ---
-title: "Background"
+title: "Wallpaper"
 date: 2025-11-03
 type: "images"
 categories: ["images"]
