@@ -1,0 +1,24 @@
+{{- $cols := .Get "cols" | default 3 -}}
+<style>
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat({{ $cols }}, minmax(0, 1fr));
+  gap: 12px;
+}
+@media (max-width: 768px) {
+  .gallery-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 480px) {
+  .gallery-grid { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+}
+.gallery-grid a { display:block; border-radius: 8px; overflow: hidden; }
+.gallery-grid img { width: 100%; height: auto; display:block; }
+</style>
+
+<div class="gallery-grid">
+  {{- range .Page.Resources.ByType "image" -}}
+    <a href="{{ .RelPermalink }}" target="_blank" title="{{ .Name }}">
+      <img src="{{ .RelPermalink }}" alt="{{ .Name }}" loading="lazy">
+    </a>
+  {{- end -}}
+</div>
