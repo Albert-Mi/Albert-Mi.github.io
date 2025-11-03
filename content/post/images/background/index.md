@@ -1,9 +1,8 @@
 ---
-title: "屏幕壁纸"
+title: "Background"
 date: 2025-11-03
 type: "images"
 categories: ["images"]
-tags: ["壁纸"]
+tags: ["wallpaper"]
 ---
-
-这是手机、电脑的壁纸图片
+这是手机、电脑的壁纸相册页。
