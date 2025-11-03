@@ -13,9 +13,11 @@
     {{ range .Pages.ByDate.Reverse }}
       <a href="{{ .RelPermalink }}" class="block border rounded-lg overflow-hidden hover:shadow-lg transition">
         <div class="aspect-[4/3] bg-gray-100">
-          {{ $first := .Resources.ByType "image" | first }}
-          {{ if $first }}
-            <img src="{{ $first.RelPermalink }}" alt="{{ .Title }}" class="w-full h-full object-cover">
+          {{/* 取当前页面包中的第一张图，注意 first 要写成 first 1 $seq */}}
+          {{ $imgs := .Resources.ByType "image" }}
+          {{ if gt (len $imgs) 0 }}
+            {{ $cover := index (first 1 $imgs) 0 }}
+            <img src="{{ $cover.RelPermalink }}" alt="{{ .Title }}" class="w-full h-full object-cover">
           {{ else }}
             <div class="w-full h-full flex items-center justify-center text-gray-400 text-sm">
               No image
