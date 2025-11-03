@@ -1,0 +1,38 @@
+{{ define "main" }}
+<article class="prose max-w-none">
+  <header>
+    <h1>{{ .Title }}</h1>
+    {{ if .Content }}
+      <div class="mt-4 mb-6">
+        {{ .Content }}
+      </div>
+    {{ end }}
+  </header>
+
+  <div class="grid md:grid-cols-3 gap-6">
+    {{ range .Pages.ByDate.Reverse }}
+      <a href="{{ .RelPermalink }}" class="block border rounded-lg overflow-hidden hover:shadow-lg transition">
+        <div class="aspect-[4/3] bg-gray-100">
+          {{ $first := .Resources.ByType "image" | first }}
+          {{ if $first }}
+            <img src="{{ $first.RelPermalink }}" alt="{{ .Title }}" class="w-full h-full object-cover">
+          {{ else }}
+            <div class="w-full h-full flex items-center justify-center text-gray-400 text-sm">
+              No image
+            </div>
+          {{ end }}
+        </div>
+        <div class="p-3">
+          <h2 class="text-lg font-semibold mb-1">{{ .Title }}</h2>
+          <p class="text-xs text-gray-500">{{ .Date.Format "2006-01-02" }}</p>
+          {{ with .Params.tags }}
+            <p class="mt-1 text-xs text-gray-400">
+              {{ range . }}#{{ . }} {{ end }}
+            </p>
+          {{ end }}
+        </div>
+      </a>
+    {{ end }}
+  </div>
+</article>
+{{ end }}
