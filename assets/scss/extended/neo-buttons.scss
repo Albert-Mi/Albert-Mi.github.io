@@ -1,0 +1,159 @@
+/* ===== Neo Buttons - Global Apply (except private) =====
+ * 放在 assets/scss/extended/ 下，Hugo Stack 会自动编译合并
+ */
+
+/* —— 基础参数 —— */
+:root {
+  --neo-radius: 999px;
+  --neo-pad-y: .56rem;
+  --neo-pad-x: 1.1rem;
+  --neo-font: 0.95rem;
+  --neo-ring: 2px;
+}
+
+/* —— 适配明亮 / 黑暗模式（Stack 用 data-scheme） —— */
+html:not([data-scheme="dark"]) {
+  --neo-bg: #f1f1f3;
+  --neo-bg-2: #ffffff;
+  --neo-text: #222;
+  --neo-shadow-1: rgba(0,0,0,.12);
+  --neo-shadow-2: rgba(0,0,0,.06);
+  --neo-glow: rgba(120,120,255,.18);
+  --neo-ring-color: rgba(80,110,255,.45);
+}
+html[data-scheme="dark"] {
+  --neo-bg: #2a2b31;
+  --neo-bg-2: #1f2025;
+  --neo-text: #e7e7ea;
+  --neo-shadow-1: rgba(0,0,0,.55);
+  --neo-shadow-2: rgba(0,0,0,.35);
+  --neo-glow: rgba(120,120,255,.22);
+  --neo-ring-color: rgba(140,170,255,.55);
+}
+
+/* —— 核心按钮占位（便于二次扩展） —— */
+%neo-core {
+  --_bg: var(--neo-bg);
+  --_fg: var(--neo-text);
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  padding: var(--neo-pad-y) var(--neo-pad-x);
+  border-radius: var(--neo-radius);
+  color: var(--_fg);
+  background: linear-gradient(180deg, var(--_bg), var(--neo-bg-2));
+  box-shadow:
+    8px 8px 18px var(--neo-shadow-1),
+    -6px -6px 14px var(--neo-shadow-2),
+    inset 0 0 0 1px rgba(255,255,255,.03);
+  border: 0;
+  text-decoration: none;
+  font-size: var(--neo-font);
+  line-height: 1;
+  transform: translateZ(0);
+  transition: box-shadow .2s ease, transform .15s ease, background .2s ease, color .2s ease, filter .2s ease;
+  cursor: pointer;
+  user-select: none;
+}
+%neo-core-hover {
+  box-shadow:
+    12px 12px 28px var(--neo-shadow-1),
+    -8px -8px 18px var(--neo-shadow-2),
+    0 0 22px var(--neo-glow);
+  transform: translateY(-1.5px);
+}
+%neo-core-active { transform: translateY(0); filter: brightness(.98); }
+%neo-core-focus {
+  outline: none;
+  box-shadow:
+    0 0 0 var(--neo-ring) var(--neo-ring-color),
+    8px 8px 18px var(--neo-shadow-1),
+    -6px -6px 14px var(--neo-shadow-2);
+}
+
+/* —— 手动类：依然保留 .neo-btn 供局部使用 —— */
+.neo-btn     { @extend %neo-core; }
+.neo-btn:hover { @extend %neo-core-hover; }
+.neo-btn:active{ @extend %neo-core-active; }
+.neo-btn:focus-visible { @extend %neo-core-focus; }
+
+/* —— 一键全站映射：body 非私密页时，替换常见交互元素 —— */
+/* 说明：
+ * 1) 使用 :where() 降低优先级，减少覆盖冲突；
+ * 2) 覆盖 a、button、input[type=button|submit|reset]、nav/菜单链接、分页链接等；
+ * 3) 为了避免把“文章正文中的内联链接”全变成按钮，这里默认排除了 .post-content / .article-content 范围；
+ *    —— 如果你确实希望正文里所有链接也变按钮，删掉对应 :not() 即可。
+ */
+body:not(.is-private):not(.no-neo)
+  :where(a, button, input[type="button"], input[type="submit"], input[type="reset"],
+         nav a, .menu a, .pagination a, .nav a, .header a, .footer a)
+  :not(.neo-exempt)
+  :not(.neo-text)
+  { @extend %neo-core; }
+
+body:not(.is-private):not(.no-neo)
+  :where(a, button, input[type="button"], input[type="submit"], input[type="reset"],
+         nav a, .menu a, .pagination a, .nav a, .header a, .footer a)
+  :not(.neo-exempt)
+  :not(.neo-text):hover { @extend %neo-core-hover; }
+
+body:not(.is-private):not(.no-neo)
+  :where(a, button, input[type="button"], input[type="submit"], input[type="reset"],
+         nav a, .menu a, .pagination a, .nav a, .header a, .footer a)
+  :not(.neo-exempt)
+  :not(.neo-text):active { @extend %neo-core-active; }
+
+body:not(.is-private):not(.no-neo)
+  :where(a, button, input[type="button"], input[type="submit"], input[type="reset"],
+         nav a, .menu a, .pagination a, .nav a, .header a, .footer a)
+  :not(.neo-exempt)
+  :not(.neo-text):focus-visible { @extend %neo-core-focus; }
+
+/* —— 正文内链接默认不变成“按钮”外观（可按需放开） —— */
+.post-content :where(a),
+.article-content :where(a) {
+  /* 保持主题原样；若希望正文链接也变成按钮，删除本块 */
+}
+
+/* —— 局部豁免（给元素加 .neo-exempt 或给容器加 .no-neo） —— */
+.no-neo :where(a, button, input[type="button"], input[type="submit"], input[type="reset"]) {
+  all: revert;  /* 恢复浏览器默认（随后仍会被主题样式接管） */
+}
+
+/* —— 可选：小号、幽灵态、图标按钮 —— */
+.neo-btn--sm { --neo-pad-y: .46rem; --neo-pad-x: .9rem; --neo-font: .9rem; }
+.neo-btn--ghost {
+  background: transparent;
+  box-shadow: inset 0 0 0 1px rgba(127,127,170,.25);
+}
+.neo-btn--ghost:hover {
+  box-shadow:
+    inset 0 0 0 1px rgba(127,127,170,.35),
+    0 7px var(--neo-shadow-1);
+}
+.neo-icon-btn { --size: 38px; width: var(--size); height: var(--size); padding: 0; justify-content: center; border-radius: 50%; }
+
+/* —— 示例：胶囊开关（若需要） —— */
+.neo-switch {
+  --sw-w: 54px; --sw-h: 28px;
+  position: relative; width: var(--sw-w); height: var(--sw-h);
+  background: linear-gradient(180deg, var(--neo-bg), var(--neo-bg-2));
+  border-radius: 999px;
+  box-shadow:
+    inset 6px 6px 12px var(--neo-shadow-1),
+    inset -6px -6px 12px var(--neo-shadow-2);
+  cursor: pointer; transition: box-shadow .2s ease;
+}
+.neo-switch:hover { box-shadow:
+  inset 8px 8px 16px var(--neo-shadow-1),
+  inset -8px -8px 16px var(--neo-shadow-2),
+  0 0 18px var(--neo-glow); }
+.neo-switch__dot {
+  position: absolute; top: 3px; left: 3px;
+  width: calc(var(--sw-h) - 6px); height: calc(var(--sw-h) - 6px);
+  border-radius: 50%;
+  background: radial-gradient(65% 65% at 30% 30%, #fff, #d9d9e2 70%, #c8c9d3);
+  box-shadow: 3px 3px 6px var(--neo-shadow-1), -2px -2px 4px var(--neo-shadow-2);
+  transition: left .18s ease;
+}
+.neo-switch--on .neo-switch__dot { left: calc(var(--sw-w) - var(--sw-h) + 3px); }
