@@ -1,93 +1,73 @@
-/* gallery 基础外壳 */
-.gallery-controls,
+/* 顶部/底部分页条与控制区（只保留必要项） */
 .gallery-pagination-top,
 .gallery-pagination-bottom {
   display: flex;
-  gap: 0.75rem;
+  gap: .75rem;
   align-items: center;
   flex-wrap: wrap;
   margin: 1rem 0;
-  font-size: 0.9rem;
+  font-size: .9rem;
 }
 
-.gallery-root {
-  width: 100%;
-}
+/* 容器 */
+.gallery-root { width: 100%; }
 
-/* 使用 CSS 变量来控制每行几张 */
+/* 网格：用 --per-row 控制每行几张，格子等分 */
 .gallery-grid {
   display: grid;
-  grid-template-columns: repeat(var(--per-row, 5), minmax(0, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(var(--per-row, 4), minmax(0, 1fr));
+  gap: 12px;
 }
 
-/* 每一张图片外面的盒子，保证“占地面积相同” */
+/* 固定每个格子为正方形（占地面积相等） */
 .gallery-item {
   position: relative;
   width: 100%;
-  aspect-ratio: 1 / 1; /* 占地相同的关键 */
+  aspect-ratio: 1 / 1;     /* 核心：正方形占位 */
   overflow: hidden;
-  border-radius: 0.5rem;
-  background: rgba(0,0,0,0.03);
-  cursor: pointer;
+  border-radius: 12px;
+  background: rgba(0,0,0,.06);
+  cursor: zoom-in;
 }
 
-/* square 模式：全部裁成正方形居中 */
-.gallery-item.square img {
+/* 图片填充到正方形里，保持比例，必要时留空白 */
+.gallery-item img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  display: block;
+  object-fit: contain;     /* 保持原始横/竖，留空白 */
+  background: #0b0b0b0a;   /* 空白处淡背景，方便分辨 */
 }
 
-/* original 模式：保持横/竖，但仍然占同样的盒子 */
-.gallery-item.original img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  background: #00000005;
+/* 兼容 Stack/Prose 对文章内图片的默认样式 */
+.gallery-root img {
+  max-width: none !important;
 }
 
-/* 标题可选 */
-.gallery-item-title {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: linear-gradient(transparent, rgba(0,0,0,0.6));
-  color: #fff;
-  font-size: 0.7rem;
-  padding: 0.3rem 0.5rem 0.45rem;
-}
-
-/* 弹出大图层 */
+/* 大图弹窗 */
 .gallery-lightbox {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.75);
+  background: rgba(0,0,0,.8);
   display: none;
   align-items: center;
   justify-content: center;
   z-index: 9999;
   padding: 1.5rem;
 }
-
-.gallery-lightbox.is-active {
-  display: flex;
-}
-
+.gallery-lightbox.is-active { display: flex; }
 .gallery-lightbox img {
-  max-width: min(90vw, 1400px);
-  max-height: 90vh;
+  max-width: min(92vw, 1600px);
+  max-height: 92vh;
   object-fit: contain;
-  border-radius: 0.75rem;
-  box-shadow: 0 10px 45px rgba(0,0,0,0.35);
+  border-radius: 14px;
+  box-shadow: 0 10px 45px rgba(0,0,0,.35);
 }
-
 .gallery-lightbox-close {
   position: fixed;
-  top: 1.3rem;
-  right: 1.3rem;
-  background: rgba(0,0,0,0.45);
+  top: 1.1rem;
+  right: 1.1rem;
+  background: rgba(0,0,0,.45);
   border: none;
   color: #fff;
   font-size: 1.7rem;
@@ -98,17 +78,7 @@
   border-radius: 9999px;
 }
 
-.gallery-mode-btn.active {
-  font-weight: 600;
-  text-decoration: underline;
-}
-
-.gallery-perpage-input {
-  width: 4rem;
-  padding: 0.15rem 0.35rem;
-}
-
-.gallery-page-input {
-  width: 3.4rem;
-  padding: 0.2rem 0.4rem;
-}
+/* 输入控件宽度 */
+.gallery-page-input { width: 3.4rem; padding: .2rem .4rem; }
+.gallery-perpage-input { width: 4rem; padding: .15rem .35rem; }
+.gallery-perrow-input { width: 4rem; padding: .15rem .35rem; }
