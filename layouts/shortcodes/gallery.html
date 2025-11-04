@@ -1,10 +1,13 @@
-{{- $cols := .Get "cols" | default 3 -}}
+{{- $cols := .Get "cols" | default 4 -}}
 <style>
-  /* 宫格：每行 {{ $cols }} 列，保持你原有的断点逻辑 */
+  /* 网格：保持每行四等分（可通过参数 cols 调整） */
   .gallery-grid {
     display: grid;
     grid-template-columns: repeat({{ $cols }}, minmax(0, 1fr));
     gap: 12px;
+  }
+  @media (max-width: 1024px) {
+    .gallery-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   }
   @media (max-width: 768px) {
     .gallery-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -13,22 +16,32 @@
     .gallery-grid { grid-template-columns: repeat(1, minmax(0, 1fr)); }
   }
 
-  /* 每个单元：正方形容器，圆角与溢出裁剪保持原风格 */
+  /* 单元格：固定为正方形 + 居中承载 */
   .gallery-item {
     position: relative;
-    aspect-ratio: 1 / 1;         /* 关键：固定正方形 */
-    border-radius: 8px;
+    aspect-ratio: 1 / 1;          /* 固定正方形容器 */
+    border-radius: 10px;
     overflow: hidden;
-    display: block;
-    background: rgba(0,0,0,.2);  /* 给 contain 留的留白一个柔和底色 */
+    display: grid;                 /* 用 grid 居中图片 */
+    place-items: center;           /* 水平+垂直都居中 */
+    background: rgba(0,0,0,.2);    /* 留白时的底色 */
   }
 
-  /* 图片填满容器，但保持比例，超出留空白 */
+  /* 图片：不拉伸不裁切，最大宽高不超过容器 */
   .gallery-item > img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;          /* 关键：横图上下留空、竖图左右留空 */
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;                   /* 维持原始宽高比 */
+    height: auto;
     display: block;
+    /* 下面两行可要可不要（双保险）；不影响 grid 居中逻辑 */
+    object-fit: contain;
+    object-position: center center;
+  }
+
+  /* 可点击的缩略图，无默认装饰 */
+  .gallery-item {
+    text-decoration: none;
   }
 </style>
 
