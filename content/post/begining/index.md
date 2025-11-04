@@ -2,7 +2,7 @@
 title: "项目结构与说明（Begining）"
 date: 2025-11-04
 description: "本页说明整个仓库的目录结构、每个文件/文件夹的用途，以及相册与短代码的放置位置，便于后续维护与扩展。"
-categories: ["docs"]
+categories: ["Example"]
 tags: ["hugo","stack","gallery","shortcodes"]
 draft: false
 ---
