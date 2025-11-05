@@ -1,0 +1,101 @@
+/* ===== Neo Buttons - Global Apply (except private) ===== */
+
+/* 基础变量 */
+:root{
+  --neo-radius:999px;
+  --neo-pad-y:.56rem;
+  --neo-pad-x:1.1rem;
+  --neo-font:.95rem;
+  --neo-ring:2px;
+}
+
+/* 亮/暗模式（Stack 用 data-scheme 切换） */
+html:not([data-scheme="dark"]){
+  --neo-bg:#f1f1f3;--neo-bg-2:#ffffff;--neo-text:#222;
+  --neo-shadow-1:rgba(0,0,0,.12);--neo-shadow-2:rgba(0,0,0,.06);
+  --neo-glow:rgba(120,120,255,.18);--neo-ring-color:rgba(80,110,255,.45);
+}
+html[data-scheme="dark"]{
+  --neo-bg:#2a2b31;--neo-bg-2:#1f2025;--neo-text:#e7e7ea;
+  --neo-shadow-1:rgba(0,0,0,.55);--neo-shadow-2:rgba(0,0,0,.35);
+  --neo-glow:rgba(120,120,255,.22);--neo-ring-color:rgba(140,170,255,.55);
+}
+
+/* 核心按钮外观（用占位选择器思路写成工具类） */
+.neo-btn-core{
+  --_bg:var(--neo-bg);--_fg:var(--neo-text);
+  display:inline-flex;align-items:center;gap:.5rem;
+  padding:var(--neo-pad-y) var(--neo-pad-x);
+  border-radius:var(--neo-radius);color:var(--_fg);
+  background:linear-gradient(180deg,var(--_bg),var(--neo-bg-2));
+  box-shadow:8px 8px 18px var(--neo-shadow-1),-6px -6px 14px var(--neo-shadow-2),inset 0 0 0 1px rgba(255,255,255,.03);
+  border:0;text-decoration:none;font-size:var(--neo-font);line-height:1;
+  transform:translateZ(0);
+  transition:box-shadow .2s ease,transform .15s ease,background .2s ease,color .2s ease,filter .2s ease;
+  cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent;
+}
+.neo-btn-core:hover{
+  box-shadow:12px 12px 28px var(--neo-shadow-1),-8px -8px 18px var(--neo-shadow-2),0 0 22px var(--neo-glow);
+  transform:translateY(-1.5px);
+}
+.neo-btn-core:active{transform:translateY(0);filter:brightness(.98);}
+.neo-btn-core:focus-visible{
+  outline:none;
+  box-shadow:0 0 0 var(--neo-ring) var(--neo-ring-color),8px 8px 18px var(--neo-shadow-1),-6px -6px 14px var(--neo-shadow-2);
+}
+
+/* —— 一键全站映射（排除私密页 + 排除文章正文内的普通链接） —— */
+body:not(.is-private):not(.no-neo)
+  :where(a,button,input[type="button"],input[type="submit"],input[type="reset"],
+         nav a,.menu a,.pagination a,.nav a,.header a,.footer a)
+  :not(.neo-exempt):not(.neo-text){
+    /* 把这些元素直接“变身”为胶囊按钮 */
+    /* 为了避免和主题权重冲突，这里用 class 注入的方式： */
+    all: revert-layer; /* 尽量清掉上游层叠，避免被主题覆盖 */
+    /* 还原后再应用我们的核心外观：*/
+    display:inline-flex; /* 让按钮外观按预期表现 */
+  }
+body:not(.is-private):not(.no-neo)
+  :where(a,button,input[type="button"],input[type="submit"],input[type="reset"],
+         nav a,.menu a,.pagination a,.nav a,.header a,.footer a)
+  :not(.neo-exempt):not(.neo-text){ /* 应用核心外观 */
+    /* 通过额外类选择器把核心样式“合并”进来 */
+  }
+body:not(.is-private):not(.no-neo)
+  :where(a,button,input[type="button"],input[type="submit"],input[type="reset"],
+         nav a,.menu a,.pagination a,.nav a,.header a,.footer a)
+  :not(.neo-exempt):not(.neo-text){ /* 直接拷贝核心外观（避免 @extend 需求） */
+  --_bg:var(--neo-bg);--_fg:var(--neo-text);
+  padding:var(--neo-pad-y) var(--neo-pad-x);
+  border-radius:var(--neo-radius);color:var(--_fg);
+  background:linear-gradient(180deg,var(--_bg),var(--neo-bg-2));
+  box-shadow:8px 8px 18px var(--neo-shadow-1),-6px -6px 14px var(--neo-shadow-2),inset 0 0 0 1px rgba(255,255,255,.03);
+  border:0;text-decoration:none;font-size:var(--neo-font);line-height:1;
+  transform:translateZ(0);
+  transition:box-shadow .2s ease,transform .15s ease,background .2s ease,color .2s ease,filter .2s ease;
+  cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent;
+}
+body:not(.is-private):not(.no-neo)
+  :where(a,button,input[type="button"],input[type="submit"],input[type="reset"],
+         nav a,.menu a,.pagination a,.nav a,.header a,.footer a)
+  :not(.neo-exempt):not(.neo-text):hover{
+  box-shadow:12px 12px 28px var(--neo-shadow-1),-8px -8px 18px var(--neo-shadow-2),0 0 22px var(--neo-glow);
+  transform:translateY(-1.5px);
+}
+body:not(.is-private):not(.no-neo)
+  :where(a,button,input[type="button"],input[type="submit"],input[type="reset"],
+         nav a,.menu a,.pagination a,.nav a,.header a,.footer a)
+  :not(.neo-exempt):not(.neo-text):active{transform:translateY(0);filter:brightness(.98);}
+body:not(.is-private):not(.no-neo)
+  :where(a,button,input[type="button"],input[type="submit"],input[type="reset"],
+         nav a,.menu a,.pagination a,.nav a,.header a,.footer a)
+  :not(.neo-exempt):not(.neo-text):focus-visible{
+  outline:none;box-shadow:0 0 0 var(--neo-ring) var(--neo-ring-color),8px 8px 18px var(--neo-shadow-1),-6px -6px 14px var(--neo-shadow-2);
+}
+
+/* 让文章正文里的普通文字链接保持原样（如需一起改成按钮，删除这段） */
+.post-content :where(a),
+.article-content :where(a){ all: revert; }
+
+/* 局部豁免：给不想变的元素加 .neo-exempt；或给某容器加 .no-neo */
+.no-neo :where(a,button,input[type="button"],input[type="submit"],input[type="reset"]){ all: revert; }
