@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
   <meta charset="utf-8" />
-  <title>科目三灯光考试模拟</title>
+  <title>科目三灯光考试模拟（按图片规则重写）</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     :root {
@@ -12,21 +12,20 @@
       --green: #16a34a;
       --red: #f43f5e;
       --gray: #94a3b8;
+      --brand: #3b82f6;
     }
     * { box-sizing: border-box; }
     body {
       margin: 0;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif;
-      background: radial-gradient(circle at top, #1f2937, #020617 65%);
+      background: radial-gradient(circle at 20% -20%, #1f2937, #020617 65%);
       color: var(--text);
       min-height: 100vh;
       display: flex;
       justify-content: center;
       padding: 20px 10px 60px;
     }
-    #app {
-      width: min(900px, 100%);
-    }
+    #app { width: min(900px, 100%); }
     .exam-box {
       background: var(--panel);
       border: 1px solid rgba(148, 163, 184, 0.12);
@@ -36,86 +35,39 @@
       box-shadow: 0 18px 40px rgba(0,0,0,0.35);
     }
     .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 1rem;
-      margin-bottom: 1rem;
+      display: flex; justify-content: space-between; align-items: center;
+      gap: 1rem; margin-bottom: 1rem;
     }
-    .title {
-      font-size: 1.1rem;
-      margin: 0;
-    }
-    .timer {
-      font-weight: 600;
-      color: #f97316;
-    }
+    .title { font-size: 1.1rem; margin: 0; }
+    .timer { font-weight: 600; color: #f97316; }
     .question {
-      font-size: 1.02rem;
-      line-height: 1.6;
-      margin-bottom: 1rem;
-      white-space: pre-line;
+      font-size: 1.02rem; line-height: 1.6; margin-bottom: 1rem; white-space: pre-line;
     }
-    .options {
-      display: flex;
-      flex-direction: column;
-      gap: 0.6rem;
-    }
+    .options { display: grid; grid-template-columns: 1fr; gap: 0.6rem; }
     .option-btn {
       background: rgba(15,23,42,0.1);
-      border: 1px solid rgba(148, 163, 184, 0.28);
+      border: 1px solid rgba(148,163,184,0.28);
       border-radius: 14px;
-      padding: 0.55rem 0.9rem;
-      text-align: left;
-      font-size: 0.96rem;
-      color: inherit;
-      cursor: pointer;
-      transition: 0.12s ease-out;
+      padding: 0.65rem 0.9rem; text-align: left; font-size: 0.96rem;
+      color: inherit; cursor: pointer; transition: 0.12s ease-out;
     }
-    .option-btn:hover {
-      background: rgba(148, 163, 184, 0.04);
-    }
-    .option-btn.disabled {
-      pointer-events: none;
-      opacity: 0.7;
-    }
+    .option-btn:hover { background: rgba(148, 163, 184, 0.06); }
+    .option-btn.disabled { pointer-events: none; opacity: 0.7; }
     .option-btn.correct {
-      background: rgba(22, 163, 74, 0.18);
-      border-color: rgba(22, 163, 74, 0.65);
+      background: rgba(22, 163, 74, 0.18); border-color: rgba(22, 163, 74, 0.65);
     }
     .option-btn.wrong {
-      background: rgba(244, 63, 94, 0.18);
-      border-color: rgba(244, 63, 94, 0.6);
+      background: rgba(244, 63, 94, 0.18); border-color: rgba(244, 63, 94, 0.6);
     }
-    .result {
-      margin-top: 1rem;
-      min-height: 1.3rem;
-      font-weight: 600;
-    }
+    .result { margin-top: 1rem; min-height: 1.3rem; font-weight: 600; }
     .result.ok { color: var(--green); }
     .result.bad { color: var(--red); }
-    .footer-tip {
-      margin-top: 1.1rem;
-      font-size: 0.8rem;
-      color: var(--gray);
-    }
-    .score-panel {
-      text-align: center;
-      padding: 2.5rem 1rem 2rem;
-    }
-    .score-big {
-      font-size: 3.4rem;
-      font-weight: 800;
-      margin-bottom: 1rem;
-    }
+    .footer-tip { margin-top: 1.1rem; font-size: 0.8rem; color: var(--gray); }
+    .score-panel { text-align: center; padding: 2.5rem 1rem 2rem; }
+    .score-big { font-size: 3.4rem; font-weight: 800; margin-bottom: 1rem; }
     .btn {
-      background: #3b82f6;
-      border: none;
-      border-radius: 9999px;
-      color: #fff;
-      padding: 0.45rem 1.2rem;
-      cursor: pointer;
-      font-weight: 500;
+      background: var(--brand); border: none; border-radius: 9999px; color: #fff;
+      padding: 0.5rem 1.2rem; cursor: pointer; font-weight: 500;
     }
     @media (max-width: 640px) {
       .exam-box { border-radius: 14px; }
@@ -125,63 +77,38 @@
 </head>
 <body>
   <div id="app"></div>
-
   <script>
-    // 固定选项
-    const ALL_OPTIONS = [
-      "① 开远光灯",
-      "② 开近光灯",
-      "③ 先打左转向灯，再远近光灯交替；超车完成回原车道后，先打右转向灯",
-      "④ 开示廓灯和危险报警闪光灯",
-      "⑤ 远近光灯交替两次",
-      "⑥ 开前照灯、前后雾灯、危险报警闪光灯",
-      "⑦ 关大灯，开示廓灯、危险报警闪光灯"
-    ];
+    // 四个固定选项（顺序固定、文本简洁）
+    const OPTIONS = ["远光灯", "近光灯", "远近光灯交替", "示廓灯+双闪"];
 
-    // 题库
+    // 题库（依据你给的图片逐条整理）
+    // answer_index: 0=远光灯, 1=近光灯, 2=远近光灯交替, 3=示廓灯+双闪
     const QUESTION_BANK = [
-      { id: 2,  text: "夜间在没有路灯、照明不良条件下行驶", answer_index: 0 },
-      { id: 3,  text: "夜间在没有路灯、照明不良条件下的市区行驶", answer_index: 1 },
-      { id: 4,  text: "夜间超车", answer_index: 2 },
-      { id: 5,  text: "路边临时停车", answer_index: 3 },
-      { id: 6,  text: "夜间同方向近距离跟车行驶", answer_index: 1 },
-      { id: 7,  text: "夜间通过急弯、坡路、拱桥、人行横道时", answer_index: 4 },
-      { id: 8,  text: "雾天行驶", answer_index: 5 },
-      { id: 9,  text: "夜间在窄路或窄桥与非机动车会车时", answer_index: 1 },
-      { id:10,  text: "夜间遇对方向车，距对方来车将近150米时", answer_index: 1 },
-      { id:11,  text: "夜间在道路上发生故障，妨碍交通又难以移动时", answer_index: 6 },
-      { id:12,  text: "夜间通过没有交通信号灯的路口时", answer_index: 4 },
+      // —— 近光灯（5）
+      { text: "夜间直行通过路口", answer_index: 1 },
+      { text: "夜间同方向近距离跟车行驶", answer_index: 1 },
+      { text: "夜间与机动车会车", answer_index: 1 },
+      { text: "夜间在有路灯的道路上行驶", answer_index: 1 },
+      { text: "夜间在照明良好的道路上行驶", answer_index: 1 },
+
+      // —— 远光灯（2）
+      { text: "夜间在照明不良条件下行驶", answer_index: 0 },
+      { text: "夜间在没有路灯条件下行驶", answer_index: 0 },
+
+      // —— 远近光灯交替（6）
+      { text: "夜间通过急弯", answer_index: 2 },
+      { text: "夜间通过坡路", answer_index: 2 },
+      { text: "夜间通过拱桥", answer_index: 2 },
+      { text: "夜间通过人行横道", answer_index: 2 },
+      { text: "夜间超越前方车辆", answer_index: 2 },
+      { text: "夜间通过没有交通信号灯控制的路口", answer_index: 2 },
+
+      // —— 示廓灯 + 双闪（2）
+      { text: "路边临时停车", answer_index: 3 },
+      { text: "夜间在道路上发生故障", answer_index: 3 },
     ];
 
-    // 全局状态
-    let currentQuestions = [];
-    let currentIndex = -1;
-    let score = 0;
-    let wrongQuestions = [];
-    let timeLeft = 5;
-    let timer = null;
-    let examRunning = false;
-
-    // 渲染框架
-    function renderExamFrame(titleText = "科目三灯光考试模拟") {
-      const app = document.getElementById("app");
-      app.innerHTML = `
-        <div class="exam-box">
-          <div class="header">
-            <h1 class="title" id="title">${titleText}</h1>
-            <div class="timer" id="timer">剩余时间：5 秒</div>
-          </div>
-          <div class="question" id="question">正在载入题目...</div>
-          <div class="options" id="options"></div>
-          <div class="result" id="result"></div>
-          <div class="footer-tip" id="footer-tip">
-            规则：随机抽取 5 题，每题 5 秒，答错扣 1 分；全部做完显示成绩；如有错题，5 秒后自动开始“错题再考”。
-          </div>
-        </div>
-      `;
-    }
-
-    // 打乱
+    // 随机打乱
     function shuffle(arr) {
       const a = arr.slice();
       for (let i = a.length - 1; i > 0; i--) {
@@ -191,122 +118,123 @@
       return a;
     }
 
-    // 开始一轮
-    function startExam(questions = null) {
-      // 如果传进来的是空数组，说明没有错题了，直接走正常抽题
-      if (Array.isArray(questions) && questions.length === 0) {
-        questions = null;
-      }
+    let currentQuestions = [];
+    let currentIndex = -1;
+    let score = 0;
+    let wrongQuestions = [];
+    let timeLeft = 6;
+    let tHandle = null;
+    let running = false;
 
-      if (questions === null) {
-        currentQuestions = shuffle(QUESTION_BANK).slice(0, 5);
-        renderExamFrame("科目三灯光考试模拟");
+    function renderShell(title = "科目三灯光考试模拟（图片版）") {
+      const app = document.getElementById("app");
+      app.innerHTML = `
+        <div class="exam-box">
+          <div class="header">
+            <h1 class="title" id="title">${title}</h1>
+            <div class="timer" id="timer">剩余时间：${timeLeft} 秒</div>
+          </div>
+          <div class="question" id="question">正在载入题目...</div>
+          <div class="options" id="options"></div>
+          <div class="result" id="result"></div>
+          <div class="footer-tip">
+            规则：随机抽取 8 题，每题 6 秒；答错计错题，结束后显示成绩；若有错题，5 秒后自动进入“错题再考”。
+          </div>
+        </div>
+      `;
+    }
+
+    function startExam(fromWrong = null) {
+      if (fromWrong && fromWrong.length) {
+        currentQuestions = fromWrong.length > 8 ? shuffle(fromWrong).slice(0, 8) : fromWrong.slice();
+        renderShell("科目三灯光考试模拟（错题再考）");
       } else {
-        currentQuestions = questions.length > 5 ? shuffle(questions).slice(0, 5) : questions.slice();
-        renderExamFrame("科目三灯光考试模拟（错题再考）");
+        currentQuestions = shuffle(QUESTION_BANK).slice(0, 8);
+        renderShell();
       }
-
       currentIndex = -1;
       score = 0;
-      wrongQuestions = [];  // 为下一轮准备
-      examRunning = true;
-      showNextQuestion();
+      wrongQuestions = [];
+      running = true;
+      nextQuestion();
     }
 
-    function showNextQuestion() {
-      if (timer) clearTimeout(timer);
-
+    function nextQuestion() {
+      if (tHandle) clearTimeout(tHandle);
       currentIndex++;
       if (currentIndex >= currentQuestions.length) {
-        finishExam();
-        return;
+        return finishExam();
       }
-
       const q = currentQuestions[currentIndex];
-      const qEl = document.getElementById("question");
+      document.getElementById("question").textContent =
+        `第 ${currentIndex + 1} 题 / 共 ${currentQuestions.length} 题\n${q.text}`;
+      document.getElementById("result").textContent = "";
       const optEl = document.getElementById("options");
-      const resEl = document.getElementById("result");
-
-      qEl.textContent = `第 ${currentIndex + 1} 题 / 共 ${currentQuestions.length} 题\n${q.text}`;
-      resEl.textContent = "";
       optEl.innerHTML = "";
-
-      ALL_OPTIONS.forEach((text, idx) => {
+      OPTIONS.forEach((txt, i) => {
         const btn = document.createElement("button");
         btn.className = "option-btn";
-        btn.textContent = text;
-        btn.addEventListener("click", () => onOptionClick(idx));
+        btn.textContent = `${i + 1}. ${txt}`;
+        btn.onclick = () => choose(i);
         optEl.appendChild(btn);
       });
-
-      timeLeft = 5;
-      examRunning = true;
-      updateTimer();
+      timeLeft = 6;
+      running = true;
+      tick();
     }
 
-    function updateTimer() {
-      const tEl = document.getElementById("timer");
-      tEl.textContent = `剩余时间：${timeLeft} 秒`;
-      if (timeLeft <= 0) {
-        onTimeout();
-      } else {
-        timeLeft--;
-        timer = setTimeout(updateTimer, 1000);
-      }
+    function tick() {
+      const el = document.getElementById("timer");
+      el.textContent = `剩余时间：${timeLeft} 秒`;
+      if (timeLeft <= 0) return timeout();
+      timeLeft--;
+      tHandle = setTimeout(tick, 1000);
     }
 
-    function onOptionClick(idx) {
-      if (!examRunning) return;
-      if (currentIndex < 0 || currentIndex >= currentQuestions.length) return;
+    function disableAll(markCorrect = null, markWrong = null) {
+      const btns = document.querySelectorAll(".option-btn");
+      btns.forEach(b => b.classList.add("disabled"));
+      if (markCorrect !== null) btns[markCorrect].classList.add("correct");
+      if (markWrong !== null) btns[markWrong].classList.add("wrong");
+    }
 
-      examRunning = false;
-      if (timer) clearTimeout(timer);
+    function choose(i) {
+      if (!running) return;
+      running = false;
+      if (tHandle) clearTimeout(tHandle);
 
       const q = currentQuestions[currentIndex];
-      const correctIdx = q.answer_index;
-      const optEl = document.getElementById("options");
-      const resEl = document.getElementById("result");
-      const btns = optEl.querySelectorAll(".option-btn");
+      const ok = i === q.answer_index;
+      const res = document.getElementById("result");
 
-      if (idx === correctIdx) {
-        score += 1;
-        resEl.textContent = "✅ 正确";
-        resEl.className = "result ok";
-        btns[idx].classList.add("correct");
+      if (ok) {
+        score++;
+        res.textContent = "✅ 正确";
+        res.className = "result ok";
+        disableAll(q.answer_index, null);
       } else {
-        resEl.textContent = "❌ 错误";
-        resEl.className = "result bad";
-        btns[idx].classList.add("wrong");
-        btns[correctIdx].classList.add("correct");
+        res.textContent = "❌ 错误";
+        res.className = "result bad";
         wrongQuestions.push(q);
+        disableAll(q.answer_index, i);
       }
-
-      btns.forEach(b => b.classList.add("disabled"));
-      setTimeout(showNextQuestion, 1200);
+      setTimeout(nextQuestion, 1100);
     }
 
-    function onTimeout() {
-      if (currentIndex < 0 || currentIndex >= currentQuestions.length) return;
-
-      examRunning = false;
+    function timeout() {
+      if (!running) return;
+      running = false;
       const q = currentQuestions[currentIndex];
-      const correctIdx = q.answer_index;
-      const optEl = document.getElementById("options");
-      const resEl = document.getElementById("result");
-      const btns = optEl.querySelectorAll(".option-btn");
-
-      resEl.textContent = "⌛ 超时，算错误";
-      resEl.className = "result bad";
-      btns[correctIdx].classList.add("correct");
-      btns.forEach(b => b.classList.add("disabled"));
+      document.getElementById("result").textContent = "⌛ 超时，按错误处理";
+      document.getElementById("result").className = "result bad";
       wrongQuestions.push(q);
-
-      setTimeout(showNextQuestion, 1200);
+      disableAll(q.answer_index, null);
+      setTimeout(nextQuestion, 1100);
     }
 
     function finishExam() {
-      if (timer) clearTimeout(timer);
-      examRunning = false;
+      if (tHandle) clearTimeout(tHandle);
+      running = false;
 
       const app = document.getElementById("app");
       const total = currentQuestions.length;
@@ -317,8 +245,8 @@
             <p>本轮考试结束！</p>
             ${
               wrongQuestions.length
-                ? `<p>你有 <strong>${wrongQuestions.length}</strong> 道题答错，<strong>5 秒后</strong>将自动开始错题再考。</p>`
-                : `<p>全部答对，恭喜！</p>`
+                ? `<p>共有 <strong>${wrongQuestions.length}</strong> 道错题，<strong>5 秒后</strong>自动开始“错题再考”。</p>`
+                : `<p>全部答对，干得漂亮！</p>`
             }
             <p style="margin-top:1.3rem;">
               <button class="btn" id="again">再来一套</button>
@@ -326,26 +254,19 @@
           </div>
         </div>
       `;
+      document.getElementById("again").onclick = () => startExam();
 
-      document.getElementById("again").addEventListener("click", () => {
-        startExam();
-      });
-
-      // ⬇⬇⬇ 这里是修过的地方：复制当前错题数组
       if (wrongQuestions.length) {
-        const wrongToReview = wrongQuestions.slice(); // 拷贝一份
+        // 拷贝，避免被后续修改
+        const retry = wrongQuestions.slice();
         setTimeout(() => {
-          // 再防一层：万一就是空的，就重新随机一轮
-          if (wrongToReview.length > 0) {
-            startExam(wrongToReview);
-          } else {
-            startExam();
-          }
+          if (retry.length) startExam(retry);
+          else startExam();
         }, 5000);
       }
     }
 
-    // 页面加载就开始
+    // 开始
     startExam();
   </script>
 </body>
