@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
   <meta charset="utf-8" />
-  <title>科目三灯光考试模拟（按图片规则重写）</title>
+  <title>科目三灯光考试模拟（图片版）</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     :root {
@@ -34,15 +34,10 @@
       backdrop-filter: blur(10px);
       box-shadow: 0 18px 40px rgba(0,0,0,0.35);
     }
-    .header {
-      display: flex; justify-content: space-between; align-items: center;
-      gap: 1rem; margin-bottom: 1rem;
-    }
+    .header { display: flex; justify-content: space-between; align-items: center; gap: 1rem; margin-bottom: 1rem; }
     .title { font-size: 1.1rem; margin: 0; }
     .timer { font-weight: 600; color: #f97316; }
-    .question {
-      font-size: 1.02rem; line-height: 1.6; margin-bottom: 1rem; white-space: pre-line;
-    }
+    .question { font-size: 1.02rem; line-height: 1.6; margin-bottom: 1rem; white-space: pre-line; }
     .options { display: grid; grid-template-columns: 1fr; gap: 0.6rem; }
     .option-btn {
       background: rgba(15,23,42,0.1);
@@ -53,22 +48,15 @@
     }
     .option-btn:hover { background: rgba(148, 163, 184, 0.06); }
     .option-btn.disabled { pointer-events: none; opacity: 0.7; }
-    .option-btn.correct {
-      background: rgba(22, 163, 74, 0.18); border-color: rgba(22, 163, 74, 0.65);
-    }
-    .option-btn.wrong {
-      background: rgba(244, 63, 94, 0.18); border-color: rgba(244, 63, 94, 0.6);
-    }
+    .option-btn.correct { background: rgba(22, 163, 74, 0.18); border-color: rgba(22, 163, 74, 0.65); }
+    .option-btn.wrong { background: rgba(244, 63, 94, 0.18); border-color: rgba(244, 63, 94, 0.6); }
     .result { margin-top: 1rem; min-height: 1.3rem; font-weight: 600; }
     .result.ok { color: var(--green); }
     .result.bad { color: var(--red); }
     .footer-tip { margin-top: 1.1rem; font-size: 0.8rem; color: var(--gray); }
     .score-panel { text-align: center; padding: 2.5rem 1rem 2rem; }
     .score-big { font-size: 3.4rem; font-weight: 800; margin-bottom: 1rem; }
-    .btn {
-      background: var(--brand); border: none; border-radius: 9999px; color: #fff;
-      padding: 0.5rem 1.2rem; cursor: pointer; font-weight: 500;
-    }
+    .btn { background: var(--brand); border: none; border-radius: 9999px; color: #fff; padding: 0.5rem 1.2rem; cursor: pointer; font-weight: 500; }
     @media (max-width: 640px) {
       .exam-box { border-radius: 14px; }
       .header { flex-direction: column; align-items: flex-start; }
@@ -78,37 +66,26 @@
 <body>
   <div id="app"></div>
   <script>
-    // 四个固定选项（顺序固定、文本简洁）
     const OPTIONS = ["远光灯", "近光灯", "远近光灯交替", "示廓灯+双闪"];
 
-    // 题库（依据你给的图片逐条整理）
-    // answer_index: 0=远光灯, 1=近光灯, 2=远近光灯交替, 3=示廓灯+双闪
     const QUESTION_BANK = [
-      // —— 近光灯（5）
       { text: "夜间直行通过路口", answer_index: 1 },
       { text: "夜间同方向近距离跟车行驶", answer_index: 1 },
       { text: "夜间与机动车会车", answer_index: 1 },
       { text: "夜间在有路灯的道路上行驶", answer_index: 1 },
       { text: "夜间在照明良好的道路上行驶", answer_index: 1 },
-
-      // —— 远光灯（2）
       { text: "夜间在照明不良条件下行驶", answer_index: 0 },
       { text: "夜间在没有路灯条件下行驶", answer_index: 0 },
-
-      // —— 远近光灯交替（6）
       { text: "夜间通过急弯", answer_index: 2 },
       { text: "夜间通过坡路", answer_index: 2 },
       { text: "夜间通过拱桥", answer_index: 2 },
       { text: "夜间通过人行横道", answer_index: 2 },
       { text: "夜间超越前方车辆", answer_index: 2 },
       { text: "夜间通过没有交通信号灯控制的路口", answer_index: 2 },
-
-      // —— 示廓灯 + 双闪（2）
       { text: "路边临时停车", answer_index: 3 },
       { text: "夜间在道路上发生故障", answer_index: 3 },
     ];
 
-    // 随机打乱
     function shuffle(arr) {
       const a = arr.slice();
       for (let i = a.length - 1; i > 0; i--) {
@@ -122,7 +99,7 @@
     let currentIndex = -1;
     let score = 0;
     let wrongQuestions = [];
-    let timeLeft = 6;
+    let timeLeft = 5;          // ← 每题 5 秒
     let tHandle = null;
     let running = false;
 
@@ -138,7 +115,7 @@
           <div class="options" id="options"></div>
           <div class="result" id="result"></div>
           <div class="footer-tip">
-            规则：随机抽取 8 题，每题 6 秒；答错计错题，结束后显示成绩；若有错题，5 秒后自动进入“错题再考”。
+            规则：随机抽取 <strong>5</strong> 题，每题 <strong>5</strong> 秒；答错计错题，结束后显示成绩；若有错题，5 秒后自动进入“错题再考”。
           </div>
         </div>
       `;
@@ -146,10 +123,10 @@
 
     function startExam(fromWrong = null) {
       if (fromWrong && fromWrong.length) {
-        currentQuestions = fromWrong.length > 8 ? shuffle(fromWrong).slice(0, 8) : fromWrong.slice();
+        currentQuestions = fromWrong.length > 5 ? shuffle(fromWrong).slice(0, 5) : fromWrong.slice();
         renderShell("科目三灯光考试模拟（错题再考）");
       } else {
-        currentQuestions = shuffle(QUESTION_BANK).slice(0, 8);
+        currentQuestions = shuffle(QUESTION_BANK).slice(0, 5); // ← 随机 5 题
         renderShell();
       }
       currentIndex = -1;
@@ -162,9 +139,8 @@
     function nextQuestion() {
       if (tHandle) clearTimeout(tHandle);
       currentIndex++;
-      if (currentIndex >= currentQuestions.length) {
-        return finishExam();
-      }
+      if (currentIndex >= currentQuestions.length) return finishExam();
+
       const q = currentQuestions[currentIndex];
       document.getElementById("question").textContent =
         `第 ${currentIndex + 1} 题 / 共 ${currentQuestions.length} 题\n${q.text}`;
@@ -178,7 +154,7 @@
         btn.onclick = () => choose(i);
         optEl.appendChild(btn);
       });
-      timeLeft = 6;
+      timeLeft = 5; // ← 每题倒计时 5 秒
       running = true;
       tick();
     }
@@ -257,16 +233,14 @@
       document.getElementById("again").onclick = () => startExam();
 
       if (wrongQuestions.length) {
-        // 拷贝，避免被后续修改
         const retry = wrongQuestions.slice();
         setTimeout(() => {
           if (retry.length) startExam(retry);
           else startExam();
-        }, 5000);
+        }, 5000); // ← 错题 5 秒后再考
       }
     }
 
-    // 开始
     startExam();
   </script>
 </body>
