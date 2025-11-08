@@ -1,55 +1,70 @@
 {{ define "main" }}
-<!-- Cover 界面 - 内联版本 -->
+<!-- Cover 界面 - 改进版 -->
 <style>
 :root{
-  --cover-blue:#2b6fff;
-  --cover-cyan:#11cfe0;
-  --cover-white:#ffffff;
-  --cover-text:#111111;
-  --cover-opacity: 0.96;
-  --lines-alpha: 0.20;
+  /* 你可以在这里自定义颜色 */
+  --cover-color-1: #2b6fff;      /* 蓝色 - 可改为任何颜色，如 #FF0000 */
+  --cover-color-2: #11cfe0;      /* 青色 - 可改为任何颜色，如 #00FF00 */
+  --cover-bg-light: #ffffff;     /* 亮色模式背景 */
+  --cover-bg-dark: #0a0c10;      /* 暗色模式背景 */
+  --cover-text-light: #111111;   /* 亮色模式文字 */
+  --cover-text-dark: #ffffff;    /* 暗色模式文字 */
 }
 
-html[data-theme="dark"], @media (prefers-color-scheme: dark){
-  :root{
-    --cover-text:#ffffff;
-    --cover-opacity: 0.92;
+/* 亮色模式 */
+#site-cover{
+  --cover-text: var(--cover-text-light);
+  --cover-bg: var(--cover-bg-light);
+}
+
+/* 暗色模式 */
+html[data-theme="dark"] #site-cover,
+@media (prefers-color-scheme: dark){
+  #site-cover{
+    --cover-text: var(--cover-text-dark);
+    --cover-bg: var(--cover-bg-dark);
   }
 }
 
+/* 覆盖层 - 完全不透明 */
 #site-cover{
-  position:fixed; inset:0; z-index:9999;
-  display:grid; place-items:center;
-  overflow:hidden; background: transparent;
+  position: fixed;
+  inset: 0;
+  z-index: 99999;  /* 超高优先级，确保在最上层 */
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: var(--cover-bg);  /* 完全不透明的背景 */
   animation: cover-enter 400ms ease-out both;
 }
 
 @keyframes cover-enter{
-  from{ opacity:0; transform: scale(1.01); }
-  to{ opacity:1; transform: scale(1); }
+  from{ opacity: 0; transform: scale(1.01); }
+  to{ opacity: 1; transform: scale(1); }
 }
 
-#site-cover .cover-bg{ position:absolute; inset:0; pointer-events:none; }
+/* 背景层 */
+#site-cover .cover-bg{
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
 
+/* 渐变背景 - 去掉线条 */
 #site-cover .bg-gradient{
-  position:absolute; inset:0;
+  position: absolute;
+  inset: 0;
   filter: blur(30px);
   background:
-    radial-gradient(1200px 1200px at 10% 20%, rgba(43,111,255,0.45), transparent 60%),
-    radial-gradient(900px 900px at 80% 30%, rgba(17,207,224,0.45), transparent 60%),
-    radial-gradient(700px 700px at 50% 80%, rgba(255,255,255,0.50), transparent 60%),
-    linear-gradient(135deg, rgba(255,255,255,var(--cover-opacity)), rgba(255,255,255,0.85));
-  mix-blend-mode: plus-lighter;
+    radial-gradient(1200px 1200px at 10% 20%, var(--cover-color-1), transparent 60%),
+    radial-gradient(900px 900px at 80% 30%, var(--cover-color-2), transparent 60%),
+    linear-gradient(135deg, var(--cover-bg), var(--cover-bg));
+  opacity: 0.3;  /* 降低渐变不透明度 */
   animation: floaty 14s ease-in-out infinite alternate;
 }
 
 html[data-theme="dark"] #site-cover .bg-gradient{
-  background:
-    radial-gradient(1200px 1200px at 10% 20%, rgba(43,111,255,0.35), transparent 60%),
-    radial-gradient(900px 900px at 80% 30%, rgba(17,207,224,0.35), transparent 60%),
-    radial-gradient(700px 700px at 50% 80%, rgba(255,255,255,0.10), transparent 60%),
-    linear-gradient(135deg, rgba(10,12,16,var(--cover-opacity)), rgba(10,12,16,0.92));
-  mix-blend-mode: normal;
+  opacity: 0.4;
 }
 
 @keyframes floaty{
@@ -57,61 +72,67 @@ html[data-theme="dark"] #site-cover .bg-gradient{
   100%{ transform: translate3d(2%, 1%, 0) scale(1.04); }
 }
 
-#site-cover .flow-lines{
-  position:absolute; inset:-20% -40%;
-  background:
-    repeating-linear-gradient(115deg, rgba(255,255,255,var(--lines-alpha)) 0px, rgba(255,255,255,var(--lines-alpha)) 1px, transparent 1px, transparent 22px),
-    repeating-linear-gradient(295deg, rgba(43,111,255,var(--lines-alpha)) 0px, rgba(43,111,255,var(--lines-alpha)) 1px, transparent 1px, transparent 24px),
-    repeating-linear-gradient(180deg, rgba(17,207,224,var(--lines-alpha)) 0px, rgba(17,207,224,var(--lines-alpha)) 1px, transparent 1px, transparent 28px);
-  opacity:.5; transform: translateZ(0);
-  animation: lines-pan 24s linear infinite;
-  mask-image: radial-gradient(120% 120% at 50% 50%, #000 60%, transparent 100%);
-}
-
-@keyframes lines-pan{
-  0% { transform: translate(-5%, -5%) scale(1.02); }
-  100% { transform: translate(5%, 5%) scale(1.06); }
-}
-
+/* 文案容器 */
 #site-cover .cover-content{
-  position:relative; z-index:2;
-  max-width:min(90vw, 1200px);
+  position: relative;
+  z-index: 2;
+  max-width: min(90vw, 1200px);
   padding: 0 4vw;
-  text-align:center;
-  display:grid; place-items:center;
+  text-align: center;
+  display: grid;
+  place-items: center;
 }
 
-#site-cover .cover-lines{ display:grid; gap: clamp(8px, 1.6vw, 18px); }
+#site-cover .cover-lines{
+  display: grid;
+  gap: clamp(8px, 1.6vw, 18px);
+}
 
 #site-cover .line{
   color: var(--cover-text);
   font-weight: 700;
-  letter-spacing: .2px;
+  letter-spacing: 0.2px;
   font-size: clamp(22px, 3.6vw, 48px);
   line-height: 1.15;
-  opacity:0; transform: translateY(8px);
-  animation: line-in 800ms cubic-bezier(.2,.8,.2,1) forwards;
+  opacity: 0;
+  transform: translateY(8px);
+  animation: line-in 800ms cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
   animation-delay: calc(var(--i) * 220ms + 250ms);
-  text-shadow: 0 1px 0 rgba(255,255,255,.15);
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
 }
 
-@keyframes line-in{ to { opacity:1; transform: translateY(0); } }
+@keyframes line-in{
+  to { opacity: 1; transform: translateY(0); }
+}
 
 #site-cover .hint{
   margin-top: clamp(10px, 2vw, 18px);
   font-size: clamp(12px, 1.4vw, 14px);
   color: var(--cover-text);
-  opacity: .75;
+  opacity: 0.75;
 }
 
-#site-cover.hide{ pointer-events:none; animation: cover-exit 500ms ease-in forwards; }
-@keyframes cover-exit{ to{ opacity:0; transform: scale(1.01); } }
+/* 点击后淡出 */
+#site-cover.hide{
+  pointer-events: none;
+  animation: cover-exit 500ms ease-in forwards;
+}
 
-#site-cover, .bg-gradient, .flow-lines { will-change: opacity, transform; }
+@keyframes cover-exit{
+  to{ opacity: 0; transform: scale(1.01); }
+}
 </style>
 
 <script>
 (function(){
+  // 检查 sessionStorage，如果已经显示过，就不再显示
+  var coverShown = sessionStorage.getItem('coverShown');
+  
+  if (coverShown === 'true') {
+    console.log('🎯 Cover already shown in this session, skipping');
+    return;
+  }
+  
   function init() {
     console.log('🎯 Inline cover script started');
     
@@ -123,7 +144,6 @@ html[data-theme="dark"] #site-cover .bg-gradient{
     wrap.innerHTML = [
       '<div class="cover-bg">',
       '  <div class="bg-gradient"></div>',
-      '  <div class="flow-lines"></div>',
       '</div>',
       '<div class="cover-content">',
       '  <div class="cover-lines">',
@@ -145,8 +165,13 @@ html[data-theme="dark"] #site-cover .bg-gradient{
     function hide(){
       wrap.classList.add('hide');
       setTimeout(function(){
-        try { document.body.removeChild(wrap); } catch(e){}
+        try { 
+          document.body.removeChild(wrap);
+          console.log('✅ Cover removed');
+        } catch(e){}
         html.style.overflow = prevOverflow || '';
+        // 标记 cover 已显示
+        sessionStorage.setItem('coverShown', 'true');
       }, 700);
     }
     
@@ -167,6 +192,26 @@ html[data-theme="dark"] #site-cover .bg-gradient{
 })();
 </script>
 
-<!-- 原有的首页内容 -->
-{{ .Content }}
+<!-- 原有的首页内容 - 这部分来自主题 -->
+<section class="article-list">
+    {{- $pages := where .Site.RegularPages "Type" "in" .Site.Params.mainSections -}}
+    {{- $notHidden := where $pages "Params.hidden" "!=" true -}}
+    {{- $filtered := (where $notHidden "PublishDate" "<=" now) -}}
+    {{- $pag := .Paginate ($filtered) -}}
+
+    {{ range $index, $element := $pag.Pages }}
+        {{ partial "article-list/default" . }}
+    {{ end }}
+
+    {{- partial "pagination.html" . -}}
+</section>
+
 {{ end }}
+
+{{- define "left-sidebar" -}}
+    {{ partial "sidebar/left.html" . }}
+{{- end -}}
+
+{{- define "right-sidebar" -}}
+    {{ partial "sidebar/right.html" (dict "Context" . "Scope" "homepage") }}
+{{- end -}}
