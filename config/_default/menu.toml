@@ -48,13 +48,13 @@ icon = "brand-twitter"  # 官方 Twitter 图标
 # icon = "home"
 
 # 个人简历
-[[main]]
-name   = "About me"
-url    = "/about/"
-weight = 1
+# [[main]]
+# name   = "About me"
+# url    = "/about/"
+# weight = 1
 # Stack expects an icon name; we'll add assets/icons/user.svg below.
-[main.params]
-icon = "user"
+# [main.params]
+# icon = "user"
 
 
 # 书签页（Bookmarks）
