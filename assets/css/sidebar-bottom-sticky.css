@@ -1,0 +1,25 @@
+/* Keep the bottom block (Dark Mode + Secret Entrance) always visible */
+aside.sidebar .menu-bottom,
+.sidebar .menu-bottom {
+  position: sticky;
+  bottom: 0;
+  background: var(--card-background, transparent);
+  padding-top: .5rem;
+  /* Optional subtle separator: */
+  box-shadow: 0 -1px 0 var(--content-border, rgba(127,127,127,.28));
+}
+
+/* Ensure the scroll happens in the upper list, not the whole sidebar */
+aside.sidebar .menu,
+.sidebar .menu {
+  max-height: calc(100vh - 140px); /* leave room for the sticky bottom */
+  overflow: auto;
+}
+
+/* A tidy row look for the secret trigger */
+.menu-bottom .secret-trigger {
+  display: flex; align-items: center; gap: .6rem;
+  margin: .25rem 0 .5rem 0;
+  opacity: .9;
+}
+.menu-bottom .secret-trigger:hover { opacity: 1; }
