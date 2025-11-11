@@ -178,10 +178,4 @@ perRow = 5
 # 默认显示模式：square(正方形裁剪) 或 original(保持横/竖)
 displayMode = "square"
 
-[cover]
-enabled = true
-lines = [
-  "你好，我是 Albert Mi",
-  "欢迎来到我的个人网站",
-  "Science · Life · Peace"
-]
+
