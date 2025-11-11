@@ -280,6 +280,9 @@ html[data-theme="dark"] #site-cover .bg-gradient{
 })();
 </script>
 
+<!-- 私密入口脚本 -->
+<script defer src="{{ "js/secret-entrance.js?v=20251101" | relURL }}"></script>
+
 <!-- 原有的首页内容 -->
 <section class="article-list">
     {{- $pages := where .Site.RegularPages "Type" "in" .Site.Params.mainSections -}}
