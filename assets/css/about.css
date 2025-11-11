@@ -1,0 +1,4 @@
+.about-card {
+  box-shadow: var(--shadow-l1, 0 2px 12px rgba(0,0,0,.08));
+  backdrop-filter: saturate(120%) blur(2px);
+}
