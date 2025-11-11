@@ -1,4 +1,286 @@
 {{ define "main" }}
+<!-- 关键：立即隐藏页面内容，避免闪烁 -->
+<style id="cover-preload-style">
+  /* 在 cover 加载前隐藏所有内容 */
+  body {
+    overflow: hidden !important;
+  }
+  
+  .main-container,
+  .article-list,
+  nav,
+  aside {
+    opacity: 0 !important;
+    visibility: hidden !important;
+  }
+</style>
+
+<!-- Cover 界面样式 -->
+<style>
+:root{
+  /* 颜色配置 - 在这里自定义 */
+  --cover-color-1: #2b6fff;      /* 蓝色 */
+  --cover-color-2: #11cfe0;      /* 青色 */
+  --cover-bg-light: #ffffff;     /* 亮色背景 */
+  --cover-bg-dark: #0a0c10;      /* 暗色背景 */
+  --cover-text-light: #111111;   /* 亮色文字 */
+  --cover-text-dark: #ffffff;    /* 暗色文字 */
+}
+
+/* 亮色模式 */
+#site-cover{
+  --cover-text: var(--cover-text-light);
+  --cover-bg: var(--cover-bg-light);
+}
+
+/* 暗色模式 */
+html[data-theme="dark"] #site-cover{
+  --cover-text: var(--cover-text-dark);
+  --cover-bg: var(--cover-bg-dark);
+}
+
+/* 覆盖层 - 完全不透明 */
+#site-cover{
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: var(--cover-bg);
+  animation: cover-enter 400ms ease-out both;
+}
+
+@keyframes cover-enter{
+  from{ opacity: 0; transform: scale(1.01); }
+  to{ opacity: 1; transform: scale(1); }
+}
+
+/* 背景层 */
+#site-cover .cover-bg{
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* 渐变背景 - 移动端优化版本 */
+#site-cover .bg-gradient{
+  position: absolute;
+  inset: 0;
+  background: 
+    radial-gradient(circle at 10% 20%, var(--cover-color-1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 30%, var(--cover-color-2) 0%, transparent 50%),
+    radial-gradient(circle at 50% 80%, rgba(255,255,255,0.1) 0%, transparent 40%);
+  opacity: 0.35;
+  animation: floaty 14s ease-in-out infinite alternate;
+  /* 移动端性能优化 */
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+}
+
+/* 暗色模式的渐变 */
+html[data-theme="dark"] #site-cover .bg-gradient{
+  opacity: 0.45;
+  background: 
+    radial-gradient(circle at 10% 20%, var(--cover-color-1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 30%, var(--cover-color-2) 0%, transparent 50%),
+    radial-gradient(circle at 50% 80%, rgba(255,255,255,0.05) 0%, transparent 40%);
+}
+
+/* 移动端额外增强显示 */
+@media (max-width: 768px) {
+  #site-cover .bg-gradient{
+    opacity: 0.5;
+    /* 移动端使用更简单的渐变 */
+    background: 
+      linear-gradient(135deg, var(--cover-color-1) 0%, transparent 60%),
+      linear-gradient(225deg, var(--cover-color-2) 0%, transparent 60%);
+  }
+  
+  html[data-theme="dark"] #site-cover .bg-gradient{
+    opacity: 0.6;
+  }
+}
+
+@keyframes floaty{
+  0%{ transform: translate3d(-2%, -1%, 0) scale(1.02); }
+  100%{ transform: translate3d(2%, 1%, 0) scale(1.04); }
+}
+
+/* 文案容器 */
+#site-cover .cover-content{
+  position: relative;
+  z-index: 2;
+  max-width: min(90vw, 1200px);
+  padding: 0 4vw;
+  text-align: center;
+  display: grid;
+  place-items: center;
+}
+
+#site-cover .cover-lines{
+  display: grid;
+  gap: clamp(8px, 1.6vw, 18px);
+}
+
+#site-cover .line{
+  color: var(--cover-text);
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  font-size: clamp(22px, 3.6vw, 48px);
+  line-height: 1.15;
+  opacity: 0;
+  transform: translateY(8px);
+  animation: line-in 800ms cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  animation-delay: calc(var(--i) * 220ms + 250ms);
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
+}
+
+@keyframes line-in{
+  to { opacity: 1; transform: translateY(0); }
+}
+
+#site-cover .hint{
+  margin-top: clamp(10px, 2vw, 18px);
+  font-size: clamp(12px, 1.4vw, 14px);
+  color: var(--cover-text);
+  opacity: 0.75;
+}
+
+/* 点击后淡出 */
+#site-cover.hide{
+  pointer-events: none;
+  animation: cover-exit 500ms ease-in forwards;
+}
+
+@keyframes cover-exit{
+  to{ opacity: 0; transform: scale(1.01); }
+}
+
+/* 显示主内容的动画 */
+.show-main-content .main-container,
+.show-main-content .article-list,
+.show-main-content nav,
+.show-main-content aside {
+  animation: main-content-enter 400ms ease-out forwards;
+}
+
+@keyframes main-content-enter{
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+</style>
+
+<!-- Cover 脚本 - 不使用 defer，立即执行 -->
+<script>
+(function(){
+  // 检查是否在本次会话中已经显示过 cover
+  var coverShown = sessionStorage.getItem('coverShown');
+  
+  if (coverShown === 'true') {
+    console.log('🎯 Cover already shown, showing main content immediately');
+    // 立即移除隐藏样式
+    var preloadStyle = document.getElementById('cover-preload-style');
+    if (preloadStyle) {
+      preloadStyle.remove();
+    }
+    document.body.classList.add('show-main-content');
+    return;
+  }
+  
+  function init() {
+    console.log('🎯 Cover script started');
+    
+    {{ $lines := .Site.Params.cover.lines | default (slice "你好，我是 Albert Mi" "欢迎来到我的个人网站" "Science · Life · Peace") }}
+    var lines = {{ $lines | jsonify }};
+    
+    // 创建 cover 元素
+    var wrap = document.createElement('div');
+    wrap.id = 'site-cover';
+    wrap.innerHTML = [
+      '<div class="cover-bg">',
+      '  <div class="bg-gradient"></div>',
+      '</div>',
+      '<div class="cover-content">',
+      '  <div class="cover-lines">',
+      {{ range $i, $line := $lines }}
+        '<div class="line" style="--i:{{ add $i 1 }};">{{ $line }}</div>',
+      {{ end }}
+      '    <div class="hint">( 单击进入 / Tap to enter )</div>',
+      '  </div>',
+      '</div>'
+    ].join('');
+    
+    // 插入到 body 最前面
+    if (document.body.firstChild) {
+      document.body.insertBefore(wrap, document.body.firstChild);
+    } else {
+      document.body.appendChild(wrap);
+    }
+    
+    console.log('✅ Cover added to page');
+    
+    // 隐藏主内容的函数
+    function hide(){
+      console.log('🎯 Hiding cover');
+      wrap.classList.add('hide');
+      
+      setTimeout(function(){
+        try { 
+          document.body.removeChild(wrap);
+          console.log('✅ Cover removed');
+        } catch(e){
+          console.error('Error removing cover:', e);
+        }
+        
+        // 移除预加载样式
+        var preloadStyle = document.getElementById('cover-preload-style');
+        if (preloadStyle) {
+          preloadStyle.remove();
+        }
+        
+        // 显示主内容
+        document.body.classList.add('show-main-content');
+        
+        // 恢复滚动
+        document.documentElement.style.overflow = '';
+        document.body.style.overflow = '';
+        
+        // 标记已显示
+        sessionStorage.setItem('coverShown', 'true');
+        console.log('✅ Main content shown');
+      }, 600);
+    }
+    
+    // 点击事件
+    function onInteract(e){ 
+      console.log('🎯 User interacted with cover');
+      if (e.preventDefault) e.preventDefault();
+      hide(); 
+    }
+    
+    // 添加事件监听
+    wrap.addEventListener('click', onInteract);
+    wrap.addEventListener('touchstart', onInteract, { passive: true });
+    
+    console.log('✅ Cover initialized');
+  }
+  
+  // 立即执行（不等待 DOMContentLoaded）
+  if (document.body) {
+    init();
+  } else {
+    // 如果 body 还没有，等待它
+    document.addEventListener('DOMContentLoaded', init);
+  }
+})();
+</script>
+
+<!-- 原有的首页内容 -->
 <section class="article-list">
     {{- $pages := where .Site.RegularPages "Type" "in" .Site.Params.mainSections -}}
     {{- $notHidden := where $pages "Params.hidden" "!=" true -}}
