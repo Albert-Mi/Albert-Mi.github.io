@@ -83,6 +83,10 @@ favicon = "/favicon.png"
 customJS  = ["js/secret-entrance.js", "js/gallery.js"]
 customCSS = ["css/gallery.css"]
 
+[params]
+customJS  = ["about.js", "secret-entrance-patch.js"]
+customCSS = ["about.css", "sidebar-bottom-sticky.css"]
+
 
 # -------- 颜色/主题 --------
 [colorScheme]
