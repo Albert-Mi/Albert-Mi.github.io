@@ -78,11 +78,3 @@ weight = 4
 [main.params]
 icon = "search"
 
-# 个人简历
-[[main]]
-name   = "About me"
-url    = "/about/"
-weight = 5
-# Stack expects an icon name; we'll add assets/icons/user.svg below.
-[main.params]
-icon = "user"
