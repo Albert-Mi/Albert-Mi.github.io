@@ -195,7 +195,7 @@ html[data-theme="dark"] #site-cover .bg-gradient{
   function init() {
     console.log('🎯 Cover script started');
     
-    {{ $lines := .Site.Params.cover.lines | default (slice "你好，我是 Albert Mi" "欢迎来到我的个人网站" "Science · Life · Peace") }}
+    {{ $lines := .Site.Params.cover.lines | default (slice "Hello，it's Xuan here" "Welcome to my Web-home" "Science · Life · Peace") }}
     var lines = {{ $lines | jsonify }};
     
     // 创建 cover 元素
