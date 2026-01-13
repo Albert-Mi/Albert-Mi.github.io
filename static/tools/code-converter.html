@@ -3,10 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Code Converter - Image/PDF to LaTeX/Markdown</title>
-    
-    <!-- Tesseract.js for OCR -->
-    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+    <title>Code Converter - Free Image/PDF to LaTeX/Markdown</title>
     
     <!-- PDF.js for PDF parsing -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
@@ -29,9 +26,8 @@
     </script>
     <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     
-    <!-- Highlight.js for code highlighting -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <!-- Marked.js for Markdown preview -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     
     <style>
         :root {
@@ -97,9 +93,20 @@
             font-size: 1.1rem;
         }
 
+        .free-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--success), #059669);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-top: 0.5rem;
+        }
+
         .features {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
             gap: 1rem;
             margin-bottom: 2rem;
         }
@@ -123,7 +130,7 @@
         }
 
         .feature p {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             color: var(--text-secondary);
         }
 
@@ -134,6 +141,176 @@
             box-shadow: var(--shadow);
             border: 1px solid var(--border);
             margin-bottom: 2rem;
+        }
+
+        .api-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .api-option {
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 1.25rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .api-option:hover {
+            border-color: var(--primary);
+        }
+
+        .api-option.active {
+            border-color: var(--primary);
+            background: rgba(59, 130, 246, 0.05);
+        }
+
+        .api-option.recommended::before {
+            content: '⭐ Recommended';
+            position: absolute;
+            top: -10px;
+            right: 10px;
+            background: var(--success);
+            color: white;
+            padding: 0.2rem 0.5rem;
+            border-radius: 10px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+
+        .api-option h4 {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .api-option p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .api-option .api-details {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .api-option .api-details span {
+            display: inline-block;
+            background: var(--bg);
+            padding: 0.15rem 0.4rem;
+            border-radius: 4px;
+            margin-right: 0.5rem;
+            margin-top: 0.25rem;
+        }
+
+        .api-key-section {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .api-key-section h4 {
+            margin-bottom: 0.5rem;
+        }
+
+        .api-key-section p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.75rem;
+        }
+
+        .api-key-input {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .api-key-input input {
+            flex: 1;
+            padding: 0.6rem 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 0.9rem;
+            background: var(--card-bg);
+            color: var(--text);
+        }
+
+        .api-key-input button {
+            padding: 0.6rem 1rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            white-space: nowrap;
+        }
+
+        .api-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-top: 0.5rem;
+        }
+
+        .api-status.connected {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--success);
+        }
+
+        .api-status.disconnected {
+            background: rgba(245, 158, 11, 0.2);
+            color: var(--warning);
+        }
+
+        .external-services {
+            background: rgba(139, 92, 246, 0.1);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .external-services h4 {
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .external-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .external-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--text);
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+
+        .external-link:hover {
+            border-color: var(--primary);
+            background: rgba(59, 130, 246, 0.05);
         }
 
         .upload-zone {
@@ -167,6 +344,23 @@
         .upload-zone p {
             color: var(--text-secondary);
             font-size: 0.9rem;
+        }
+
+        .paste-hint {
+            margin-top: 1rem;
+            padding: 0.75rem;
+            background: rgba(59, 130, 246, 0.1);
+            border-radius: 8px;
+            font-size: 0.85rem;
+        }
+
+        .paste-hint kbd {
+            background: var(--card-bg);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            border: 1px solid var(--border);
+            font-family: monospace;
+            font-size: 0.8rem;
         }
 
         .file-input {
@@ -228,8 +422,7 @@
             font-size: 0.9rem;
         }
 
-        .option-group select,
-        .option-group input {
+        .option-group select {
             padding: 0.75rem;
             border: 1px solid var(--border);
             border-radius: 8px;
@@ -319,6 +512,14 @@
             color: var(--text-secondary);
         }
 
+        .file-item-preview {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+        }
+
         .file-item-status {
             padding: 0.25rem 0.75rem;
             border-radius: 20px;
@@ -326,25 +527,10 @@
             font-weight: 600;
         }
 
-        .status-pending {
-            background: rgba(245, 158, 11, 0.2);
-            color: var(--warning);
-        }
-
-        .status-processing {
-            background: rgba(59, 130, 246, 0.2);
-            color: var(--primary);
-        }
-
-        .status-complete {
-            background: rgba(16, 185, 129, 0.2);
-            color: var(--success);
-        }
-
-        .status-error {
-            background: rgba(239, 68, 68, 0.2);
-            color: var(--danger);
-        }
+        .status-pending { background: rgba(245, 158, 11, 0.2); color: var(--warning); }
+        .status-processing { background: rgba(59, 130, 246, 0.2); color: var(--primary); }
+        .status-complete { background: rgba(16, 185, 129, 0.2); color: var(--success); }
+        .status-error { background: rgba(239, 68, 68, 0.2); color: var(--danger); }
 
         .btn {
             padding: 0.75rem 1.5rem;
@@ -419,22 +605,11 @@
             transition: all 0.3s ease;
         }
 
-        .tab:hover {
-            color: var(--text);
-        }
+        .tab:hover { color: var(--text); }
+        .tab.active { background: var(--primary); color: white; }
 
-        .tab.active {
-            background: var(--primary);
-            color: white;
-        }
-
-        .tab-content {
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
 
         .output-area {
             background: var(--bg);
@@ -442,7 +617,7 @@
             border-radius: 8px;
             padding: 1rem;
             min-height: 300px;
-            max-height: 500px;
+            max-height: 600px;
             overflow-y: auto;
         }
 
@@ -457,45 +632,34 @@
             line-height: 1.8;
         }
 
-        .preview-output h1, .preview-output h2, .preview-output h3 {
-            margin: 1rem 0 0.5rem;
-        }
+        .preview-output h1, .preview-output h2, .preview-output h3 { margin: 1rem 0 0.5rem; }
+        .preview-output p { margin-bottom: 0.75rem; }
+        .preview-output table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+        .preview-output th, .preview-output td { border: 1px solid var(--border); padding: 0.5rem; text-align: left; }
+        .preview-output th { background: var(--border); }
+        .preview-output code { background: var(--border); padding: 0.2rem 0.4rem; border-radius: 4px; }
+        .preview-output pre { background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 1rem; overflow-x: auto; }
+        .preview-output pre code { background: none; padding: 0; }
+        .preview-output blockquote { border-left: 4px solid var(--primary); padding-left: 1rem; margin: 1rem 0; color: var(--text-secondary); }
 
-        .preview-output p {
-            margin-bottom: 0.5rem;
-        }
-
-        .preview-output table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 1rem 0;
-        }
-
-        .preview-output th, .preview-output td {
-            border: 1px solid var(--border);
-            padding: 0.5rem;
-            text-align: left;
-        }
-
-        .preview-output th {
-            background: var(--border);
+        .output-wrapper {
+            position: relative;
         }
 
         .copy-btn {
             position: absolute;
             top: 0.5rem;
             right: 0.5rem;
-            padding: 0.5rem;
+            padding: 0.5rem 0.75rem;
             background: var(--card-bg);
             border: 1px solid var(--border);
             border-radius: 6px;
             cursor: pointer;
             font-size: 0.85rem;
+            z-index: 10;
         }
 
-        .output-wrapper {
-            position: relative;
-        }
+        .copy-btn:hover { background: var(--border); }
 
         .stats-bar {
             display: flex;
@@ -507,63 +671,9 @@
             flex-wrap: wrap;
         }
 
-        .stat {
-            text-align: center;
-        }
-
-        .stat-value {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--primary);
-        }
-
-        .stat-label {
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-        }
-
-        .help-section {
-            background: rgba(59, 130, 246, 0.1);
-            border-radius: 12px;
-            padding: 1.5rem;
-            margin-top: 2rem;
-        }
-
-        .help-section h3 {
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .help-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1rem;
-        }
-
-        .help-item {
-            background: var(--card-bg);
-            padding: 1rem;
-            border-radius: 8px;
-        }
-
-        .help-item h4 {
-            margin-bottom: 0.5rem;
-            font-size: 0.95rem;
-        }
-
-        .help-item code {
-            background: var(--bg);
-            padding: 0.2rem 0.4rem;
-            border-radius: 4px;
-            font-size: 0.85rem;
-        }
-
-        .help-item p {
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-        }
+        .stat { text-align: center; }
+        .stat-value { font-size: 1.5rem; font-weight: 700; color: var(--primary); }
+        .stat-label { font-size: 0.85rem; color: var(--text-secondary); }
 
         footer {
             text-align: center;
@@ -587,9 +697,7 @@
             animation: spin 1s linear infinite;
         }
 
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
+        @keyframes spin { to { transform: rotate(360deg); } }
 
         .toast {
             position: fixed;
@@ -605,26 +713,38 @@
             z-index: 1000;
         }
 
-        .toast.show {
-            transform: translateX(0);
+        .toast.show { transform: translateX(0); }
+        .toast.error { border-left-color: var(--danger); }
+
+        .context-menu {
+            position: fixed;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            padding: 0.5rem 0;
+            z-index: 1000;
+            display: none;
         }
 
-        .toast.error {
-            border-left-color: var(--danger);
+        .context-menu.show { display: block; }
+
+        .context-menu-item {
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
         }
+
+        .context-menu-item:hover { background: var(--bg); }
 
         @media (max-width: 768px) {
-            header h1 {
-                font-size: 1.75rem;
-            }
-            
-            .card {
-                padding: 1.5rem;
-            }
-            
-            .upload-zone {
-                padding: 2rem 1rem;
-            }
+            header h1 { font-size: 1.75rem; }
+            .card { padding: 1.5rem; }
+            .upload-zone { padding: 2rem 1rem; }
+            .api-key-input { flex-direction: column; }
         }
     </style>
 </head>
@@ -632,51 +752,116 @@
     <div class="container">
         <header>
             <h1>📝 Code Converter</h1>
-            <p>Convert screenshots, photos, PDFs, and Word documents to clean LaTeX or Markdown</p>
+            <p>Convert screenshots, photos, PDFs to LaTeX/Markdown</p>
+            <span class="free-badge">🆓 100% FREE</span>
         </header>
 
         <div class="features">
             <div class="feature">
+                <div class="feature-icon">🆓</div>
+                <h3>Completely Free</h3>
+                <p>No payment required</p>
+            </div>
+            <div class="feature">
                 <div class="feature-icon">📷</div>
-                <h3>Image OCR</h3>
-                <p>Extract text from screenshots & photos</p>
-            </div>
-            <div class="feature">
-                <div class="feature-icon">📄</div>
-                <h3>PDF Support</h3>
-                <p>Parse multi-page PDF documents</p>
-            </div>
-            <div class="feature">
-                <div class="feature-icon">📝</div>
-                <h3>Word Docs</h3>
-                <p>Convert .docx files directly</p>
+                <h3>Paste Screenshots</h3>
+                <p>Ctrl+V anywhere</p>
             </div>
             <div class="feature">
                 <div class="feature-icon">🔢</div>
-                <h3>Math Support</h3>
-                <p>LaTeX formulas & equations</p>
+                <h3>Math Formulas</h3>
+                <p>Perfect $LaTeX$ output</p>
             </div>
             <div class="feature">
-                <div class="feature-icon">📊</div>
-                <h3>Tables</h3>
-                <p>Structured table conversion</p>
+                <div class="feature-icon">📑</div>
+                <h3>Headers & Tables</h3>
+                <p># ## ### formatting</p>
             </div>
             <div class="feature">
-                <div class="feature-icon">🆓</div>
-                <h3>100% Free</h3>
-                <p>No account, runs locally</p>
+                <div class="feature-icon">⚡</div>
+                <h3>Fast</h3>
+                <p>2-5 seconds</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">🌐</div>
+                <h3>Online</h3>
+                <p>No installation</p>
             </div>
         </div>
 
         <div class="card">
-            <h2 style="margin-bottom: 1.5rem;">📤 Upload Your Files</h2>
+            <h2 style="margin-bottom: 1rem;">🔧 Choose Conversion Method</h2>
             
-            <div class="upload-zone" id="uploadZone">
+            <div class="api-selector">
+                <div class="api-option recommended active" data-api="gemini" onclick="selectApi('gemini')">
+                    <h4>🌟 Google Gemini</h4>
+                    <p>Best quality, completely FREE (60 requests/min)</p>
+                    <div class="api-details">
+                        <span>✅ Free tier</span>
+                        <span>⚡ 2-5s</span>
+                        <span>🔢 Math</span>
+                        <span>📊 Tables</span>
+                    </div>
+                </div>
+                <div class="api-option" data-api="external" onclick="selectApi('external')">
+                    <h4>🔗 External Tools</h4>
+                    <p>Use free online converters (no API key needed)</p>
+                    <div class="api-details">
+                        <span>✅ No signup</span>
+                        <span>🌐 Browser-based</span>
+                        <span>📷 SimpleTex</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gemini API Section -->
+            <div class="api-key-section" id="geminiSection">
+                <h4>🔑 Google Gemini API Key (FREE)</h4>
+                <p>Get your free API key from <a href="https://aistudio.google.com/app/apikey" target="_blank">Google AI Studio</a> — takes 30 seconds!</p>
+                <div class="api-key-input">
+                    <input type="password" id="geminiKeyInput" placeholder="Paste your Gemini API key here..." />
+                    <button onclick="saveGeminiKey()">Save Key</button>
+                </div>
+                <span class="api-status disconnected" id="geminiStatus">⚪ Not configured</span>
+            </div>
+
+            <!-- External Services Section -->
+            <div class="external-services" id="externalSection" style="display: none;">
+                <h4>🔗 Free Online Converters (No API Key)</h4>
+                <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.75rem;">
+                    Click to open in new tab. Upload your image there, then paste the result back here.
+                </p>
+                <div class="external-links">
+                    <a href="https://simpletex.cn/ai/latex_ocr" target="_blank" class="external-link">
+                        📐 SimpleTex <span style="font-size: 0.75rem; color: var(--success);">⭐ Best for Math</span>
+                    </a>
+                    <a href="https://web.baimiaoapp.com/" target="_blank" class="external-link">
+                        📝 Baimiao OCR
+                    </a>
+                    <a href="https://www.onlineocr.net/" target="_blank" class="external-link">
+                        🔤 Online OCR
+                    </a>
+                    <a href="https://www.imagetotext.info/" target="_blank" class="external-link">
+                        🖼️ Image to Text
+                    </a>
+                    <a href="https://mathpix.com/" target="_blank" class="external-link">
+                        ➗ Mathpix <span style="font-size: 0.75rem; color: var(--warning);">10 free/mo</span>
+                    </a>
+                </div>
+            </div>
+
+            <h2 style="margin: 1.5rem 0 1rem;">📤 Upload Your Files</h2>
+            
+            <div class="upload-zone" id="uploadZone" tabindex="0">
                 <div class="upload-icon">📁</div>
-                <h3>Drop files here or click to upload</h3>
+                <h3>Drop files here, click to upload, or paste screenshot</h3>
                 <p>Supports: PNG, JPG, JPEG, GIF, WebP, PDF, DOCX</p>
+                <div class="paste-hint">
+                    💡 <strong>Quick paste:</strong> Press <kbd>Ctrl</kbd>+<kbd>V</kbd> or <kbd>⌘</kbd>+<kbd>V</kbd> anywhere, 
+                    or <strong>right-click</strong> to paste
+                </div>
                 <input type="file" id="fileInput" class="file-input" multiple 
-                       accept=".png,.jpg,.jpeg,.gif,.webp,.pdf,.docx">
+                       accept=".png,.jpg,.jpeg,.gif,.webp,.pdf,.docx,image/*">
             </div>
 
             <div class="file-list" id="fileList"></div>
@@ -685,51 +870,46 @@
             <div class="format-selector">
                 <div class="format-btn active" data-format="markdown" onclick="selectFormat('markdown')">
                     <h4>📝 Markdown</h4>
-                    <p>Best for VSCode, GitHub, notes</p>
+                    <p>VSCode, GitHub, notes</p>
                 </div>
                 <div class="format-btn" data-format="latex" onclick="selectFormat('latex')">
                     <h4>🔬 LaTeX</h4>
-                    <p>Best for math, academic papers</p>
+                    <p>Academic papers, math</p>
                 </div>
             </div>
 
             <h3 style="margin: 1.5rem 0 1rem;">⚙️ Options</h3>
             <div class="options-grid">
                 <div class="option-group">
-                    <label>OCR Language</label>
-                    <select id="ocrLanguage">
-                        <option value="eng">English</option>
-                        <option value="chi_sim">Chinese (Simplified)</option>
-                        <option value="chi_tra">Chinese (Traditional)</option>
-                        <option value="jpn">Japanese</option>
-                        <option value="kor">Korean</option>
-                        <option value="deu">German</option>
-                        <option value="fra">French</option>
-                        <option value="spa">Spanish</option>
-                        <option value="eng+chi_sim">English + Chinese</option>
-                    </select>
-                </div>
-                <div class="option-group">
                     <label>Document Structure</label>
                     <select id="docStructure">
                         <option value="auto">Auto-detect</option>
                         <option value="article">Article/Report</option>
                         <option value="notes">Research Notes</option>
-                        <option value="slides">Presentation Slides</option>
+                        <option value="textbook">Textbook/Tutorial</option>
+                    </select>
+                </div>
+                <div class="option-group">
+                    <label>Content Language</label>
+                    <select id="contentLanguage">
+                        <option value="auto">Auto-detect</option>
+                        <option value="english">English</option>
+                        <option value="chinese">Chinese (中文)</option>
+                        <option value="mixed">Mixed</option>
                     </select>
                 </div>
                 <div class="option-group">
                     <div class="checkbox-group">
                         <input type="checkbox" id="detectMath" checked>
-                        <label for="detectMath">Detect math formulas</label>
+                        <label for="detectMath">Convert math to LaTeX</label>
                     </div>
                     <div class="checkbox-group">
                         <input type="checkbox" id="detectTables" checked>
-                        <label for="detectTables">Detect tables</label>
+                        <label for="detectTables">Format tables</label>
                     </div>
                     <div class="checkbox-group">
-                        <input type="checkbox" id="preserveImages" checked>
-                        <label for="preserveImages">Include image references</label>
+                        <input type="checkbox" id="addHeaders" checked>
+                        <label for="addHeaders">Add section headers</label>
                     </div>
                 </div>
             </div>
@@ -765,24 +945,20 @@
                 <div class="stats-bar">
                     <div class="stat">
                         <div class="stat-value" id="statFiles">0</div>
-                        <div class="stat-label">Files Processed</div>
+                        <div class="stat-label">Files</div>
                     </div>
                     <div class="stat">
                         <div class="stat-value" id="statChars">0</div>
-                        <div class="stat-label">Characters Extracted</div>
+                        <div class="stat-label">Characters</div>
                     </div>
                     <div class="stat">
-                        <div class="stat-value" id="statMath">0</div>
-                        <div class="stat-label">Math Expressions</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value" id="statTables">0</div>
-                        <div class="stat-label">Tables Found</div>
+                        <div class="stat-value" id="statTime">0s</div>
+                        <div class="stat-label">Time</div>
                     </div>
                 </div>
 
                 <div class="tabs">
-                    <button class="tab active" onclick="switchTab('code')">📝 Code Output</button>
+                    <button class="tab active" onclick="switchTab('code')">📝 Code</button>
                     <button class="tab" onclick="switchTab('preview')">👁️ Preview</button>
                 </div>
 
@@ -800,51 +976,20 @@
                 </div>
 
                 <div class="action-buttons" style="margin-top: 1rem;">
-                    <button class="btn btn-primary" onclick="downloadOutput()">
-                        💾 Download File
-                    </button>
-                    <button class="btn btn-secondary" onclick="copyOutput()">
-                        📋 Copy to Clipboard
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <div class="help-section">
-            <h3>💡 Quick Tips</h3>
-            <div class="help-grid">
-                <div class="help-item">
-                    <h4>Math Formulas</h4>
-                    <p>Inline: <code>$E = mc^2$</code><br>
-                    Block: <code>$$\int_0^\infty e^{-x^2} dx$$</code></p>
-                </div>
-                <div class="help-item">
-                    <h4>Tables in Markdown</h4>
-                    <p><code>| Col1 | Col2 |</code><br>
-                    <code>|------|------|</code><br>
-                    <code>| data | data |</code></p>
-                </div>
-                <div class="help-item">
-                    <h4>GitHub Images</h4>
-                    <p>Upload to your repo, then use:<br>
-                    <code>![alt](https://raw.githubusercontent.com/USER/REPO/main/path/image.png)</code></p>
-                </div>
-                <div class="help-item">
-                    <h4>LaTeX Blocks</h4>
-                    <p><code>\begin{align}</code><br>
-                    <code>  x &= y + z \\</code><br>
-                    <code>\end{align}</code></p>
+                    <button class="btn btn-primary" onclick="downloadOutput()">💾 Download</button>
+                    <button class="btn btn-secondary" onclick="copyOutput()">📋 Copy</button>
                 </div>
             </div>
         </div>
 
         <footer>
-            <p>Built with ❤️ | 100% Free & Open Source | Runs entirely in your browser</p>
-            <p>Powered by <a href="https://tesseract.projectnaptha.com/" target="_blank">Tesseract.js</a>, 
-               <a href="https://mozilla.github.io/pdf.js/" target="_blank">PDF.js</a>, 
-               <a href="https://www.mathjax.org/" target="_blank">MathJax</a></p>
-            <p style="margin-top: 1rem;"><a href="https://albert-mi.github.io/">← Back to Website</a></p>
+            <p>🆓 100% Free | Powered by Google Gemini</p>
+            <p style="margin-top: 0.5rem;"><a href="https://albert-mi.github.io/">← Back to Website</a></p>
         </footer>
+    </div>
+
+    <div class="context-menu" id="contextMenu">
+        <div class="context-menu-item" onclick="pasteFromClipboard()">📋 Paste Image</div>
     </div>
 
     <div class="toast" id="toast"></div>
@@ -853,10 +998,11 @@
         // Global state
         let files = [];
         let selectedFormat = 'markdown';
+        let selectedApi = 'gemini';
         let conversionResults = [];
-        let stats = { files: 0, chars: 0, math: 0, tables: 0 };
+        let geminiKey = localStorage.getItem('gemini_api_key') || '';
 
-        // Initialize PDF.js worker
+        // Initialize PDF.js
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
         // DOM elements
@@ -866,76 +1012,156 @@
         const convertBtn = document.getElementById('convertBtn');
         const progressSection = document.getElementById('progressSection');
         const outputSection = document.getElementById('outputSection');
+        const contextMenu = document.getElementById('contextMenu');
 
-        // Event listeners
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            if (geminiKey) {
+                document.getElementById('geminiKeyInput').value = geminiKey;
+                updateGeminiStatus(true);
+            }
+            updateConvertButton();
+        });
+
+        // API Selection
+        function selectApi(api) {
+            selectedApi = api;
+            document.querySelectorAll('.api-option').forEach(el => {
+                el.classList.toggle('active', el.dataset.api === api);
+            });
+            
+            document.getElementById('geminiSection').style.display = api === 'gemini' ? 'block' : 'none';
+            document.getElementById('externalSection').style.display = api === 'external' ? 'block' : 'none';
+            
+            updateConvertButton();
+        }
+
+        // Gemini API Key
+        function saveGeminiKey() {
+            geminiKey = document.getElementById('geminiKeyInput').value.trim();
+            if (geminiKey) {
+                localStorage.setItem('gemini_api_key', geminiKey);
+                updateGeminiStatus(true);
+                showToast('✅ API key saved!');
+            } else {
+                localStorage.removeItem('gemini_api_key');
+                updateGeminiStatus(false);
+            }
+            updateConvertButton();
+        }
+
+        function updateGeminiStatus(connected) {
+            const status = document.getElementById('geminiStatus');
+            status.className = 'api-status ' + (connected ? 'connected' : 'disconnected');
+            status.innerHTML = connected ? '🟢 Ready' : '⚪ Not configured';
+        }
+
+        function updateConvertButton() {
+            const hasFiles = files.length > 0;
+            const hasApi = selectedApi === 'external' || (selectedApi === 'gemini' && geminiKey);
+            
+            convertBtn.disabled = !hasFiles || !hasApi;
+            
+            if (!hasFiles) {
+                document.getElementById('btnText').textContent = '🚀 Convert Files';
+            } else if (!hasApi) {
+                document.getElementById('btnText').textContent = '🔑 Enter API Key First';
+            } else {
+                document.getElementById('btnText').textContent = '🚀 Convert Files';
+            }
+        }
+
+        // File handling
         uploadZone.addEventListener('click', () => fileInput.click());
-        uploadZone.addEventListener('dragover', handleDragOver);
-        uploadZone.addEventListener('dragleave', handleDragLeave);
-        uploadZone.addEventListener('drop', handleDrop);
-        fileInput.addEventListener('change', handleFileSelect);
-
-        function handleDragOver(e) {
-            e.preventDefault();
-            uploadZone.classList.add('dragover');
-        }
-
-        function handleDragLeave(e) {
+        uploadZone.addEventListener('dragover', e => { e.preventDefault(); uploadZone.classList.add('dragover'); });
+        uploadZone.addEventListener('dragleave', e => { e.preventDefault(); uploadZone.classList.remove('dragover'); });
+        uploadZone.addEventListener('drop', e => {
             e.preventDefault();
             uploadZone.classList.remove('dragover');
+            addFiles(Array.from(e.dataTransfer.files));
+        });
+        fileInput.addEventListener('change', e => addFiles(Array.from(e.target.files)));
+
+        // Paste support
+        document.addEventListener('paste', handlePaste);
+        document.addEventListener('contextmenu', e => {
+            const rect = uploadZone.getBoundingClientRect();
+            if (e.clientX >= rect.left && e.clientX <= rect.right &&
+                e.clientY >= rect.top && e.clientY <= rect.bottom) {
+                e.preventDefault();
+                contextMenu.style.left = e.clientX + 'px';
+                contextMenu.style.top = e.clientY + 'px';
+                contextMenu.classList.add('show');
+            }
+        });
+        document.addEventListener('click', () => contextMenu.classList.remove('show'));
+
+        async function handlePaste(e) {
+            const items = e.clipboardData?.items;
+            if (!items) return;
+            for (const item of items) {
+                if (item.type.startsWith('image/')) {
+                    e.preventDefault();
+                    const blob = item.getAsFile();
+                    if (blob) {
+                        const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+                        const file = new File([blob], `screenshot-${timestamp}.png`, { type: blob.type });
+                        addFiles([file]);
+                        showToast('📷 Screenshot pasted!');
+                    }
+                    return;
+                }
+            }
         }
 
-        function handleDrop(e) {
-            e.preventDefault();
-            uploadZone.classList.remove('dragover');
-            const droppedFiles = Array.from(e.dataTransfer.files);
-            addFiles(droppedFiles);
-        }
-
-        function handleFileSelect(e) {
-            const selectedFiles = Array.from(e.target.files);
-            addFiles(selectedFiles);
+        async function pasteFromClipboard() {
+            try {
+                const items = await navigator.clipboard.read();
+                for (const item of items) {
+                    for (const type of item.types) {
+                        if (type.startsWith('image/')) {
+                            const blob = await item.getType(type);
+                            const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+                            const file = new File([blob], `screenshot-${timestamp}.png`, { type: blob.type });
+                            addFiles([file]);
+                            showToast('📷 Screenshot pasted!');
+                            return;
+                        }
+                    }
+                }
+                showToast('No image in clipboard', true);
+            } catch (err) {
+                showToast('Try Ctrl+V instead', true);
+            }
         }
 
         function addFiles(newFiles) {
-            const validExtensions = ['.png', '.jpg', '.jpeg', '.gif', '.webp', '.pdf', '.docx'];
-            
             newFiles.forEach(file => {
-                const ext = '.' + file.name.split('.').pop().toLowerCase();
-                if (validExtensions.includes(ext)) {
+                if (file.type.startsWith('image/') || 
+                    ['.pdf', '.docx'].includes('.' + file.name.split('.').pop().toLowerCase())) {
                     files.push({
-                        file: file,
+                        file,
                         name: file.name,
                         size: file.size,
-                        type: getFileType(ext),
-                        status: 'pending'
+                        type: file.type.startsWith('image/') ? 'image' : 
+                              file.name.endsWith('.pdf') ? 'pdf' : 'docx',
+                        status: 'pending',
+                        preview: file.type.startsWith('image/') ? URL.createObjectURL(file) : null
                     });
                 }
             });
-
             renderFileList();
-            convertBtn.disabled = files.length === 0;
-        }
-
-        function getFileType(ext) {
-            if (['.png', '.jpg', '.jpeg', '.gif', '.webp'].includes(ext)) return 'image';
-            if (ext === '.pdf') return 'pdf';
-            if (ext === '.docx') return 'docx';
-            return 'unknown';
-        }
-
-        function formatFileSize(bytes) {
-            if (bytes < 1024) return bytes + ' B';
-            if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
-            return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+            updateConvertButton();
         }
 
         function renderFileList() {
             fileList.innerHTML = files.map((f, i) => `
                 <div class="file-item">
-                    <div class="file-item-icon">${getFileIcon(f.type)}</div>
+                    ${f.preview ? `<img src="${f.preview}" class="file-item-preview" alt="Preview">` : 
+                                  `<div class="file-item-icon">${f.type === 'pdf' ? '📄' : '📝'}</div>`}
                     <div class="file-item-info">
                         <div class="file-item-name">${f.name}</div>
-                        <div class="file-item-size">${formatFileSize(f.size)}</div>
+                        <div class="file-item-size">${formatSize(f.size)}</div>
                     </div>
                     <span class="file-item-status status-${f.status}">${f.status}</span>
                     <button class="btn btn-secondary" style="padding: 0.5rem;" onclick="removeFile(${i})">✕</button>
@@ -943,19 +1169,17 @@
             `).join('');
         }
 
-        function getFileIcon(type) {
-            switch(type) {
-                case 'image': return '🖼️';
-                case 'pdf': return '📄';
-                case 'docx': return '📝';
-                default: return '📁';
-            }
+        function formatSize(bytes) {
+            if (bytes < 1024) return bytes + ' B';
+            if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+            return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
         }
 
-        function removeFile(index) {
-            files.splice(index, 1);
+        function removeFile(i) {
+            if (files[i].preview) URL.revokeObjectURL(files[i].preview);
+            files.splice(i, 1);
             renderFileList();
-            convertBtn.disabled = files.length === 0;
+            updateConvertButton();
         }
 
         function selectFormat(format) {
@@ -966,389 +1190,181 @@
         }
 
         function clearAll() {
+            files.forEach(f => { if (f.preview) URL.revokeObjectURL(f.preview); });
             files = [];
             conversionResults = [];
-            stats = { files: 0, chars: 0, math: 0, tables: 0 };
             renderFileList();
-            convertBtn.disabled = true;
+            updateConvertButton();
             outputSection.classList.remove('active');
             progressSection.classList.remove('active');
         }
 
+        // Conversion
         async function startConversion() {
             if (files.length === 0) return;
+            if (selectedApi === 'external') {
+                showToast('Use external tools above, then paste result', true);
+                return;
+            }
+            if (!geminiKey) {
+                showToast('Please enter your Gemini API key', true);
+                return;
+            }
 
             convertBtn.disabled = true;
             document.getElementById('btnText').innerHTML = '<span class="loading-spinner"></span> Converting...';
             progressSection.classList.add('active');
             outputSection.classList.remove('active');
-
             conversionResults = [];
-            stats = { files: 0, chars: 0, math: 0, tables: 0 };
+
             const startTime = Date.now();
 
             for (let i = 0; i < files.length; i++) {
                 const file = files[i];
                 file.status = 'processing';
                 renderFileList();
-
                 updateProgress(i, files.length, 'Processing ' + file.name);
 
                 try {
-                    let text = '';
-                    
+                    let result = '';
                     if (file.type === 'image') {
-                        text = await processImage(file.file);
+                        result = await processWithGemini(file.file);
                     } else if (file.type === 'pdf') {
-                        text = await processPDF(file.file);
+                        result = await processPdfWithGemini(file.file);
                     } else if (file.type === 'docx') {
-                        text = await processDocx(file.file);
+                        result = await processDocxWithGemini(file.file);
                     }
-
-                    const converted = convertToFormat(text, file.name);
-                    conversionResults.push({
-                        name: file.name,
-                        content: converted.content,
-                        stats: converted.stats
-                    });
-
-                    stats.chars += converted.stats.chars;
-                    stats.math += converted.stats.math;
-                    stats.tables += converted.stats.tables;
-                    stats.files++;
-
+                    conversionResults.push({ name: file.name, content: result });
                     file.status = 'complete';
                 } catch (error) {
-                    console.error('Error processing file:', error);
+                    console.error('Error:', error);
                     file.status = 'error';
-                    showToast('Error processing ' + file.name, true);
+                    conversionResults.push({ name: file.name, content: `<!-- Error: ${error.message} -->` });
+                    showToast('Error: ' + error.message, true);
                 }
-
                 renderFileList();
             }
 
-            // Final output
+            const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
             updateProgress(files.length, files.length, 'Complete!');
-            displayResults();
-
+            displayResults(elapsed);
             document.getElementById('btnText').textContent = '🚀 Convert Files';
             convertBtn.disabled = false;
-            
-            const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
-            showToast(`Conversion complete in ${elapsed}s!`);
+            showToast(`✅ Done in ${elapsed}s!`);
         }
 
-        async function processImage(file) {
-            const language = document.getElementById('ocrLanguage').value;
-            
-            const result = await Tesseract.recognize(file, language, {
-                logger: m => {
-                    if (m.status === 'recognizing text') {
-                        const percent = Math.round(m.progress * 100);
-                        document.getElementById('progressPercent').textContent = percent + '%';
-                        document.getElementById('progressFill').style.width = percent + '%';
-                    }
-                }
+        async function processWithGemini(file) {
+            const base64 = await fileToBase64(file);
+            const prompt = buildPrompt();
+
+            const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiKey}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    contents: [{
+                        parts: [
+                            { inline_data: { mime_type: file.type, data: base64 } },
+                            { text: prompt }
+                        ]
+                    }],
+                    generationConfig: { maxOutputTokens: 8192 }
+                })
             });
 
-            return result.data.text;
-        }
-
-        async function processPDF(file) {
-            const arrayBuffer = await file.arrayBuffer();
-            const pdf = await pdfjsLib.getDocument(arrayBuffer).promise;
-            let fullText = '';
-
-            for (let i = 1; i <= pdf.numPages; i++) {
-                const page = await pdf.getPage(i);
-                const textContent = await page.getTextContent();
-                const pageText = textContent.items.map(item => item.str).join(' ');
-                fullText += pageText + '\n\n';
-
-                updateProgress(i - 1, pdf.numPages, `Processing page ${i} of ${pdf.numPages}`);
+            if (!response.ok) {
+                const err = await response.json();
+                throw new Error(err.error?.message || 'Gemini API error');
             }
 
-            // If no text extracted, try OCR on rendered pages
-            if (fullText.trim().length < 50) {
-                fullText = await ocrPDF(file);
-            }
-
-            return fullText;
+            const data = await response.json();
+            return data.candidates?.[0]?.content?.parts?.[0]?.text || '';
         }
 
-        async function ocrPDF(file) {
+        async function processPdfWithGemini(file) {
             const arrayBuffer = await file.arrayBuffer();
             const pdf = await pdfjsLib.getDocument(arrayBuffer).promise;
-            let fullText = '';
-            const language = document.getElementById('ocrLanguage').value;
+            let results = [];
 
             for (let i = 1; i <= pdf.numPages; i++) {
+                updateProgress(i - 1, pdf.numPages, `PDF page ${i}/${pdf.numPages}`);
                 const page = await pdf.getPage(i);
-                const scale = 2;
-                const viewport = page.getViewport({ scale });
-                
+                const viewport = page.getViewport({ scale: 2 });
                 const canvas = document.createElement('canvas');
                 canvas.width = viewport.width;
                 canvas.height = viewport.height;
-                const ctx = canvas.getContext('2d');
-
-                await page.render({ canvasContext: ctx, viewport }).promise;
+                await page.render({ canvasContext: canvas.getContext('2d'), viewport }).promise;
                 
-                const result = await Tesseract.recognize(canvas, language);
-                fullText += result.data.text + '\n\n';
-
-                updateProgress(i - 1, pdf.numPages, `OCR page ${i} of ${pdf.numPages}`);
+                const blob = await new Promise(r => canvas.toBlob(r, 'image/png'));
+                const result = await processWithGemini(new File([blob], 'page.png', { type: 'image/png' }));
+                results.push(`<!-- Page ${i} -->\n${result}`);
             }
-
-            return fullText;
+            return results.join('\n\n---\n\n');
         }
 
-        async function processDocx(file) {
+        async function processDocxWithGemini(file) {
             const arrayBuffer = await file.arrayBuffer();
             const result = await mammoth.extractRawText({ arrayBuffer });
-            return result.value;
-        }
-
-        function convertToFormat(text, filename) {
-            const detectMath = document.getElementById('detectMath').checked;
-            const detectTables = document.getElementById('detectTables').checked;
-            const preserveImages = document.getElementById('preserveImages').checked;
-            const structure = document.getElementById('docStructure').value;
-
-            let content = text;
-            let mathCount = 0;
-            let tableCount = 0;
-
-            // Clean up text
-            content = content.replace(/\r\n/g, '\n');
-            content = content.replace(/\n{3,}/g, '\n\n');
-
-            // Detect and convert math expressions
-            if (detectMath) {
-                const mathResult = detectAndConvertMath(content);
-                content = mathResult.content;
-                mathCount = mathResult.count;
-            }
-
-            // Detect tables (simple heuristic)
-            if (detectTables) {
-                const tableResult = detectAndConvertTables(content);
-                content = tableResult.content;
-                tableCount = tableResult.count;
-            }
-
-            // Add structure based on format
-            if (selectedFormat === 'markdown') {
-                content = formatAsMarkdown(content, filename, structure, preserveImages);
-            } else {
-                content = formatAsLaTeX(content, filename, structure, preserveImages);
-            }
-
-            return {
-                content,
-                stats: {
-                    chars: text.length,
-                    math: mathCount,
-                    tables: tableCount
-                }
-            };
-        }
-
-        function detectAndConvertMath(text) {
-            let count = 0;
-            let content = text;
-
-            // Common math patterns
-            const patterns = [
-                // Fractions
-                { regex: /(\d+)\s*\/\s*(\d+)/g, replace: (m, a, b) => `$\\frac{${a}}{${b}}$` },
-                // Square roots
-                { regex: /sqrt\(([^)]+)\)/gi, replace: (m, a) => `$\\sqrt{${a}}$` },
-                { regex: /√(\d+)/g, replace: (m, a) => `$\\sqrt{${a}}$` },
-                // Superscripts (x^2)
-                { regex: /(\w+)\^(\d+)/g, replace: (m, a, b) => `$${a}^{${b}}$` },
-                // Subscripts (x_1)
-                { regex: /(\w+)_(\d+)/g, replace: (m, a, b) => `$${a}_{${b}}$` },
-                // Integrals
-                { regex: /∫/g, replace: '$\\int$' },
-                // Summation
-                { regex: /∑/g, replace: '$\\sum$' },
-                // Greek letters
-                { regex: /α/g, replace: '$\\alpha$' },
-                { regex: /β/g, replace: '$\\beta$' },
-                { regex: /γ/g, replace: '$\\gamma$' },
-                { regex: /δ/g, replace: '$\\delta$' },
-                { regex: /θ/g, replace: '$\\theta$' },
-                { regex: /λ/g, replace: '$\\lambda$' },
-                { regex: /π/g, replace: '$\\pi$' },
-                { regex: /σ/g, replace: '$\\sigma$' },
-                { regex: /φ/g, replace: '$\\varphi$' },
-                { regex: /ψ/g, replace: '$\\psi$' },
-                { regex: /ω/g, replace: '$\\omega$' },
-                // Infinity
-                { regex: /∞/g, replace: '$\\infty$' },
-                // Plus/minus
-                { regex: /±/g, replace: '$\\pm$' },
-                // Not equal
-                { regex: /≠/g, replace: '$\\neq$' },
-                // Less/greater than or equal
-                { regex: /≤/g, replace: '$\\leq$' },
-                { regex: /≥/g, replace: '$\\geq$' },
-                // Arrows
-                { regex: /→/g, replace: '$\\rightarrow$' },
-                { regex: /←/g, replace: '$\\leftarrow$' },
-                { regex: /↔/g, replace: '$\\leftrightarrow$' },
-            ];
-
-            patterns.forEach(p => {
-                const matches = content.match(p.regex);
-                if (matches) count += matches.length;
-                content = content.replace(p.regex, p.replace);
+            
+            const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiKey}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    contents: [{ parts: [{ text: buildTextPrompt(result.value) }] }],
+                    generationConfig: { maxOutputTokens: 8192 }
+                })
             });
 
-            return { content, count };
+            if (!response.ok) throw new Error('Gemini API error');
+            const data = await response.json();
+            return data.candidates?.[0]?.content?.parts?.[0]?.text || '';
         }
 
-        function detectAndConvertTables(text) {
-            let count = 0;
-            let content = text;
-
-            // Simple table detection: lines with multiple tabs or consistent spacing
-            const lines = content.split('\n');
-            let tableLines = [];
-            let inTable = false;
-
-            for (let i = 0; i < lines.length; i++) {
-                const line = lines[i];
-                const tabCount = (line.match(/\t/g) || []).length;
-                const pipeCount = (line.match(/\|/g) || []).length;
-
-                if (tabCount >= 2 || pipeCount >= 2) {
-                    if (!inTable) {
-                        inTable = true;
-                        tableLines = [];
-                    }
-                    tableLines.push(line);
-                } else if (inTable && line.trim() === '') {
-                    // End of table
-                    if (tableLines.length >= 2) {
-                        count++;
-                        const table = convertToTableFormat(tableLines);
-                        // Replace table lines with formatted table
-                        for (let j = i - tableLines.length; j < i; j++) {
-                            lines[j] = '';
-                        }
-                        lines[i - 1] = table;
-                    }
-                    inTable = false;
-                    tableLines = [];
-                }
-            }
-
-            return { content: lines.join('\n'), count };
+        function fileToBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result.split(',')[1]);
+                reader.onerror = reject;
+                reader.readAsDataURL(file);
+            });
         }
 
-        function convertToTableFormat(lines) {
-            if (selectedFormat === 'markdown') {
-                const rows = lines.map(line => {
-                    const cells = line.split(/\t+|\s{2,}/).filter(c => c.trim());
-                    return '| ' + cells.join(' | ') + ' |';
-                });
-                
-                if (rows.length > 0) {
-                    const colCount = rows[0].split('|').length - 2;
-                    const separator = '|' + ' --- |'.repeat(colCount);
-                    rows.splice(1, 0, separator);
-                }
-                
-                return rows.join('\n');
-            } else {
-                // LaTeX table
-                const rows = lines.map(line => {
-                    const cells = line.split(/\t+|\s{2,}/).filter(c => c.trim());
-                    return cells.join(' & ') + ' \\\\';
-                });
-                
-                const colCount = lines[0].split(/\t+|\s{2,}/).filter(c => c.trim()).length;
-                const colSpec = 'l'.repeat(colCount);
-                
-                return `\\begin{tabular}{${colSpec}}\n\\hline\n${rows.join('\n')}\n\\hline\n\\end{tabular}`;
-            }
+        function buildPrompt() {
+            const format = selectedFormat;
+            const structure = document.getElementById('docStructure').value;
+            const language = document.getElementById('contentLanguage').value;
+            const detectMath = document.getElementById('detectMath').checked;
+            const detectTables = document.getElementById('detectTables').checked;
+            const addHeaders = document.getElementById('addHeaders').checked;
+
+            return `Convert this image to clean, well-formatted ${format === 'markdown' ? 'Markdown' : 'LaTeX'}.
+
+CRITICAL REQUIREMENTS:
+1. Preserve ALL text content accurately
+2. ${addHeaders ? 'Use proper heading hierarchy: # for main titles, ## for sections, ### for subsections' : 'No headers'}
+3. ${detectMath ? `Convert ALL math to LaTeX:
+   - Inline: $E = mc^2$, $\\alpha + \\beta$
+   - Block: $$\\int_0^\\infty e^{-x^2} dx$$
+   - Fractions: $\\frac{a}{b}$
+   - Greek: $\\alpha$, $\\beta$, $\\gamma$, $\\theta$, $\\pi$
+   - Subscripts: $x_1$, Superscripts: $x^2$
+   - Summation: $\\sum_{i=1}^n$, Integral: $\\int_a^b$` : 'Keep math as plain text'}
+4. ${detectTables ? 'Format tables with | header | header | and |---|---| syntax' : 'No table formatting'}
+5. Format lists: - for unordered, 1. 2. 3. for ordered
+6. Use **bold** and *italic* for emphasis
+
+${language !== 'auto' ? `Language: ${language}` : ''}
+${structure !== 'auto' ? `Document type: ${structure}` : ''}
+
+OUTPUT ONLY THE ${format.toUpperCase()} CODE. No explanations.`;
         }
 
-        function formatAsMarkdown(content, filename, structure, preserveImages) {
-            let output = '';
-            
-            // Add header based on structure
-            if (structure === 'article' || structure === 'notes') {
-                const title = filename.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' ');
-                output += `# ${title}\n\n`;
-                
-                if (structure === 'notes') {
-                    output += `## Abstract\n\n`;
-                    output += `*[Summary of the content]*\n\n`;
-                    output += `## Content\n\n`;
-                }
-            }
+        function buildTextPrompt(text) {
+            return `Format this text as ${selectedFormat === 'markdown' ? 'Markdown' : 'LaTeX'}:
 
-            output += content;
+${text}
 
-            if (preserveImages) {
-                output += `\n\n---\n\n`;
-                output += `<!-- Image Reference -->\n`;
-                output += `<!-- Upload your images to GitHub and use: -->\n`;
-                output += `<!-- ![Description](https://raw.githubusercontent.com/USERNAME/REPO/main/path/to/image.png) -->\n`;
-            }
-
-            return output;
-        }
-
-        function formatAsLaTeX(content, filename, structure, preserveImages) {
-            let output = '';
-            
-            // LaTeX document structure
-            output += `\\documentclass{article}\n`;
-            output += `\\usepackage{amsmath,amssymb}\n`;
-            output += `\\usepackage{graphicx}\n`;
-            output += `\\usepackage{booktabs}\n`;
-            output += `\\usepackage[utf8]{inputenc}\n\n`;
-            
-            const title = filename.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' ');
-            output += `\\title{${title}}\n`;
-            output += `\\author{}\n`;
-            output += `\\date{\\today}\n\n`;
-            output += `\\begin{document}\n`;
-            output += `\\maketitle\n\n`;
-
-            if (structure === 'notes') {
-                output += `\\begin{abstract}\n`;
-                output += `[Summary of the content]\n`;
-                output += `\\end{abstract}\n\n`;
-            }
-
-            // Convert markdown-style headers to LaTeX sections
-            content = content.replace(/^### (.+)$/gm, '\\subsubsection{$1}');
-            content = content.replace(/^## (.+)$/gm, '\\subsection{$1}');
-            content = content.replace(/^# (.+)$/gm, '\\section{$1}');
-            
-            // Convert bold and italic
-            content = content.replace(/\*\*(.+?)\*\*/g, '\\textbf{$1}');
-            content = content.replace(/\*(.+?)\*/g, '\\textit{$1}');
-
-            output += content;
-            
-            if (preserveImages) {
-                output += `\n\n% Image Reference\n`;
-                output += `% \\begin{figure}[h]\n`;
-                output += `%   \\centering\n`;
-                output += `%   \\includegraphics[width=0.8\\textwidth]{image.png}\n`;
-                output += `%   \\caption{Description}\n`;
-                output += `% \\end{figure}\n`;
-            }
-
-            output += `\n\\end{document}`;
-
-            return output;
+Requirements: Add # headers, convert math to $...$ and $$...$$, format tables properly.
+OUTPUT ONLY THE FORMATTED CODE.`;
         }
 
         function updateProgress(current, total, status) {
@@ -1356,80 +1372,31 @@
             document.getElementById('progressStatus').textContent = status;
             document.getElementById('progressPercent').textContent = percent + '%';
             document.getElementById('progressFill').style.width = percent + '%';
-            document.getElementById('progressFile').textContent = `File ${current + 1} of ${total}`;
-            
-            // Estimate remaining time
-            if (current > 0) {
-                const avgTime = 2; // seconds per file estimate
-                const remaining = (total - current) * avgTime;
-                document.getElementById('progressTime').textContent = `Est. time: ${remaining}s remaining`;
-            }
+            document.getElementById('progressFile').textContent = `File ${Math.min(current + 1, total)} of ${total}`;
         }
 
-        function displayResults() {
+        function displayResults(elapsed) {
             outputSection.classList.add('active');
-            
-            // Update stats
-            document.getElementById('statFiles').textContent = stats.files;
-            document.getElementById('statChars').textContent = stats.chars.toLocaleString();
-            document.getElementById('statMath').textContent = stats.math;
-            document.getElementById('statTables').textContent = stats.tables;
+            const fullContent = conversionResults.map(r => 
+                conversionResults.length > 1 ? `<!-- ${r.name} -->\n\n${r.content}` : r.content
+            ).join('\n\n---\n\n');
 
-            // Combine all results
-            const fullContent = conversionResults.map(r => {
-                if (conversionResults.length > 1) {
-                    return `<!-- === ${r.name} === -->\n\n${r.content}`;
-                }
-                return r.content;
-            }).join('\n\n---\n\n');
-
-            // Display code output
+            document.getElementById('statFiles').textContent = conversionResults.length;
+            document.getElementById('statChars').textContent = fullContent.length.toLocaleString();
+            document.getElementById('statTime').textContent = elapsed + 's';
             document.getElementById('codeOutput').textContent = fullContent;
-            
-            // Display preview
-            const previewOutput = document.getElementById('previewOutput');
+
+            const preview = document.getElementById('previewOutput');
             if (selectedFormat === 'markdown') {
-                previewOutput.innerHTML = renderMarkdownPreview(fullContent);
+                try { preview.innerHTML = marked.parse(fullContent); }
+                catch { preview.innerHTML = `<pre>${escapeHtml(fullContent)}</pre>`; }
             } else {
-                previewOutput.innerHTML = `<pre style="font-family: monospace; white-space: pre-wrap;">${escapeHtml(fullContent)}</pre>`;
+                preview.innerHTML = `<pre>${escapeHtml(fullContent)}</pre>`;
             }
 
-            // Re-render MathJax
-            if (typeof MathJax !== 'undefined') {
-                MathJax.typesetPromise([previewOutput]);
+            if (typeof MathJax !== 'undefined' && MathJax.typesetPromise) {
+                MathJax.typesetPromise([preview]).catch(() => {});
             }
-        }
-
-        function renderMarkdownPreview(markdown) {
-            let html = markdown;
-            
-            // Headers
-            html = html.replace(/^### (.+)$/gm, '<h3>$1</h3>');
-            html = html.replace(/^## (.+)$/gm, '<h2>$1</h2>');
-            html = html.replace(/^# (.+)$/gm, '<h1>$1</h1>');
-            
-            // Bold and italic
-            html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
-            html = html.replace(/\*(.+?)\*/g, '<em>$1</em>');
-            
-            // Code blocks
-            html = html.replace(/```(\w*)\n([\s\S]*?)```/g, '<pre><code>$2</code></pre>');
-            html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
-            
-            // Lists
-            html = html.replace(/^\* (.+)$/gm, '<li>$1</li>');
-            html = html.replace(/^(\d+)\. (.+)$/gm, '<li>$2</li>');
-            
-            // Paragraphs
-            html = html.replace(/\n\n/g, '</p><p>');
-            html = '<p>' + html + '</p>';
-            
-            // Clean up
-            html = html.replace(/<p><\/p>/g, '');
-            html = html.replace(/<p>(<h\d>)/g, '$1');
-            html = html.replace(/(<\/h\d>)<\/p>/g, '$1');
-
-            return html;
         }
 
         function escapeHtml(text) {
@@ -1438,51 +1405,37 @@
             return div.innerHTML;
         }
 
-        function switchTab(tabName) {
+        function switchTab(tab) {
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-            
-            document.querySelector(`.tab:nth-child(${tabName === 'code' ? 1 : 2})`).classList.add('active');
-            document.getElementById(tabName + 'Tab').classList.add('active');
+            document.querySelector(`.tab:nth-child(${tab === 'code' ? 1 : 2})`).classList.add('active');
+            document.getElementById(tab + 'Tab').classList.add('active');
         }
 
         function copyOutput() {
-            const output = document.getElementById('codeOutput').textContent;
-            navigator.clipboard.writeText(output).then(() => {
-                showToast('Copied to clipboard!');
-            }).catch(() => {
-                showToast('Failed to copy', true);
-            });
+            navigator.clipboard.writeText(document.getElementById('codeOutput').textContent)
+                .then(() => showToast('📋 Copied!'))
+                .catch(() => showToast('Copy failed', true));
         }
 
         function downloadOutput() {
-            const output = document.getElementById('codeOutput').textContent;
+            const content = document.getElementById('codeOutput').textContent;
             const ext = selectedFormat === 'markdown' ? 'md' : 'tex';
-            const filename = `converted_output.${ext}`;
-            
-            const blob = new Blob([output], { type: 'text/plain;charset=utf-8' });
-            const url = URL.createObjectURL(blob);
-            
+            const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
             const a = document.createElement('a');
-            a.href = url;
-            a.download = filename;
-            document.body.appendChild(a);
+            a.href = URL.createObjectURL(blob);
+            a.download = `output.${ext}`;
             a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-            
-            showToast(`Downloaded ${filename}`);
+            URL.revokeObjectURL(a.href);
+            showToast('💾 Downloaded!');
         }
 
-        function showToast(message, isError = false) {
+        function showToast(msg, isError = false) {
             const toast = document.getElementById('toast');
-            toast.textContent = message;
+            toast.textContent = msg;
             toast.className = 'toast' + (isError ? ' error' : '');
             toast.classList.add('show');
-            
-            setTimeout(() => {
-                toast.classList.remove('show');
-            }, 3000);
+            setTimeout(() => toast.classList.remove('show'), 3000);
         }
     </script>
 </body>
