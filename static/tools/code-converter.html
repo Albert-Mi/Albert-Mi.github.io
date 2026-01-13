@@ -30,392 +30,1606 @@
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     
     <style>
+        /* ============================================
+           ORIGINAL UI STYLES - UNCHANGED
+           ============================================ */
         :root {
             --primary: #3b82f6;
             --primary-dark: #2563eb;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
             --bg: #f8fafc;
             --card-bg: #ffffff;
             --text: #1e293b;
+            --text-secondary: #64748b;
+            --border: #e2e8f0;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg: #0f172a;
+                --card-bg: #1e293b;
+                --text: #f1f5f9;
+                --text-secondary: #94a3b8;
+                --border: #334155;
+            }
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             background: var(--bg);
             color: var(--text);
             line-height: 1.6;
-            padding: 20px;
+            min-height: 100vh;
         }
 
         .container {
-            max-width: 1000px;
+            max-width: 1200px;
             margin: 0 auto;
+            padding: 2rem 1rem;
         }
 
         header {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 2rem;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--primary), #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        header p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        .free-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--success), #059669);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-top: 0.5rem;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .feature {
+            background: var(--card-bg);
+            padding: 1rem;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .feature-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature h3 {
+            font-size: 0.9rem;
+            color: var(--text);
+        }
+
+        .feature p {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
         }
 
         .card {
             background: var(--card-bg);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            margin-bottom: 2rem;
+        }
+
+        .api-key-section {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.3);
             border-radius: 12px;
-            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
-            padding: 24px;
-            margin-bottom: 20px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
         }
 
-        .upload-area {
-            border: 2px dashed #cbd5e1;
-            border-radius: 8px;
-            padding: 40px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.2s;
+        .api-key-section h4 {
+            margin-bottom: 0.5rem;
         }
 
-        .upload-area:hover {
-            border-color: var(--primary);
-            background: #eff6ff;
+        .api-key-section p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.75rem;
         }
 
-        .config-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-bottom: 20px;
+        .api-key-input {
+            display: flex;
+            gap: 0.5rem;
         }
 
-        input, select, textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #cbd5e1;
+        .api-key-input input {
+            flex: 1;
+            padding: 0.6rem 0.75rem;
+            border: 1px solid var(--border);
             border-radius: 6px;
-            font-size: 14px;
+            font-size: 0.9rem;
+            background: var(--card-bg);
+            color: var(--text);
         }
 
-        button {
+        .api-key-input button {
+            padding: 0.6rem 1rem;
             background: var(--primary);
             color: white;
             border: none;
-            padding: 12px 24px;
             border-radius: 6px;
-            font-weight: 600;
             cursor: pointer;
-            transition: background 0.2s;
+            font-size: 0.9rem;
+            white-space: nowrap;
+        }
+
+        .api-status {
             display: inline-flex;
             align-items: center;
-            gap: 8px;
+            gap: 0.25rem;
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-top: 0.5rem;
         }
 
-        button:hover { background: var(--primary-dark); }
-
-        button:disabled {
-            background: #94a3b8;
-            cursor: not-allowed;
+        .api-status.connected {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--success);
         }
 
-        .results {
+        .api-status.disconnected {
+            background: rgba(245, 158, 11, 0.2);
+            color: var(--warning);
+        }
+
+        /* ============================================
+           USAGE MONITORING STYLES - NEW SECTION
+           ============================================ */
+        .usage-monitor {
+            background: rgba(139, 92, 246, 0.1);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .usage-monitor h4 {
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .usage-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .usage-stat {
+            background: var(--card-bg);
+            padding: 0.75rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .usage-stat-label {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.25rem;
+        }
+
+        .usage-stat-value {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .usage-stat-value.warning {
+            color: var(--warning);
+        }
+
+        .usage-stat-value.danger {
+            color: var(--danger);
+        }
+
+        .progress-container {
+            margin-bottom: 0.5rem;
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .progress-bar-bg {
+            height: 8px;
+            background: var(--border);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.3s ease, background 0.3s ease;
+        }
+
+        .progress-bar-fill.safe {
+            background: linear-gradient(90deg, var(--success), #34d399);
+        }
+
+        .progress-bar-fill.warning {
+            background: linear-gradient(90deg, var(--warning), #fbbf24);
+        }
+
+        .progress-bar-fill.danger {
+            background: linear-gradient(90deg, var(--danger), #f87171);
+        }
+
+        .usage-warning {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 8px;
+            padding: 0.75rem;
+            margin-top: 0.75rem;
             display: none;
+        }
+
+        .usage-warning.show {
+            display: block;
+        }
+
+        .usage-warning p {
+            color: var(--danger);
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .last-request-info {
+            background: var(--bg);
+            border-radius: 8px;
+            padding: 0.5rem 0.75rem;
+            margin-top: 0.75rem;
+            font-size: 0.75rem;
+        }
+
+        .last-request-info span {
+            display: inline-block;
+            margin-right: 1rem;
+        }
+
+        .reset-btn {
+            background: var(--border);
+            color: var(--text);
+            border: none;
+            padding: 0.3rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            cursor: pointer;
+            margin-left: 0.5rem;
+        }
+
+        .reset-btn:hover {
+            background: var(--text-secondary);
+            color: white;
+        }
+
+        /* ============================================
+           REST OF ORIGINAL UI STYLES
+           ============================================ */
+        .upload-zone {
+            border: 2px dashed var(--border);
+            border-radius: 12px;
+            padding: 3rem 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 1.5rem;
+        }
+
+        .upload-zone:hover, .upload-zone.dragover {
+            border-color: var(--primary);
+            background: rgba(59, 130, 246, 0.05);
+        }
+
+        .upload-zone.dragover {
+            transform: scale(1.02);
+        }
+
+        .upload-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .upload-zone h3 {
+            margin-bottom: 0.5rem;
+        }
+
+        .upload-zone p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .paste-hint {
+            margin-top: 1rem;
+            padding: 0.75rem;
+            background: rgba(59, 130, 246, 0.1);
+            border-radius: 8px;
+            font-size: 0.85rem;
+        }
+
+        .paste-hint kbd {
+            background: var(--card-bg);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            border: 1px solid var(--border);
+            font-family: monospace;
+            font-size: 0.8rem;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .format-selector {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .format-btn {
+            flex: 1;
+            min-width: 150px;
+            padding: 1rem;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            background: var(--card-bg);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .format-btn:hover {
+            border-color: var(--primary);
+        }
+
+        .format-btn.active {
+            border-color: var(--primary);
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .format-btn h4 {
+            margin-bottom: 0.25rem;
+        }
+
+        .format-btn p {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .option-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .option-group label {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .option-group select {
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: var(--bg);
+            color: var(--text);
+            font-size: 1rem;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary);
+        }
+
+        .progress-section {
+            margin: 1.5rem 0;
+            display: none;
+        }
+
+        .progress-section.active {
+            display: block;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+
+        .progress-bar {
+            height: 12px;
+            background: var(--border);
+            border-radius: 6px;
+            overflow: hidden;
+            margin-bottom: 0.5rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), #8b5cf6);
+            border-radius: 6px;
+            transition: width 0.3s ease;
+            width: 0%;
+        }
+
+        .progress-details {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .file-list {
+            margin: 1rem 0;
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--bg);
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+        }
+
+        .file-item-icon {
+            font-size: 1.5rem;
+        }
+
+        .file-item-info {
+            flex: 1;
+        }
+
+        .file-item-name {
+            font-weight: 600;
+        }
+
+        .file-item-size {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .file-item-preview {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+        }
+
+        .file-item-status {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .status-pending { background: rgba(245, 158, 11, 0.2); color: var(--warning); }
+        .status-processing { background: rgba(59, 130, 246, 0.2); color: var(--primary); }
+        .status-complete { background: rgba(16, 185, 129, 0.2); color: var(--success); }
+        .status-error { background: rgba(239, 68, 68, 0.2); color: var(--danger); }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), #8b5cf6);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: var(--bg);
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--border);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .output-section {
+            margin-top: 2rem;
+            display: none;
+        }
+
+        .output-section.active {
+            display: block;
         }
 
         .tabs {
             display: flex;
-            gap: 4px;
-            margin-bottom: 12px;
-            border-bottom: 1px solid #e2e8f0;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 1rem;
         }
 
         .tab {
-            padding: 8px 16px;
+            padding: 0.5rem 1rem;
+            border: none;
+            background: none;
+            color: var(--text-secondary);
             cursor: pointer;
-            border-bottom: 2px solid transparent;
+            font-size: 1rem;
+            border-radius: 8px 8px 0 0;
+            transition: all 0.3s ease;
         }
 
-        .tab.active {
-            border-bottom-color: var(--primary);
-            color: var(--primary);
-            font-weight: 600;
-        }
+        .tab:hover { color: var(--text); }
+        .tab.active { background: var(--primary); color: white; }
 
-        .tab-content {
-            display: none;
-        }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
 
-        .tab-content.active {
-            display: block;
-        }
-
-        pre {
-            background: #0f172a;
-            color: #f8fafc;
-            padding: 16px;
+        .output-area {
+            background: var(--bg);
+            border: 1px solid var(--border);
             border-radius: 8px;
-            overflow-x: auto;
+            padding: 1rem;
+            min-height: 300px;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .code-output {
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 0.9rem;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .preview-output {
+            line-height: 1.8;
+        }
+
+        .preview-output h1, .preview-output h2, .preview-output h3 { margin: 1rem 0 0.5rem; }
+        .preview-output p { margin-bottom: 0.75rem; }
+        .preview-output table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+        .preview-output th, .preview-output td { border: 1px solid var(--border); padding: 0.5rem; text-align: left; }
+        .preview-output th { background: var(--border); }
+        .preview-output code { background: var(--border); padding: 0.2rem 0.4rem; border-radius: 4px; }
+        .preview-output pre { background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 1rem; overflow-x: auto; }
+        .preview-output pre code { background: none; padding: 0; }
+
+        .output-wrapper {
             position: relative;
         }
 
-        .preview-area {
-            background: white;
-            border: 1px solid #e2e8f0;
-            padding: 20px;
-            border-radius: 8px;
-            min-height: 200px;
+        .copy-btn {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            padding: 0.5rem 0.75rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            z-index: 10;
         }
 
-        .loader {
-            display: none;
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid var(--primary);
+        .copy-btn:hover { background: var(--border); }
+
+        .stats-bar {
+            display: flex;
+            gap: 2rem;
+            padding: 1rem;
+            background: var(--bg);
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .stat { text-align: center; }
+        .stat-value { font-size: 1.5rem; font-weight: 700; color: var(--primary); }
+        .stat-label { font-size: 0.85rem; color: var(--text-secondary); }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255,255,255,0.3);
             border-radius: 50%;
-            width: 24px;
-            height: 24px;
+            border-top-color: white;
             animation: spin 1s linear infinite;
         }
 
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @keyframes spin { to { transform: rotate(360deg); } }
 
         .toast {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: #1e293b;
-            color: white;
-            padding: 12px 24px;
+            bottom: 2rem;
+            right: 2rem;
+            padding: 1rem 1.5rem;
+            background: var(--card-bg);
             border-radius: 8px;
-            opacity: 0;
-            transition: opacity 0.3s;
+            box-shadow: var(--shadow);
+            border-left: 4px solid var(--success);
+            transform: translateX(120%);
+            transition: transform 0.3s ease;
+            z-index: 1000;
         }
 
-        .toast.show { opacity: 1; }
-        .toast.error { background: #ef4444; }
+        .toast.show { transform: translateX(0); }
+        .toast.error { border-left-color: var(--danger); }
+
+        .context-menu {
+            position: fixed;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            padding: 0.5rem 0;
+            z-index: 1000;
+            display: none;
+        }
+
+        .context-menu.show { display: block; }
+
+        .context-menu-item {
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .context-menu-item:hover { background: var(--bg); }
+
+        @media (max-width: 768px) {
+            header h1 { font-size: 1.75rem; }
+            .card { padding: 1.5rem; }
+            .upload-zone { padding: 2rem 1rem; }
+            .api-key-input { flex-direction: column; }
+            .usage-grid { grid-template-columns: 1fr 1fr; }
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>📄 File to Code Converter</h1>
-            <p>Convert images, PDFs, and Word docs to LaTeX or Markdown</p>
+            <h1>📝 Code Converter</h1>
+            <p>Convert screenshots, photos, PDFs to LaTeX/Markdown</p>
+            <span class="free-badge">🆓 100% FREE</span>
         </header>
 
+        <div class="features">
+            <div class="feature">
+                <div class="feature-icon">🆓</div>
+                <h3>Completely Free</h3>
+                <p>No payment required</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">📷</div>
+                <h3>Paste Screenshots</h3>
+                <p>Ctrl+V anywhere</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">🔢</div>
+                <h3>Math Formulas</h3>
+                <p>Perfect $LaTeX$ output</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">📑</div>
+                <h3>Headers & Tables</h3>
+                <p># ## ### formatting</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">⚡</div>
+                <h3>Fast</h3>
+                <p>2-5 seconds</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">🌐</div>
+                <h3>Online</h3>
+                <p>No installation</p>
+            </div>
+        </div>
+
         <div class="card">
-            <div class="config-grid">
-                <div>
-                    <label>Google API Key</label>
-                    <input type="password" id="apiKey" placeholder="Paste your API key here">
+            <!-- API Key Section -->
+            <div class="api-key-section" id="geminiSection">
+                <h4>🔑 Google Gemini API Key (FREE)</h4>
+                <p>Get your free API key from <a href="https://aistudio.google.com/app/apikey" target="_blank">Google AI Studio</a> — takes 30 seconds!</p>
+                <div class="api-key-input">
+                    <input type="password" id="geminiKeyInput" placeholder="Paste your Gemini API key here..." />
+                    <button onclick="saveGeminiKey()">Save Key</button>
                 </div>
-                <div>
-                    <label>Output Format</label>
-                    <select id="formatSelect">
-                        <option value="markdown">Markdown</option>
-                        <option value="latex">LaTeX</option>
+                <span class="api-status disconnected" id="geminiStatus">⚪ Not configured</span>
+            </div>
+
+            <!-- ============================================
+                 USAGE MONITORING SECTION - NEW
+                 ============================================ -->
+            <div class="usage-monitor" id="usageMonitor">
+                <h4>
+                    📊 API Usage Monitor
+                    <button class="reset-btn" onclick="resetUsageStats()">Reset</button>
+                </h4>
+                
+                <div class="usage-grid">
+                    <div class="usage-stat">
+                        <div class="usage-stat-label">Requests Today</div>
+                        <div class="usage-stat-value" id="requestsToday">0</div>
+                    </div>
+                    <div class="usage-stat">
+                        <div class="usage-stat-label">Total Tokens</div>
+                        <div class="usage-stat-value" id="totalTokens">0</div>
+                    </div>
+                    <div class="usage-stat">
+                        <div class="usage-stat-label">Req/Min</div>
+                        <div class="usage-stat-value" id="requestsPerMin">0</div>
+                    </div>
+                    <div class="usage-stat">
+                        <div class="usage-stat-label">Status</div>
+                        <div class="usage-stat-value" id="tierStatus">✅ OK</div>
+                    </div>
+                </div>
+
+                <!-- Daily Requests Progress Bar -->
+                <div class="progress-container">
+                    <div class="progress-label">
+                        <span>Daily Requests</span>
+                        <span id="dailyRequestsText">0 / 1,500</span>
+                    </div>
+                    <div class="progress-bar-bg">
+                        <div class="progress-bar-fill safe" id="dailyRequestsBar" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <!-- Tokens Per Minute Progress Bar -->
+                <div class="progress-container">
+                    <div class="progress-label">
+                        <span>Tokens/Min</span>
+                        <span id="tokensPerMinText">0 / 1M</span>
+                    </div>
+                    <div class="progress-bar-bg">
+                        <div class="progress-bar-fill safe" id="tokensPerMinBar" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <!-- Last Request Info -->
+                <div class="last-request-info" id="lastRequestInfo" style="display: none;">
+                    <strong>Last:</strong>
+                    <span id="lastPromptTokens">Prompt: 0</span>
+                    <span id="lastResponseTokens">Response: 0</span>
+                    <span id="lastTotalTokens">Total: 0</span>
+                </div>
+
+                <!-- Warning Message -->
+                <div class="usage-warning" id="usageWarning">
+                    <p>⚠️ <span id="warningMessage">Approaching free tier limit!</span></p>
+                </div>
+            </div>
+            <!-- END USAGE MONITORING SECTION -->
+
+            <h2 style="margin: 1.5rem 0 1rem;">📤 Upload Your Files</h2>
+            
+            <div class="upload-zone" id="uploadZone" tabindex="0">
+                <div class="upload-icon">📁</div>
+                <h3>Drop files here, click to upload, or paste screenshot</h3>
+                <p>Supports: PNG, JPG, JPEG, GIF, WebP, PDF, DOCX</p>
+                <div class="paste-hint">
+                    💡 <strong>Quick paste:</strong> Press <kbd>Ctrl</kbd>+<kbd>V</kbd> or <kbd>⌘</kbd>+<kbd>V</kbd> anywhere
+                </div>
+                <input type="file" id="fileInput" class="file-input" multiple 
+                       accept=".png,.jpg,.jpeg,.gif,.webp,.pdf,.docx,image/*">
+            </div>
+
+            <div class="file-list" id="fileList"></div>
+
+            <h3 style="margin: 1.5rem 0 1rem;">🎯 Output Format</h3>
+            <div class="format-selector">
+                <div class="format-btn active" data-format="markdown" onclick="selectFormat('markdown')">
+                    <h4>📝 Markdown</h4>
+                    <p>VSCode, GitHub, notes</p>
+                </div>
+                <div class="format-btn" data-format="latex" onclick="selectFormat('latex')">
+                    <h4>🔬 LaTeX</h4>
+                    <p>Academic papers, math</p>
+                </div>
+            </div>
+
+            <h3 style="margin: 1.5rem 0 1rem;">⚙️ Options</h3>
+            <div class="options-grid">
+                <div class="option-group">
+                    <label>Document Structure</label>
+                    <select id="docStructure">
+                        <option value="auto">Auto-detect</option>
+                        <option value="article">Article/Report</option>
+                        <option value="notes">Research Notes</option>
+                        <option value="textbook">Textbook/Tutorial</option>
                     </select>
                 </div>
+                <div class="option-group">
+                    <label>Content Language</label>
+                    <select id="contentLanguage">
+                        <option value="auto">Auto-detect</option>
+                        <option value="english">English</option>
+                        <option value="chinese">Chinese (中文)</option>
+                        <option value="mixed">Mixed</option>
+                    </select>
+                </div>
+                <div class="option-group">
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="detectMath" checked>
+                        <label for="detectMath">Convert math to LaTeX</label>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="detectTables" checked>
+                        <label for="detectTables">Format tables</label>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="addHeaders" checked>
+                        <label for="addHeaders">Add section headers</label>
+                    </div>
+                </div>
             </div>
 
-            <div class="upload-area" onclick="document.getElementById('fileInput').click()" id="dropZone">
-                <p>Click or drag file here (PDF, PNG, JPG, DOCX)</p>
-                <input type="file" id="fileInput" hidden accept=".pdf,.png,.jpg,.jpeg,.docx">
-                <p id="fileNameDisplay" style="margin-top: 10px; color: var(--primary); font-weight: 600;"></p>
+            <div class="progress-section" id="progressSection">
+                <div class="progress-header">
+                    <span id="progressStatus">Processing...</span>
+                    <span id="progressPercent">0%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <div class="progress-details">
+                    <span id="progressFile">File 0 of 0</span>
+                    <span id="progressTime">Est. time: calculating...</span>
+                </div>
             </div>
 
-            <div style="margin-top: 20px; text-align: center;">
-                <button id="convertBtn" onclick="processFile()">
-                    <span id="btnText">Convert Now</span>
-                    <div class="loader" id="loader"></div>
+            <div class="action-buttons">
+                <button class="btn btn-primary" id="convertBtn" onclick="startConversion()" disabled>
+                    <span id="btnText">🚀 Convert Files</span>
+                </button>
+                <button class="btn btn-secondary" onclick="clearAll()">
+                    🗑️ Clear All
                 </button>
             </div>
         </div>
 
-        <div class="results" id="resultsSection">
+        <div class="output-section" id="outputSection">
             <div class="card">
-                <div class="tabs">
-                    <div class="tab active" onclick="switchTab('code')">Source Code</div>
-                    <div class="tab" onclick="switchTab('preview')">Preview</div>
-                </div>
-
-                <div id="codeTab" class="tab-content active">
-                    <div style="margin-bottom: 10px; display: flex; gap: 10px; justify-content: flex-end;">
-                        <button onclick="copyOutput()" style="padding: 6px 12px; font-size: 12px;">Copy</button>
-                        <button onclick="downloadOutput()" style="padding: 6px 12px; font-size: 12px;">Download</button>
+                <h2 style="margin-bottom: 1rem;">📋 Conversion Results</h2>
+                
+                <div class="stats-bar">
+                    <div class="stat">
+                        <div class="stat-value" id="statFiles">0</div>
+                        <div class="stat-label">Files</div>
                     </div>
-                    <pre id="codeOutput">Processing...</pre>
+                    <div class="stat">
+                        <div class="stat-value" id="statChars">0</div>
+                        <div class="stat-label">Characters</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value" id="statTime">0s</div>
+                        <div class="stat-label">Time</div>
+                    </div>
                 </div>
 
-                <div id="previewTab" class="tab-content">
-                    <div id="renderOutput" class="preview-area"></div>
+                <div class="tabs">
+                    <button class="tab active" onclick="switchTab('code')">📝 Code</button>
+                    <button class="tab" onclick="switchTab('preview')">👁️ Preview</button>
+                </div>
+
+                <div class="tab-content active" id="codeTab">
+                    <div class="output-wrapper">
+                        <button class="copy-btn" onclick="copyOutput()">📋 Copy</button>
+                        <div class="output-area">
+                            <pre class="code-output" id="codeOutput"></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="previewTab">
+                    <div class="output-area preview-output" id="previewOutput"></div>
+                </div>
+
+                <div class="action-buttons" style="margin-top: 1rem;">
+                    <button class="btn btn-primary" onclick="downloadOutput()">💾 Download</button>
+                    <button class="btn btn-secondary" onclick="copyOutput()">📋 Copy</button>
                 </div>
             </div>
         </div>
+
+        <footer>
+            <p>🆓 100% Free | Powered by Google Gemini 2.5 Flash</p>
+            <p style="margin-top: 0.5rem;"><a href="https://albert-mi.github.io/">← Back to Website</a></p>
+        </footer>
     </div>
 
-    <div id="toast" class="toast"></div>
+    <div class="context-menu" id="contextMenu">
+        <div class="context-menu-item" onclick="pasteFromClipboard()">📋 Paste Image</div>
+    </div>
+
+    <div class="toast" id="toast"></div>
 
     <script>
+        /* ============================================
+           GLOBAL STATE
+           ============================================ */
+        let files = [];
+        let selectedFormat = 'markdown';
+        let conversionResults = [];
+        let geminiKey = localStorage.getItem('gemini_api_key') || '';
+
+        /* ============================================
+           GEMINI API CONFIGURATION - FIXED
+           
+           KEY FIX: Changed model from "gemini-1.5-flash" to "gemini-2.5-flash"
+           
+           The error "models/gemini-1.5-flash is not found" occurred because:
+           1. The old model name was deprecated
+           2. Google updated to gemini-2.5-flash for v1beta API
+           ============================================ */
+        const GEMINI_CONFIG = {
+            // FIX: Use gemini-2.5-flash instead of gemini-1.5-flash
+            model: 'gemini-2.5-flash',
+            apiVersion: 'v1beta',
+            baseUrl: 'https://generativelanguage.googleapis.com'
+        };
+
+        /* ============================================
+           USAGE MONITORING CONFIGURATION
+           
+           Google Free Tier Limits (Gemini 2.5 Flash):
+           - 1,500 requests per day (RPD)
+           - 15 requests per minute (RPM)
+           - 1,000,000 tokens per minute (TPM)
+           ============================================ */
+        const FREE_TIER_LIMITS = {
+            requestsPerDay: 1500,
+            requestsPerMinute: 15,
+            tokensPerMinute: 1000000
+        };
+
+        let usageStats = {
+            requestsToday: 0,
+            totalTokensToday: 0,
+            requestTimestamps: [],
+            tokenTimestamps: [],
+            lastResetDate: new Date().toDateString(),
+            lastRequest: null
+        };
+
+        // Initialize PDF.js
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
-        let currentFile = null;
-        let selectedFormat = 'markdown';
+        // DOM elements
+        const uploadZone = document.getElementById('uploadZone');
+        const fileInput = document.getElementById('fileInput');
+        const fileList = document.getElementById('fileList');
+        const convertBtn = document.getElementById('convertBtn');
+        const progressSection = document.getElementById('progressSection');
+        const outputSection = document.getElementById('outputSection');
+        const contextMenu = document.getElementById('contextMenu');
 
-        // File Selection Handling
-        document.getElementById('fileInput').addEventListener('change', e => {
-            const file = e.target.files[0];
-            if (file) {
-                currentFile = file;
-                document.getElementById('fileNameDisplay').textContent = `Selected: ${file.name}`;
+        /* ============================================
+           INITIALIZATION
+           ============================================ */
+        document.addEventListener('DOMContentLoaded', () => {
+            if (geminiKey) {
+                document.getElementById('geminiKeyInput').value = geminiKey;
+                updateGeminiStatus(true);
             }
+            loadUsageStats();
+            updateConvertButton();
+            updateUsageDisplay();
+            setInterval(updateUsageDisplay, 10000);
+            checkDailyReset();
         });
 
-        // Drag and Drop
-        const dropZone = document.getElementById('dropZone');
-        dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.style.background = '#eff6ff'; });
-        dropZone.addEventListener('dragleave', () => dropZone.style.background = 'none');
-        dropZone.addEventListener('drop', e => {
-            e.preventDefault();
-            dropZone.style.background = 'none';
-            const file = e.dataTransfer.files[0];
-            if (file) {
-                currentFile = file;
-                document.getElementById('fileNameDisplay').textContent = `Selected: ${file.name}`;
-            }
-        });
-
-        async function processFile() {
-            const apiKey = document.getElementById('apiKey').value;
-            if (!apiKey) return showToast('Please enter your Gemini API Key', true);
-            if (!currentFile) return showToast('Please upload a file first', true);
-
-            selectedFormat = document.getElementById('formatSelect').value;
-            toggleLoading(true);
-
-            try {
-                let base64Data = '';
-                let mimeType = currentFile.type;
-
-                // Handle Image vs PDF/Doc
-                if (mimeType.startsWith('image/')) {
-                    base64Data = await fileToBase64(currentFile);
-                } else if (mimeType === 'application/pdf') {
-                    base64Data = await fileToBase64(currentFile);
-                } else if (currentFile.name.endsWith('.docx')) {
-                    const arrayBuffer = await currentFile.arrayBuffer();
-                    const result = await mammoth.extractRawText({ arrayBuffer });
-                    base64Data = btoa(unescape(encodeURIComponent(result.value)));
-                    mimeType = 'text/plain';
-                }
-
-                await callGemini(apiKey, base64Data, mimeType);
-            } catch (error) {
-                showToast(error.message, true);
-            } finally {
-                toggleLoading(false);
+        /* ============================================
+           USAGE MONITORING FUNCTIONS
+           ============================================ */
+        function loadUsageStats() {
+            const saved = localStorage.getItem('gemini_usage_stats');
+            if (saved) {
+                try { usageStats = JSON.parse(saved); } catch (e) {}
             }
         }
 
-        async function callGemini(apiKey, base64Data, mimeType) {
-            // FIX: Updated to gemini-2.5-flash for 2026 support
-            const model = "gemini-2.5-flash";
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
-            
-            const prompt = `Convert the provided file into clean ${selectedFormat} code. 
-            If it contains math, use LaTeX notation. If it's a document, preserve formatting structure. 
-            Return ONLY the raw code block, no conversational text.`;
+        function saveUsageStats() {
+            localStorage.setItem('gemini_usage_stats', JSON.stringify(usageStats));
+        }
 
-            const payload = {
-                contents: [{
-                    parts: [
-                        { text: prompt },
-                        {
-                            inline_data: {
-                                mime_type: mimeType,
-                                data: base64Data
-                            }
-                        }
-                    ]
-                }],
-                generationConfig: {
-                    temperature: 0.1,
-                    topP: 0.95,
-                    maxOutputTokens: 8192
+        function checkDailyReset() {
+            const today = new Date().toDateString();
+            if (usageStats.lastResetDate !== today) {
+                usageStats.requestsToday = 0;
+                usageStats.totalTokensToday = 0;
+                usageStats.lastResetDate = today;
+                saveUsageStats();
+            }
+        }
+
+        function calculateRPM() {
+            const now = Date.now();
+            usageStats.requestTimestamps = usageStats.requestTimestamps.filter(t => t > now - 60000);
+            return usageStats.requestTimestamps.length;
+        }
+
+        function calculateTPM() {
+            const now = Date.now();
+            usageStats.tokenTimestamps = usageStats.tokenTimestamps.filter(t => t.time > now - 60000);
+            return usageStats.tokenTimestamps.reduce((sum, t) => sum + t.tokens, 0);
+        }
+
+        function recordApiRequest(promptTokens, responseTokens) {
+            const now = Date.now();
+            const totalTokens = promptTokens + responseTokens;
+            usageStats.requestsToday++;
+            usageStats.totalTokensToday += totalTokens;
+            usageStats.requestTimestamps.push(now);
+            usageStats.tokenTimestamps.push({ time: now, tokens: totalTokens });
+            usageStats.lastRequest = { promptTokens, responseTokens, totalTokens, timestamp: now };
+            saveUsageStats();
+            updateUsageDisplay();
+        }
+
+        function updateUsageDisplay() {
+            checkDailyReset();
+            const rpm = calculateRPM();
+            const tpm = calculateTPM();
+
+            document.getElementById('requestsToday').textContent = usageStats.requestsToday.toLocaleString();
+            document.getElementById('totalTokens').textContent = usageStats.totalTokensToday.toLocaleString();
+            document.getElementById('requestsPerMin').textContent = rpm;
+
+            const dailyPercent = (usageStats.requestsToday / FREE_TIER_LIMITS.requestsPerDay) * 100;
+            document.getElementById('dailyRequestsBar').style.width = Math.min(dailyPercent, 100) + '%';
+            document.getElementById('dailyRequestsText').textContent = `${usageStats.requestsToday.toLocaleString()} / ${FREE_TIER_LIMITS.requestsPerDay.toLocaleString()}`;
+            updateProgressBarColor('dailyRequestsBar', dailyPercent);
+
+            const tpmPercent = (tpm / FREE_TIER_LIMITS.tokensPerMinute) * 100;
+            document.getElementById('tokensPerMinBar').style.width = Math.min(tpmPercent, 100) + '%';
+            document.getElementById('tokensPerMinText').textContent = `${(tpm/1000).toFixed(0)}K / 1M`;
+            updateProgressBarColor('tokensPerMinBar', tpmPercent);
+
+            const tierStatus = document.getElementById('tierStatus');
+            if (dailyPercent >= 100 || rpm >= FREE_TIER_LIMITS.requestsPerMinute) {
+                tierStatus.textContent = '❌ Limit';
+                tierStatus.className = 'usage-stat-value danger';
+            } else if (dailyPercent >= 80 || rpm >= 12) {
+                tierStatus.textContent = '⚠️ High';
+                tierStatus.className = 'usage-stat-value warning';
+            } else {
+                tierStatus.textContent = '✅ OK';
+                tierStatus.className = 'usage-stat-value';
+            }
+
+            if (usageStats.lastRequest) {
+                document.getElementById('lastRequestInfo').style.display = 'block';
+                document.getElementById('lastPromptTokens').textContent = `Prompt: ${usageStats.lastRequest.promptTokens}`;
+                document.getElementById('lastResponseTokens').textContent = `Resp: ${usageStats.lastRequest.responseTokens}`;
+                document.getElementById('lastTotalTokens').textContent = `Total: ${usageStats.lastRequest.totalTokens}`;
+            }
+
+            updateWarningDisplay(dailyPercent, rpm, tpmPercent);
+        }
+
+        function updateProgressBarColor(barId, percent) {
+            const bar = document.getElementById(barId);
+            bar.classList.remove('safe', 'warning', 'danger');
+            bar.classList.add(percent >= 90 ? 'danger' : percent >= 70 ? 'warning' : 'safe');
+        }
+
+        function updateWarningDisplay(dailyPercent, rpm, tpmPercent) {
+            const warning = document.getElementById('usageWarning');
+            const message = document.getElementById('warningMessage');
+            
+            if (dailyPercent >= 100) {
+                message.textContent = 'Daily limit reached! Wait until tomorrow.';
+                warning.classList.add('show');
+            } else if (rpm >= FREE_TIER_LIMITS.requestsPerMinute) {
+                message.textContent = 'Rate limit! Wait 1 minute.';
+                warning.classList.add('show');
+            } else if (dailyPercent >= 90) {
+                message.textContent = `Only ${Math.round(100-dailyPercent)}% daily requests left!`;
+                warning.classList.add('show');
+            } else {
+                warning.classList.remove('show');
+            }
+        }
+
+        function canMakeRequest() {
+            const rpm = calculateRPM();
+            if (usageStats.requestsToday >= FREE_TIER_LIMITS.requestsPerDay) {
+                showToast('Daily limit reached!', true);
+                return false;
+            }
+            if (rpm >= FREE_TIER_LIMITS.requestsPerMinute) {
+                showToast('Rate limit! Wait 1 minute.', true);
+                return false;
+            }
+            return true;
+        }
+
+        function resetUsageStats() {
+            if (confirm('Reset all usage stats?')) {
+                usageStats = {
+                    requestsToday: 0,
+                    totalTokensToday: 0,
+                    requestTimestamps: [],
+                    tokenTimestamps: [],
+                    lastResetDate: new Date().toDateString(),
+                    lastRequest: null
+                };
+                saveUsageStats();
+                updateUsageDisplay();
+                showToast('Stats reset!');
+            }
+        }
+
+        /* ============================================
+           API KEY MANAGEMENT
+           ============================================ */
+        function saveGeminiKey() {
+            geminiKey = document.getElementById('geminiKeyInput').value.trim();
+            if (geminiKey) {
+                localStorage.setItem('gemini_api_key', geminiKey);
+                updateGeminiStatus(true);
+                showToast('✅ API key saved!');
+            } else {
+                localStorage.removeItem('gemini_api_key');
+                updateGeminiStatus(false);
+            }
+            updateConvertButton();
+        }
+
+        function updateGeminiStatus(connected) {
+            const status = document.getElementById('geminiStatus');
+            status.className = 'api-status ' + (connected ? 'connected' : 'disconnected');
+            status.innerHTML = connected ? '🟢 Ready' : '⚪ Not configured';
+        }
+
+        function updateConvertButton() {
+            convertBtn.disabled = files.length === 0 || !geminiKey;
+            document.getElementById('btnText').textContent = 
+                !geminiKey && files.length > 0 ? '🔑 Enter API Key First' : '🚀 Convert Files';
+        }
+
+        /* ============================================
+           FILE HANDLING
+           ============================================ */
+        uploadZone.addEventListener('click', () => fileInput.click());
+        uploadZone.addEventListener('dragover', e => { e.preventDefault(); uploadZone.classList.add('dragover'); });
+        uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('dragover'));
+        uploadZone.addEventListener('drop', e => {
+            e.preventDefault();
+            uploadZone.classList.remove('dragover');
+            addFiles(Array.from(e.dataTransfer.files));
+        });
+        fileInput.addEventListener('change', e => addFiles(Array.from(e.target.files)));
+
+        document.addEventListener('paste', handlePaste);
+        document.addEventListener('contextmenu', e => {
+            const rect = uploadZone.getBoundingClientRect();
+            if (e.clientX >= rect.left && e.clientX <= rect.right && e.clientY >= rect.top && e.clientY <= rect.bottom) {
+                e.preventDefault();
+                contextMenu.style.left = e.clientX + 'px';
+                contextMenu.style.top = e.clientY + 'px';
+                contextMenu.classList.add('show');
+            }
+        });
+        document.addEventListener('click', () => contextMenu.classList.remove('show'));
+
+        async function handlePaste(e) {
+            const items = e.clipboardData?.items;
+            if (!items) return;
+            for (const item of items) {
+                if (item.type.startsWith('image/')) {
+                    e.preventDefault();
+                    const blob = item.getAsFile();
+                    if (blob) {
+                        const file = new File([blob], `screenshot-${Date.now()}.png`, { type: blob.type });
+                        addFiles([file]);
+                        showToast('📷 Screenshot pasted!');
+                    }
+                    return;
                 }
-            };
+            }
+        }
+
+        async function pasteFromClipboard() {
+            try {
+                const items = await navigator.clipboard.read();
+                for (const item of items) {
+                    for (const type of item.types) {
+                        if (type.startsWith('image/')) {
+                            const blob = await item.getType(type);
+                            const file = new File([blob], `screenshot-${Date.now()}.png`, { type: blob.type });
+                            addFiles([file]);
+                            showToast('📷 Screenshot pasted!');
+                            return;
+                        }
+                    }
+                }
+            } catch (err) {
+                showToast('Try Ctrl+V instead', true);
+            }
+        }
+
+        function addFiles(newFiles) {
+            newFiles.forEach(file => {
+                if (file.type.startsWith('image/') || ['.pdf','.docx'].includes('.'+file.name.split('.').pop().toLowerCase())) {
+                    files.push({
+                        file,
+                        name: file.name,
+                        size: file.size,
+                        type: file.type.startsWith('image/') ? 'image' : file.name.endsWith('.pdf') ? 'pdf' : 'docx',
+                        status: 'pending',
+                        preview: file.type.startsWith('image/') ? URL.createObjectURL(file) : null
+                    });
+                }
+            });
+            renderFileList();
+            updateConvertButton();
+        }
+
+        function renderFileList() {
+            fileList.innerHTML = files.map((f, i) => `
+                <div class="file-item">
+                    ${f.preview ? `<img src="${f.preview}" class="file-item-preview">` : `<div class="file-item-icon">${f.type==='pdf'?'📄':'📝'}</div>`}
+                    <div class="file-item-info">
+                        <div class="file-item-name">${f.name}</div>
+                        <div class="file-item-size">${formatSize(f.size)}</div>
+                    </div>
+                    <span class="file-item-status status-${f.status}">${f.status}</span>
+                    <button class="btn btn-secondary" style="padding:0.5rem" onclick="removeFile(${i})">✕</button>
+                </div>
+            `).join('');
+        }
+
+        function formatSize(bytes) {
+            if (bytes < 1024) return bytes + ' B';
+            if (bytes < 1048576) return (bytes/1024).toFixed(1) + ' KB';
+            return (bytes/1048576).toFixed(1) + ' MB';
+        }
+
+        function removeFile(i) {
+            if (files[i].preview) URL.revokeObjectURL(files[i].preview);
+            files.splice(i, 1);
+            renderFileList();
+            updateConvertButton();
+        }
+
+        function selectFormat(format) {
+            selectedFormat = format;
+            document.querySelectorAll('.format-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.format === format));
+        }
+
+        function clearAll() {
+            files.forEach(f => { if (f.preview) URL.revokeObjectURL(f.preview); });
+            files = [];
+            conversionResults = [];
+            renderFileList();
+            updateConvertButton();
+            outputSection.classList.remove('active');
+            progressSection.classList.remove('active');
+        }
+
+        /* ============================================
+           CONVERSION - FIXED GEMINI API
+           ============================================ */
+        async function startConversion() {
+            if (!files.length || !geminiKey) return;
+            if (!canMakeRequest()) return;
+
+            convertBtn.disabled = true;
+            document.getElementById('btnText').innerHTML = '<span class="loading-spinner"></span> Converting...';
+            progressSection.classList.add('active');
+            outputSection.classList.remove('active');
+            conversionResults = [];
+
+            const startTime = Date.now();
+
+            for (let i = 0; i < files.length; i++) {
+                if (!canMakeRequest()) break;
+                
+                const file = files[i];
+                file.status = 'processing';
+                renderFileList();
+                updateProgress(i, files.length, 'Processing ' + file.name);
+
+                try {
+                    let result = '';
+                    if (file.type === 'image') result = await processWithGemini(file.file);
+                    else if (file.type === 'pdf') result = await processPdfWithGemini(file.file);
+                    else if (file.type === 'docx') result = await processDocxWithGemini(file.file);
+                    conversionResults.push({ name: file.name, content: result });
+                    file.status = 'complete';
+                } catch (error) {
+                    file.status = 'error';
+                    conversionResults.push({ name: file.name, content: `<!-- Error: ${error.message} -->` });
+                    showToast('Error: ' + error.message, true);
+                }
+                renderFileList();
+            }
+
+            const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
+            updateProgress(files.length, files.length, 'Complete!');
+            displayResults(elapsed);
+            document.getElementById('btnText').textContent = '🚀 Convert Files';
+            convertBtn.disabled = false;
+            showToast(`✅ Done in ${elapsed}s!`);
+        }
+
+        /* ============================================
+           GEMINI API CALL - FIXED
+           
+           FIX: Model changed to gemini-2.5-flash
+           ============================================ */
+        async function processWithGemini(file) {
+            const base64 = await fileToBase64(file);
+            const prompt = buildPrompt();
+
+            // FIX: Construct URL with correct model (gemini-2.5-flash)
+            const url = `${GEMINI_CONFIG.baseUrl}/${GEMINI_CONFIG.apiVersion}/models/${GEMINI_CONFIG.model}:generateContent?key=${geminiKey}`;
 
             const response = await fetch(url, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
+                body: JSON.stringify({
+                    contents: [{
+                        parts: [
+                            { inline_data: { mime_type: file.type, data: base64 } },
+                            { text: prompt }
+                        ]
+                    }],
+                    generationConfig: { maxOutputTokens: 8192, temperature: 0.1, topP: 0.95 }
+                })
             });
 
             if (!response.ok) {
-                const errData = await response.json();
-                throw new Error(errData.error?.message || 'API Request failed');
+                const err = await response.json();
+                throw new Error(err.error?.message || 'Gemini API error');
             }
 
             const data = await response.json();
-            const resultText = data.candidates?.[0]?.content?.parts?.[0]?.text || 'No content generated';
             
-            // Clean up backticks if model included them
-            const cleanCode = resultText.replace(/^```[a-z]*\n/i, '').replace(/\n```$/i, '').trim();
-            
-            displayResult(cleanCode);
+            // Track usage from response metadata
+            if (data.usageMetadata) {
+                recordApiRequest(data.usageMetadata.promptTokenCount || 0, data.usageMetadata.candidatesTokenCount || 0);
+            } else {
+                recordApiRequest(500, 1000); // Estimate if not available
+            }
+
+            const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+            return text.replace(/^```[a-z]*\n?/i, '').replace(/\n?```$/i, '').trim();
         }
 
-        function displayResult(code) {
-            document.getElementById('resultsSection').style.display = 'block';
-            document.getElementById('codeOutput').textContent = code;
+        async function processPdfWithGemini(file) {
+            const arrayBuffer = await file.arrayBuffer();
+            const pdf = await pdfjsLib.getDocument(arrayBuffer).promise;
+            let results = [];
+
+            for (let i = 1; i <= pdf.numPages; i++) {
+                if (!canMakeRequest()) {
+                    results.push(`<!-- Page ${i}: Skipped (rate limit) -->`);
+                    continue;
+                }
+                updateProgress(i-1, pdf.numPages, `PDF page ${i}/${pdf.numPages}`);
+                const page = await pdf.getPage(i);
+                const viewport = page.getViewport({ scale: 2 });
+                const canvas = document.createElement('canvas');
+                canvas.width = viewport.width;
+                canvas.height = viewport.height;
+                await page.render({ canvasContext: canvas.getContext('2d'), viewport }).promise;
+                const blob = await new Promise(r => canvas.toBlob(r, 'image/png'));
+                const result = await processWithGemini(new File([blob], 'page.png', { type: 'image/png' }));
+                results.push(`<!-- Page ${i} -->\n${result}`);
+            }
+            return results.join('\n\n---\n\n');
+        }
+
+        async function processDocxWithGemini(file) {
+            const arrayBuffer = await file.arrayBuffer();
+            const result = await mammoth.extractRawText({ arrayBuffer });
             
-            const renderOutput = document.getElementById('renderOutput');
-            if (selectedFormat === 'markdown') {
-                renderOutput.innerHTML = marked.parse(code);
-            } else {
-                renderOutput.innerHTML = `<div class="tex-preview">${code.replace(/\n/g, '<br>')}</div>`;
+            const url = `${GEMINI_CONFIG.baseUrl}/${GEMINI_CONFIG.apiVersion}/models/${GEMINI_CONFIG.model}:generateContent?key=${geminiKey}`;
+            
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    contents: [{ parts: [{ text: buildTextPrompt(result.value) }] }],
+                    generationConfig: { maxOutputTokens: 8192, temperature: 0.1 }
+                })
+            });
+
+            if (!response.ok) throw new Error('Gemini API error');
+            const data = await response.json();
+            
+            if (data.usageMetadata) {
+                recordApiRequest(data.usageMetadata.promptTokenCount || 0, data.usageMetadata.candidatesTokenCount || 0);
             }
             
-            MathJax.typesetPromise([renderOutput]);
+            const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+            return text.replace(/^```[a-z]*\n?/i, '').replace(/\n?```$/i, '').trim();
         }
 
         function fileToBase64(file) {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
-                reader.readAsDataURL(file);
                 reader.onload = () => resolve(reader.result.split(',')[1]);
-                reader.onerror = error => reject(error);
+                reader.onerror = reject;
+                reader.readAsDataURL(file);
             });
         }
 
-        function toggleLoading(isLoading) {
-            const btn = document.getElementById('convertBtn');
-            const loader = document.getElementById('loader');
-            const btnText = document.getElementById('btnText');
-            
-            btn.disabled = isLoading;
-            loader.style.display = isLoading ? 'block' : 'none';
-            btnText.style.display = isLoading ? 'none' : 'block';
+        function buildPrompt() {
+            const format = selectedFormat;
+            const detectMath = document.getElementById('detectMath').checked;
+            const detectTables = document.getElementById('detectTables').checked;
+            const addHeaders = document.getElementById('addHeaders').checked;
+
+            return `Convert this image to ${format === 'markdown' ? 'Markdown' : 'LaTeX'}.
+
+REQUIREMENTS:
+1. Preserve ALL text accurately
+2. ${addHeaders ? 'Use # ## ### for headers' : 'No headers'}
+3. ${detectMath ? 'Convert math: inline $E=mc^2$, block $$\\int_0^\\infty$$, Greek $\\alpha\\beta$, fractions $\\frac{a}{b}$' : 'Keep math as text'}
+4. ${detectTables ? 'Format tables with | col | col | syntax' : 'No tables'}
+5. Use **bold** *italic* for emphasis
+6. Lists: - for unordered, 1. for ordered
+
+OUTPUT ONLY THE ${format.toUpperCase()} CODE. No explanations.`;
+        }
+
+        function buildTextPrompt(text) {
+            return `Format as ${selectedFormat === 'markdown' ? 'Markdown' : 'LaTeX'}:\n\n${text}\n\nAdd headers, convert math to $...$ and $$...$$.\nOUTPUT ONLY CODE.`;
+        }
+
+        function updateProgress(current, total, status) {
+            const percent = Math.round((current / total) * 100);
+            document.getElementById('progressStatus').textContent = status;
+            document.getElementById('progressPercent').textContent = percent + '%';
+            document.getElementById('progressFill').style.width = percent + '%';
+            document.getElementById('progressFile').textContent = `File ${Math.min(current+1, total)} of ${total}`;
+        }
+
+        function displayResults(elapsed) {
+            outputSection.classList.add('active');
+            const fullContent = conversionResults.map(r => conversionResults.length > 1 ? `<!-- ${r.name} -->\n\n${r.content}` : r.content).join('\n\n---\n\n');
+
+            document.getElementById('statFiles').textContent = conversionResults.length;
+            document.getElementById('statChars').textContent = fullContent.length.toLocaleString();
+            document.getElementById('statTime').textContent = elapsed + 's';
+            document.getElementById('codeOutput').textContent = fullContent;
+
+            const preview = document.getElementById('previewOutput');
+            if (selectedFormat === 'markdown') {
+                try { preview.innerHTML = marked.parse(fullContent); }
+                catch { preview.innerHTML = `<pre>${escapeHtml(fullContent)}</pre>`; }
+            } else {
+                preview.innerHTML = `<pre>${escapeHtml(fullContent)}</pre>`;
+            }
+
+            if (typeof MathJax !== 'undefined' && MathJax.typesetPromise) {
+                MathJax.typesetPromise([preview]).catch(() => {});
+            }
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
         }
 
         function switchTab(tab) {
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-            
-            if(tab === 'code') {
-                document.querySelector('.tab:nth-child(1)').classList.add('active');
-                document.getElementById('codeTab').classList.add('active');
-            } else {
-                document.querySelector('.tab:nth-child(2)').classList.add('active');
-                document.getElementById('previewTab').classList.add('active');
-            }
+            document.querySelector(`.tab:nth-child(${tab === 'code' ? 1 : 2})`).classList.add('active');
+            document.getElementById(tab + 'Tab').classList.add('active');
         }
 
         function copyOutput() {
-            const content = document.getElementById('codeOutput').textContent;
-            const tempInput = document.createElement('textarea');
-            tempInput.value = content;
-            document.body.appendChild(tempInput);
-            tempInput.select();
-            document.execCommand('copy');
-            document.body.removeChild(tempInput);
-            showToast('📋 Copied to clipboard!');
+            navigator.clipboard.writeText(document.getElementById('codeOutput').textContent)
+                .then(() => showToast('📋 Copied!'))
+                .catch(() => showToast('Copy failed', true));
         }
 
         function downloadOutput() {
@@ -424,7 +1638,7 @@
             const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
             const a = document.createElement('a');
             a.href = URL.createObjectURL(blob);
-            a.download = `converted_file.${ext}`;
+            a.download = `output.${ext}`;
             a.click();
             URL.revokeObjectURL(a.href);
             showToast('💾 Downloaded!');
