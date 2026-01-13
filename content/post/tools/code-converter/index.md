@@ -1,13 +1,14 @@
 ---
-title: "Code Converter - Image/PDF to LaTeX & Markdown"
+title: "Code Converter - FREE Image to LaTeX/Markdown"
 date: 2026-01-13
-description: "A free, browser-based tool to convert screenshots, photos, PDFs, and Word documents into clean LaTeX or Markdown code. Perfect for research notes, academic papers, and VSCode documentation."
+description: "100% FREE AI-powered tool using Google Gemini to convert screenshots, photos, and PDFs into properly formatted LaTeX or Markdown with math formulas, tables, and section headers."
 slug: code-converter
 tags: 
     - Tools
     - LaTeX
     - Markdown
-    - Productivity
+    - Free
+    - AI
 categories:
     - Tools
 image: cover.png
@@ -20,234 +21,161 @@ draft: false
 
 **[➡️ Open Code Converter](https://albert-mi.github.io/tools/code-converter.html)**
 
-Convert your screenshots, photos, PDFs, and Word documents into clean, usable **LaTeX** or **Markdown** code — all for free, running entirely in your browser!
+**100% FREE** converter using **Google Gemini** (free tier: 60 requests/minute) — transforms screenshots into properly formatted LaTeX/Markdown with `#` headers, `$...$` math, and tables!
 
 <!--more-->
 
-## ✨ Key Features
+## 🆓 Why It's Free
+
+| Service | Free Tier | Speed | Quality |
+|---------|-----------|-------|---------|
+| **Google Gemini** | ✅ 60 req/min | 2-5s | ⭐⭐⭐⭐⭐ |
+| Claude API | ❌ Paid | 2-5s | ⭐⭐⭐⭐⭐ |
+| Mathpix | ⚠️ 10/month | 1-2s | ⭐⭐⭐⭐⭐ |
+| Tesseract | ✅ Free | 30-60s | ⭐⭐ |
+
+**Google Gemini's free tier** provides:
+- **60 requests per minute** (more than enough!)
+- **1 million tokens per minute**
+- **No credit card required**
+- Same quality as paid APIs
+
+## 🔑 Quick Setup (30 seconds)
+
+1. Go to **[Google AI Studio](https://aistudio.google.com/app/apikey)**
+2. Sign in with Google account
+3. Click **"Create API Key"**
+4. Paste in the tool — done!
+
+Your key is stored **locally in your browser** only.
+
+## ✨ Features
 
 | Feature | Description |
 |---------|-------------|
-| **📷 Image OCR** | Extract text from screenshots and photos using Tesseract.js |
-| **📄 PDF Support** | Parse multi-page PDF documents with automatic OCR fallback |
-| **📝 Word Docs** | Convert .docx files directly to structured text |
-| **🔢 Math Detection** | Automatic conversion of mathematical symbols to LaTeX syntax |
-| **📊 Table Recognition** | Converts tabular data to proper Markdown/LaTeX tables |
-| **🌐 Multi-language** | Supports English, Chinese, Japanese, Korean, and more |
-| **🆓 100% Free** | No account required, no data uploaded to servers |
-| **🔒 Privacy First** | All processing happens locally in your browser |
+| **📷 Clipboard Paste** | `Ctrl+V` to paste screenshots instantly |
+| **🔢 Math Formulas** | Converts to `$E=mc^2$` and `$$\int$$` |
+| **📑 Section Headers** | Auto-generates `#`, `##`, `###` |
+| **📊 Tables** | Proper Markdown/LaTeX table syntax |
+| **⚡ Fast** | 2-5 seconds per image |
+| **🌐 Multi-language** | English, Chinese, mixed content |
 
-## 📖 How to Use
+## 📸 How to Use
 
-### Step 1: Upload Your Files
+### Method 1: Paste Screenshot (Fastest)
 
-Drag and drop or click to upload your files. Supported formats:
-- **Images**: PNG, JPG, JPEG, GIF, WebP
-- **Documents**: PDF, DOCX
+1. Take screenshot (`Win+Shift+S` or `Cmd+Shift+4`)
+2. Press `Ctrl+V` anywhere on the page
+3. Click **Convert** → Done in 2-5 seconds!
 
-### Step 2: Select Output Format
+### Method 2: Upload Files
 
-Choose between:
+- Drag & drop images/PDFs
+- Or click to browse files
 
-**Markdown** - Best for:
-- VSCode documentation
-- GitHub README files
-- Research notes
-- Blog posts
+### Method 3: External Tools (No API)
 
-**LaTeX** - Best for:
-- Academic papers
-- Mathematical content
-- Formal reports
-- Thesis documents
+If you prefer not to use any API, the tool links to free online converters:
+- **[SimpleTex](https://simpletex.cn/ai/latex_ocr)** — Best for math
+- **[Baimiao OCR](https://web.baimiaoapp.com/)** — General OCR
+- **[Mathpix](https://mathpix.com/)** — 10 free/month
 
-### Step 3: Configure Options
+## 🔢 Math Conversion Examples
 
-| Option | Description |
-|--------|-------------|
-| **OCR Language** | Select the primary language of your document |
-| **Document Structure** | Auto-detect, Article, Research Notes, or Slides |
-| **Detect Math** | Automatically convert mathematical symbols to LaTeX |
-| **Detect Tables** | Convert tabular content to proper table format |
-| **Include Images** | Add placeholder references for embedded images |
+The AI correctly converts mathematical expressions:
 
-### Step 4: Convert & Download
+| Image Content | Output |
+|---------------|--------|
+| E = mc² | `$E = mc^2$` |
+| α + β = γ | `$\alpha + \beta = \gamma$` |
+| ∫₀^∞ f(x)dx | `$\int_0^\infty f(x) dx$` |
+| Σᵢ₌₁ⁿ xᵢ | `$\sum_{i=1}^n x_i$` |
+| √(a² + b²) | `$\sqrt{a^2 + b^2}$` |
 
-Click **Convert Files** to process. The tool shows:
-- Real-time progress percentage
-- Estimated time remaining
-- File-by-file status
+### Rendered Examples
 
-Once complete, you can:
-- **Preview** the rendered output
-- **Copy** to clipboard
-- **Download** as `.md` or `.tex` file
+Inline: $E = mc^2$, $\alpha + \beta = \gamma$
 
-## 💡 LaTeX Math Examples
+Block equations:
+$$
+\int_0^\infty e^{-x^2} dx = \frac{\sqrt{\pi}}{2}
+$$
 
-The converter automatically detects and converts common mathematical expressions:
+$$
+\sum_{i=1}^n i^2 = \frac{n(n+1)(2n+1)}{6}
+$$
 
-### Inline Math
+## 📊 Table Output
 
-Write inline math using single dollar signs:
+Input image with table → Output:
 
 ```markdown
-The golden ratio is $\varphi = \frac{1+\sqrt{5}}{2}$
+| Name | Age | Score |
+|------|-----|-------|
+| Alice | 25 | 95 |
+| Bob | 30 | 88 |
 ```
 
-Renders as: The golden ratio is $\varphi = \frac{1+\sqrt{5}}{2}$
+## 📑 Header Generation
 
-### Block Math
-
-Use double dollar signs for display equations:
+The AI automatically detects document structure:
 
 ```markdown
-$$
-\int_{-\infty}^{\infty} e^{-x^2} dx = \sqrt{\pi}
-$$
+# Main Title
+
+## Section 1
+
+Content here...
+
+### Subsection 1.1
+
+More content...
+
+## Section 2
+
+...
 ```
 
-Renders as:
+## ⚙️ Configuration Options
 
-$$
-\int_{-\infty}^{\infty} e^{-x^2} dx = \sqrt{\pi}
-$$
+| Option | Values |
+|--------|--------|
+| **Output Format** | Markdown / LaTeX |
+| **Document Type** | Auto, Article, Notes, Textbook |
+| **Language** | Auto, English, Chinese, Mixed |
+| **Math Detection** | On/Off |
+| **Table Formatting** | On/Off |
+| **Add Headers** | On/Off |
 
-### Aligned Equations
+## 🔗 Alternative Free Tools
 
-For multi-line equations:
+If you prefer browser-based tools without any API:
 
-```latex
-\begin{align}
-E &= mc^2 \\
-F &= ma \\
-p &= mv
-\end{align}
-```
+| Tool | Best For | Link |
+|------|----------|------|
+| **SimpleTex** | Math/LaTeX | [simpletex.cn](https://simpletex.cn/ai/latex_ocr) |
+| **Baimiao** | Chinese OCR | [web.baimiaoapp.com](https://web.baimiaoapp.com/) |
+| **Online OCR** | General text | [onlineocr.net](https://www.onlineocr.net/) |
 
-$$
-\begin{align}
-E &= mc^2 \\
-F &= ma \\
-p &= mv
-\end{align}
-$$
+## 💡 Tips
 
-### Common Symbols Detected
+1. **Clear screenshots** = better accuracy
+2. **One topic per image** for best structure detection
+3. **Check preview tab** to verify math renders correctly
+4. **Use LaTeX format** for academic papers with complex math
 
-| Symbol | LaTeX Code | Rendered |
-|--------|-----------|----------|
-| Greek letters | `\alpha, \beta, \gamma` | $\alpha, \beta, \gamma$ |
-| Fractions | `\frac{a}{b}` | $\frac{a}{b}$ |
-| Square root | `\sqrt{x}` | $\sqrt{x}$ |
-| Summation | `\sum_{i=1}^{n}` | $\sum_{i=1}^{n}$ |
-| Integral | `\int_a^b` | $\int_a^b$ |
-| Infinity | `\infty` | $\infty$ |
+## 🔒 Privacy
 
-## 📊 Markdown Tables
-
-The converter recognizes tabular data and formats it properly:
-
-```markdown
-| Column 1 | Column 2 | Column 3 |
-|----------|----------|----------|
-| Data 1   | Data 2   | Data 3   |
-| Data 4   | Data 5   | Data 6   |
-```
-
-## 🖼️ Adding Images to GitHub
-
-After converting, you may want to add images. Here's how to embed GitHub-hosted images:
-
-### Step 1: Upload Image to Your Repository
-
-1. Go to your GitHub repository
-2. Navigate to the folder where you want to store images
-3. Click **Add file** → **Upload files**
-4. Drag your image and commit
-
-### Step 2: Get the Raw URL
-
-1. Click on the uploaded image
-2. Click **Raw** button
-3. Copy the URL (format: `https://raw.githubusercontent.com/USERNAME/REPO/main/path/image.png`)
-
-### Step 3: Use in Markdown
-
-```markdown
-![Description of image](https://raw.githubusercontent.com/USERNAME/REPO/main/path/image.png)
-```
-
-### Step 4: Use in LaTeX
-
-```latex
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=0.8\textwidth]{image.png}
-    \caption{Your caption here}
-    \label{fig:label}
-\end{figure}
-```
-
-## 🔧 Technical Details
-
-The Code Converter uses these open-source libraries:
-
-| Library | Purpose | Version |
-|---------|---------|---------|
-| [Tesseract.js](https://tesseract.projectnaptha.com/) | OCR text extraction | 5.x |
-| [PDF.js](https://mozilla.github.io/pdf.js/) | PDF parsing | 3.11 |
-| [Mammoth.js](https://github.com/mwilliamson/mammoth.js) | DOCX conversion | 1.6 |
-| [MathJax](https://www.mathjax.org/) | Math rendering | 3.x |
-
-**All processing happens locally** — your files never leave your browser. This ensures complete privacy and works offline after the initial page load.
-
-## 🎯 Use Cases
-
-### Research Notes
-Convert handwritten or scanned research notes into structured Markdown with proper sections:
-- Abstract
-- Introduction  
-- Methods
-- Results
-- Conclusion
-
-### Academic Papers
-Transform PDF papers or images of equations into LaTeX-ready content with:
-- Proper document structure
-- Mathematical notation
-- Table formatting
-- Bibliography placeholders
-
-### Course Materials
-Digitize lecture slides and handouts into editable formats for:
-- Study guides
-- Flashcard creation
-- Note compilation
-
-### Documentation
-Convert screenshots of code or technical diagrams into:
-- README documentation
-- Wiki pages
-- Technical specifications
-
-## 📱 Mobile Support
-
-The tool works on mobile devices! Simply:
-1. Open the tool in your mobile browser
-2. Tap the upload zone to access your camera or photo library
-3. Process and copy the results
+- API key stored **locally in your browser**
+- Images sent **directly to Google** (not our servers)
+- No data stored or logged by this tool
 
 ## 🔗 Quick Links
 
-- **[🚀 Launch Code Converter](https://albert-mi.github.io/tools/code-converter.html)**
-- **[📖 Math Typesetting Guide](/post/begining/math-typesetting/)**
-- **[📝 Markdown Syntax Guide](/post/begining/markdown/)**
-
-## 💬 Feedback
-
-Found a bug or have a feature request? Feel free to reach out or contribute to improving this tool!
+- **[🚀 Open Code Converter](https://albert-mi.github.io/tools/code-converter.html)**
+- **[🔑 Get Free Gemini Key](https://aistudio.google.com/app/apikey)**
+- **[📐 SimpleTex (No API)](https://simpletex.cn/ai/latex_ocr)**
 
 ---
 
-*Similar to [Snip](https://mathpix.com/snip) but 100% free and open-source, running entirely in your browser.*
+*100% Free • Powered by Google Gemini • No installation required*
