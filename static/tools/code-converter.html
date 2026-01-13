@@ -1,0 +1,1489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Converter - Image/PDF to LaTeX/Markdown</title>
+    
+    <!-- Tesseract.js for OCR -->
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+    
+    <!-- PDF.js for PDF parsing -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    
+    <!-- Mammoth.js for Word documents -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+    
+    <!-- MathJax for math rendering preview -->
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+            }
+        };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    <!-- Highlight.js for code highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    
+    <style>
+        :root {
+            --primary: #3b82f6;
+            --primary-dark: #2563eb;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text: #1e293b;
+            --text-secondary: #64748b;
+            --border: #e2e8f0;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg: #0f172a;
+                --card-bg: #1e293b;
+                --text: #f1f5f9;
+                --text-secondary: #94a3b8;
+                --border: #334155;
+            }
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--primary), #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        header p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .feature {
+            background: var(--card-bg);
+            padding: 1rem;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .feature-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature h3 {
+            font-size: 0.9rem;
+            color: var(--text);
+        }
+
+        .feature p {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            margin-bottom: 2rem;
+        }
+
+        .upload-zone {
+            border: 2px dashed var(--border);
+            border-radius: 12px;
+            padding: 3rem 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 1.5rem;
+        }
+
+        .upload-zone:hover, .upload-zone.dragover {
+            border-color: var(--primary);
+            background: rgba(59, 130, 246, 0.05);
+        }
+
+        .upload-zone.dragover {
+            transform: scale(1.02);
+        }
+
+        .upload-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .upload-zone h3 {
+            margin-bottom: 0.5rem;
+        }
+
+        .upload-zone p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .format-selector {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .format-btn {
+            flex: 1;
+            min-width: 150px;
+            padding: 1rem;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            background: var(--card-bg);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .format-btn:hover {
+            border-color: var(--primary);
+        }
+
+        .format-btn.active {
+            border-color: var(--primary);
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .format-btn h4 {
+            margin-bottom: 0.25rem;
+        }
+
+        .format-btn p {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .option-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .option-group label {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .option-group select,
+        .option-group input {
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: var(--bg);
+            color: var(--text);
+            font-size: 1rem;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary);
+        }
+
+        .progress-section {
+            margin: 1.5rem 0;
+            display: none;
+        }
+
+        .progress-section.active {
+            display: block;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+
+        .progress-bar {
+            height: 12px;
+            background: var(--border);
+            border-radius: 6px;
+            overflow: hidden;
+            margin-bottom: 0.5rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), #8b5cf6);
+            border-radius: 6px;
+            transition: width 0.3s ease;
+            width: 0%;
+        }
+
+        .progress-details {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .file-list {
+            margin: 1rem 0;
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--bg);
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+        }
+
+        .file-item-icon {
+            font-size: 1.5rem;
+        }
+
+        .file-item-info {
+            flex: 1;
+        }
+
+        .file-item-name {
+            font-weight: 600;
+        }
+
+        .file-item-size {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .file-item-status {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .status-pending {
+            background: rgba(245, 158, 11, 0.2);
+            color: var(--warning);
+        }
+
+        .status-processing {
+            background: rgba(59, 130, 246, 0.2);
+            color: var(--primary);
+        }
+
+        .status-complete {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--success);
+        }
+
+        .status-error {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--danger);
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), #8b5cf6);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: var(--bg);
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--border);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .output-section {
+            margin-top: 2rem;
+            display: none;
+        }
+
+        .output-section.active {
+            display: block;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 1rem;
+        }
+
+        .tab {
+            padding: 0.5rem 1rem;
+            border: none;
+            background: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 1rem;
+            border-radius: 8px 8px 0 0;
+            transition: all 0.3s ease;
+        }
+
+        .tab:hover {
+            color: var(--text);
+        }
+
+        .tab.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .output-area {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem;
+            min-height: 300px;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .code-output {
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 0.9rem;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .preview-output {
+            line-height: 1.8;
+        }
+
+        .preview-output h1, .preview-output h2, .preview-output h3 {
+            margin: 1rem 0 0.5rem;
+        }
+
+        .preview-output p {
+            margin-bottom: 0.5rem;
+        }
+
+        .preview-output table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+
+        .preview-output th, .preview-output td {
+            border: 1px solid var(--border);
+            padding: 0.5rem;
+            text-align: left;
+        }
+
+        .preview-output th {
+            background: var(--border);
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            padding: 0.5rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+        }
+
+        .output-wrapper {
+            position: relative;
+        }
+
+        .stats-bar {
+            display: flex;
+            gap: 2rem;
+            padding: 1rem;
+            background: var(--bg);
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .help-section {
+            background: rgba(59, 130, 246, 0.1);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .help-section h3 {
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .help-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+
+        .help-item {
+            background: var(--card-bg);
+            padding: 1rem;
+            border-radius: 8px;
+        }
+
+        .help-item h4 {
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .help-item code {
+            background: var(--bg);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-size: 0.85rem;
+        }
+
+        .help-item p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            padding: 1rem 1.5rem;
+            background: var(--card-bg);
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            border-left: 4px solid var(--success);
+            transform: translateX(120%);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast.error {
+            border-left-color: var(--danger);
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.75rem;
+            }
+            
+            .card {
+                padding: 1.5rem;
+            }
+            
+            .upload-zone {
+                padding: 2rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📝 Code Converter</h1>
+            <p>Convert screenshots, photos, PDFs, and Word documents to clean LaTeX or Markdown</p>
+        </header>
+
+        <div class="features">
+            <div class="feature">
+                <div class="feature-icon">📷</div>
+                <h3>Image OCR</h3>
+                <p>Extract text from screenshots & photos</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">📄</div>
+                <h3>PDF Support</h3>
+                <p>Parse multi-page PDF documents</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">📝</div>
+                <h3>Word Docs</h3>
+                <p>Convert .docx files directly</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">🔢</div>
+                <h3>Math Support</h3>
+                <p>LaTeX formulas & equations</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">📊</div>
+                <h3>Tables</h3>
+                <p>Structured table conversion</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">🆓</div>
+                <h3>100% Free</h3>
+                <p>No account, runs locally</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2 style="margin-bottom: 1.5rem;">📤 Upload Your Files</h2>
+            
+            <div class="upload-zone" id="uploadZone">
+                <div class="upload-icon">📁</div>
+                <h3>Drop files here or click to upload</h3>
+                <p>Supports: PNG, JPG, JPEG, GIF, WebP, PDF, DOCX</p>
+                <input type="file" id="fileInput" class="file-input" multiple 
+                       accept=".png,.jpg,.jpeg,.gif,.webp,.pdf,.docx">
+            </div>
+
+            <div class="file-list" id="fileList"></div>
+
+            <h3 style="margin: 1.5rem 0 1rem;">🎯 Output Format</h3>
+            <div class="format-selector">
+                <div class="format-btn active" data-format="markdown" onclick="selectFormat('markdown')">
+                    <h4>📝 Markdown</h4>
+                    <p>Best for VSCode, GitHub, notes</p>
+                </div>
+                <div class="format-btn" data-format="latex" onclick="selectFormat('latex')">
+                    <h4>🔬 LaTeX</h4>
+                    <p>Best for math, academic papers</p>
+                </div>
+            </div>
+
+            <h3 style="margin: 1.5rem 0 1rem;">⚙️ Options</h3>
+            <div class="options-grid">
+                <div class="option-group">
+                    <label>OCR Language</label>
+                    <select id="ocrLanguage">
+                        <option value="eng">English</option>
+                        <option value="chi_sim">Chinese (Simplified)</option>
+                        <option value="chi_tra">Chinese (Traditional)</option>
+                        <option value="jpn">Japanese</option>
+                        <option value="kor">Korean</option>
+                        <option value="deu">German</option>
+                        <option value="fra">French</option>
+                        <option value="spa">Spanish</option>
+                        <option value="eng+chi_sim">English + Chinese</option>
+                    </select>
+                </div>
+                <div class="option-group">
+                    <label>Document Structure</label>
+                    <select id="docStructure">
+                        <option value="auto">Auto-detect</option>
+                        <option value="article">Article/Report</option>
+                        <option value="notes">Research Notes</option>
+                        <option value="slides">Presentation Slides</option>
+                    </select>
+                </div>
+                <div class="option-group">
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="detectMath" checked>
+                        <label for="detectMath">Detect math formulas</label>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="detectTables" checked>
+                        <label for="detectTables">Detect tables</label>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="preserveImages" checked>
+                        <label for="preserveImages">Include image references</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="progress-section" id="progressSection">
+                <div class="progress-header">
+                    <span id="progressStatus">Processing...</span>
+                    <span id="progressPercent">0%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <div class="progress-details">
+                    <span id="progressFile">File 0 of 0</span>
+                    <span id="progressTime">Est. time: calculating...</span>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <button class="btn btn-primary" id="convertBtn" onclick="startConversion()" disabled>
+                    <span id="btnText">🚀 Convert Files</span>
+                </button>
+                <button class="btn btn-secondary" onclick="clearAll()">
+                    🗑️ Clear All
+                </button>
+            </div>
+        </div>
+
+        <div class="output-section" id="outputSection">
+            <div class="card">
+                <h2 style="margin-bottom: 1rem;">📋 Conversion Results</h2>
+                
+                <div class="stats-bar">
+                    <div class="stat">
+                        <div class="stat-value" id="statFiles">0</div>
+                        <div class="stat-label">Files Processed</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value" id="statChars">0</div>
+                        <div class="stat-label">Characters Extracted</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value" id="statMath">0</div>
+                        <div class="stat-label">Math Expressions</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value" id="statTables">0</div>
+                        <div class="stat-label">Tables Found</div>
+                    </div>
+                </div>
+
+                <div class="tabs">
+                    <button class="tab active" onclick="switchTab('code')">📝 Code Output</button>
+                    <button class="tab" onclick="switchTab('preview')">👁️ Preview</button>
+                </div>
+
+                <div class="tab-content active" id="codeTab">
+                    <div class="output-wrapper">
+                        <button class="copy-btn" onclick="copyOutput()">📋 Copy</button>
+                        <div class="output-area">
+                            <pre class="code-output" id="codeOutput"></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="previewTab">
+                    <div class="output-area preview-output" id="previewOutput"></div>
+                </div>
+
+                <div class="action-buttons" style="margin-top: 1rem;">
+                    <button class="btn btn-primary" onclick="downloadOutput()">
+                        💾 Download File
+                    </button>
+                    <button class="btn btn-secondary" onclick="copyOutput()">
+                        📋 Copy to Clipboard
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="help-section">
+            <h3>💡 Quick Tips</h3>
+            <div class="help-grid">
+                <div class="help-item">
+                    <h4>Math Formulas</h4>
+                    <p>Inline: <code>$E = mc^2$</code><br>
+                    Block: <code>$$\int_0^\infty e^{-x^2} dx$$</code></p>
+                </div>
+                <div class="help-item">
+                    <h4>Tables in Markdown</h4>
+                    <p><code>| Col1 | Col2 |</code><br>
+                    <code>|------|------|</code><br>
+                    <code>| data | data |</code></p>
+                </div>
+                <div class="help-item">
+                    <h4>GitHub Images</h4>
+                    <p>Upload to your repo, then use:<br>
+                    <code>![alt](https://raw.githubusercontent.com/USER/REPO/main/path/image.png)</code></p>
+                </div>
+                <div class="help-item">
+                    <h4>LaTeX Blocks</h4>
+                    <p><code>\begin{align}</code><br>
+                    <code>  x &= y + z \\</code><br>
+                    <code>\end{align}</code></p>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>Built with ❤️ | 100% Free & Open Source | Runs entirely in your browser</p>
+            <p>Powered by <a href="https://tesseract.projectnaptha.com/" target="_blank">Tesseract.js</a>, 
+               <a href="https://mozilla.github.io/pdf.js/" target="_blank">PDF.js</a>, 
+               <a href="https://www.mathjax.org/" target="_blank">MathJax</a></p>
+            <p style="margin-top: 1rem;"><a href="https://albert-mi.github.io/">← Back to Website</a></p>
+        </footer>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+        // Global state
+        let files = [];
+        let selectedFormat = 'markdown';
+        let conversionResults = [];
+        let stats = { files: 0, chars: 0, math: 0, tables: 0 };
+
+        // Initialize PDF.js worker
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+        // DOM elements
+        const uploadZone = document.getElementById('uploadZone');
+        const fileInput = document.getElementById('fileInput');
+        const fileList = document.getElementById('fileList');
+        const convertBtn = document.getElementById('convertBtn');
+        const progressSection = document.getElementById('progressSection');
+        const outputSection = document.getElementById('outputSection');
+
+        // Event listeners
+        uploadZone.addEventListener('click', () => fileInput.click());
+        uploadZone.addEventListener('dragover', handleDragOver);
+        uploadZone.addEventListener('dragleave', handleDragLeave);
+        uploadZone.addEventListener('drop', handleDrop);
+        fileInput.addEventListener('change', handleFileSelect);
+
+        function handleDragOver(e) {
+            e.preventDefault();
+            uploadZone.classList.add('dragover');
+        }
+
+        function handleDragLeave(e) {
+            e.preventDefault();
+            uploadZone.classList.remove('dragover');
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            uploadZone.classList.remove('dragover');
+            const droppedFiles = Array.from(e.dataTransfer.files);
+            addFiles(droppedFiles);
+        }
+
+        function handleFileSelect(e) {
+            const selectedFiles = Array.from(e.target.files);
+            addFiles(selectedFiles);
+        }
+
+        function addFiles(newFiles) {
+            const validExtensions = ['.png', '.jpg', '.jpeg', '.gif', '.webp', '.pdf', '.docx'];
+            
+            newFiles.forEach(file => {
+                const ext = '.' + file.name.split('.').pop().toLowerCase();
+                if (validExtensions.includes(ext)) {
+                    files.push({
+                        file: file,
+                        name: file.name,
+                        size: file.size,
+                        type: getFileType(ext),
+                        status: 'pending'
+                    });
+                }
+            });
+
+            renderFileList();
+            convertBtn.disabled = files.length === 0;
+        }
+
+        function getFileType(ext) {
+            if (['.png', '.jpg', '.jpeg', '.gif', '.webp'].includes(ext)) return 'image';
+            if (ext === '.pdf') return 'pdf';
+            if (ext === '.docx') return 'docx';
+            return 'unknown';
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes < 1024) return bytes + ' B';
+            if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+            return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+        }
+
+        function renderFileList() {
+            fileList.innerHTML = files.map((f, i) => `
+                <div class="file-item">
+                    <div class="file-item-icon">${getFileIcon(f.type)}</div>
+                    <div class="file-item-info">
+                        <div class="file-item-name">${f.name}</div>
+                        <div class="file-item-size">${formatFileSize(f.size)}</div>
+                    </div>
+                    <span class="file-item-status status-${f.status}">${f.status}</span>
+                    <button class="btn btn-secondary" style="padding: 0.5rem;" onclick="removeFile(${i})">✕</button>
+                </div>
+            `).join('');
+        }
+
+        function getFileIcon(type) {
+            switch(type) {
+                case 'image': return '🖼️';
+                case 'pdf': return '📄';
+                case 'docx': return '📝';
+                default: return '📁';
+            }
+        }
+
+        function removeFile(index) {
+            files.splice(index, 1);
+            renderFileList();
+            convertBtn.disabled = files.length === 0;
+        }
+
+        function selectFormat(format) {
+            selectedFormat = format;
+            document.querySelectorAll('.format-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.format === format);
+            });
+        }
+
+        function clearAll() {
+            files = [];
+            conversionResults = [];
+            stats = { files: 0, chars: 0, math: 0, tables: 0 };
+            renderFileList();
+            convertBtn.disabled = true;
+            outputSection.classList.remove('active');
+            progressSection.classList.remove('active');
+        }
+
+        async function startConversion() {
+            if (files.length === 0) return;
+
+            convertBtn.disabled = true;
+            document.getElementById('btnText').innerHTML = '<span class="loading-spinner"></span> Converting...';
+            progressSection.classList.add('active');
+            outputSection.classList.remove('active');
+
+            conversionResults = [];
+            stats = { files: 0, chars: 0, math: 0, tables: 0 };
+            const startTime = Date.now();
+
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                file.status = 'processing';
+                renderFileList();
+
+                updateProgress(i, files.length, 'Processing ' + file.name);
+
+                try {
+                    let text = '';
+                    
+                    if (file.type === 'image') {
+                        text = await processImage(file.file);
+                    } else if (file.type === 'pdf') {
+                        text = await processPDF(file.file);
+                    } else if (file.type === 'docx') {
+                        text = await processDocx(file.file);
+                    }
+
+                    const converted = convertToFormat(text, file.name);
+                    conversionResults.push({
+                        name: file.name,
+                        content: converted.content,
+                        stats: converted.stats
+                    });
+
+                    stats.chars += converted.stats.chars;
+                    stats.math += converted.stats.math;
+                    stats.tables += converted.stats.tables;
+                    stats.files++;
+
+                    file.status = 'complete';
+                } catch (error) {
+                    console.error('Error processing file:', error);
+                    file.status = 'error';
+                    showToast('Error processing ' + file.name, true);
+                }
+
+                renderFileList();
+            }
+
+            // Final output
+            updateProgress(files.length, files.length, 'Complete!');
+            displayResults();
+
+            document.getElementById('btnText').textContent = '🚀 Convert Files';
+            convertBtn.disabled = false;
+            
+            const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
+            showToast(`Conversion complete in ${elapsed}s!`);
+        }
+
+        async function processImage(file) {
+            const language = document.getElementById('ocrLanguage').value;
+            
+            const result = await Tesseract.recognize(file, language, {
+                logger: m => {
+                    if (m.status === 'recognizing text') {
+                        const percent = Math.round(m.progress * 100);
+                        document.getElementById('progressPercent').textContent = percent + '%';
+                        document.getElementById('progressFill').style.width = percent + '%';
+                    }
+                }
+            });
+
+            return result.data.text;
+        }
+
+        async function processPDF(file) {
+            const arrayBuffer = await file.arrayBuffer();
+            const pdf = await pdfjsLib.getDocument(arrayBuffer).promise;
+            let fullText = '';
+
+            for (let i = 1; i <= pdf.numPages; i++) {
+                const page = await pdf.getPage(i);
+                const textContent = await page.getTextContent();
+                const pageText = textContent.items.map(item => item.str).join(' ');
+                fullText += pageText + '\n\n';
+
+                updateProgress(i - 1, pdf.numPages, `Processing page ${i} of ${pdf.numPages}`);
+            }
+
+            // If no text extracted, try OCR on rendered pages
+            if (fullText.trim().length < 50) {
+                fullText = await ocrPDF(file);
+            }
+
+            return fullText;
+        }
+
+        async function ocrPDF(file) {
+            const arrayBuffer = await file.arrayBuffer();
+            const pdf = await pdfjsLib.getDocument(arrayBuffer).promise;
+            let fullText = '';
+            const language = document.getElementById('ocrLanguage').value;
+
+            for (let i = 1; i <= pdf.numPages; i++) {
+                const page = await pdf.getPage(i);
+                const scale = 2;
+                const viewport = page.getViewport({ scale });
+                
+                const canvas = document.createElement('canvas');
+                canvas.width = viewport.width;
+                canvas.height = viewport.height;
+                const ctx = canvas.getContext('2d');
+
+                await page.render({ canvasContext: ctx, viewport }).promise;
+                
+                const result = await Tesseract.recognize(canvas, language);
+                fullText += result.data.text + '\n\n';
+
+                updateProgress(i - 1, pdf.numPages, `OCR page ${i} of ${pdf.numPages}`);
+            }
+
+            return fullText;
+        }
+
+        async function processDocx(file) {
+            const arrayBuffer = await file.arrayBuffer();
+            const result = await mammoth.extractRawText({ arrayBuffer });
+            return result.value;
+        }
+
+        function convertToFormat(text, filename) {
+            const detectMath = document.getElementById('detectMath').checked;
+            const detectTables = document.getElementById('detectTables').checked;
+            const preserveImages = document.getElementById('preserveImages').checked;
+            const structure = document.getElementById('docStructure').value;
+
+            let content = text;
+            let mathCount = 0;
+            let tableCount = 0;
+
+            // Clean up text
+            content = content.replace(/\r\n/g, '\n');
+            content = content.replace(/\n{3,}/g, '\n\n');
+
+            // Detect and convert math expressions
+            if (detectMath) {
+                const mathResult = detectAndConvertMath(content);
+                content = mathResult.content;
+                mathCount = mathResult.count;
+            }
+
+            // Detect tables (simple heuristic)
+            if (detectTables) {
+                const tableResult = detectAndConvertTables(content);
+                content = tableResult.content;
+                tableCount = tableResult.count;
+            }
+
+            // Add structure based on format
+            if (selectedFormat === 'markdown') {
+                content = formatAsMarkdown(content, filename, structure, preserveImages);
+            } else {
+                content = formatAsLaTeX(content, filename, structure, preserveImages);
+            }
+
+            return {
+                content,
+                stats: {
+                    chars: text.length,
+                    math: mathCount,
+                    tables: tableCount
+                }
+            };
+        }
+
+        function detectAndConvertMath(text) {
+            let count = 0;
+            let content = text;
+
+            // Common math patterns
+            const patterns = [
+                // Fractions
+                { regex: /(\d+)\s*\/\s*(\d+)/g, replace: (m, a, b) => `$\\frac{${a}}{${b}}$` },
+                // Square roots
+                { regex: /sqrt\(([^)]+)\)/gi, replace: (m, a) => `$\\sqrt{${a}}$` },
+                { regex: /√(\d+)/g, replace: (m, a) => `$\\sqrt{${a}}$` },
+                // Superscripts (x^2)
+                { regex: /(\w+)\^(\d+)/g, replace: (m, a, b) => `$${a}^{${b}}$` },
+                // Subscripts (x_1)
+                { regex: /(\w+)_(\d+)/g, replace: (m, a, b) => `$${a}_{${b}}$` },
+                // Integrals
+                { regex: /∫/g, replace: '$\\int$' },
+                // Summation
+                { regex: /∑/g, replace: '$\\sum$' },
+                // Greek letters
+                { regex: /α/g, replace: '$\\alpha$' },
+                { regex: /β/g, replace: '$\\beta$' },
+                { regex: /γ/g, replace: '$\\gamma$' },
+                { regex: /δ/g, replace: '$\\delta$' },
+                { regex: /θ/g, replace: '$\\theta$' },
+                { regex: /λ/g, replace: '$\\lambda$' },
+                { regex: /π/g, replace: '$\\pi$' },
+                { regex: /σ/g, replace: '$\\sigma$' },
+                { regex: /φ/g, replace: '$\\varphi$' },
+                { regex: /ψ/g, replace: '$\\psi$' },
+                { regex: /ω/g, replace: '$\\omega$' },
+                // Infinity
+                { regex: /∞/g, replace: '$\\infty$' },
+                // Plus/minus
+                { regex: /±/g, replace: '$\\pm$' },
+                // Not equal
+                { regex: /≠/g, replace: '$\\neq$' },
+                // Less/greater than or equal
+                { regex: /≤/g, replace: '$\\leq$' },
+                { regex: /≥/g, replace: '$\\geq$' },
+                // Arrows
+                { regex: /→/g, replace: '$\\rightarrow$' },
+                { regex: /←/g, replace: '$\\leftarrow$' },
+                { regex: /↔/g, replace: '$\\leftrightarrow$' },
+            ];
+
+            patterns.forEach(p => {
+                const matches = content.match(p.regex);
+                if (matches) count += matches.length;
+                content = content.replace(p.regex, p.replace);
+            });
+
+            return { content, count };
+        }
+
+        function detectAndConvertTables(text) {
+            let count = 0;
+            let content = text;
+
+            // Simple table detection: lines with multiple tabs or consistent spacing
+            const lines = content.split('\n');
+            let tableLines = [];
+            let inTable = false;
+
+            for (let i = 0; i < lines.length; i++) {
+                const line = lines[i];
+                const tabCount = (line.match(/\t/g) || []).length;
+                const pipeCount = (line.match(/\|/g) || []).length;
+
+                if (tabCount >= 2 || pipeCount >= 2) {
+                    if (!inTable) {
+                        inTable = true;
+                        tableLines = [];
+                    }
+                    tableLines.push(line);
+                } else if (inTable && line.trim() === '') {
+                    // End of table
+                    if (tableLines.length >= 2) {
+                        count++;
+                        const table = convertToTableFormat(tableLines);
+                        // Replace table lines with formatted table
+                        for (let j = i - tableLines.length; j < i; j++) {
+                            lines[j] = '';
+                        }
+                        lines[i - 1] = table;
+                    }
+                    inTable = false;
+                    tableLines = [];
+                }
+            }
+
+            return { content: lines.join('\n'), count };
+        }
+
+        function convertToTableFormat(lines) {
+            if (selectedFormat === 'markdown') {
+                const rows = lines.map(line => {
+                    const cells = line.split(/\t+|\s{2,}/).filter(c => c.trim());
+                    return '| ' + cells.join(' | ') + ' |';
+                });
+                
+                if (rows.length > 0) {
+                    const colCount = rows[0].split('|').length - 2;
+                    const separator = '|' + ' --- |'.repeat(colCount);
+                    rows.splice(1, 0, separator);
+                }
+                
+                return rows.join('\n');
+            } else {
+                // LaTeX table
+                const rows = lines.map(line => {
+                    const cells = line.split(/\t+|\s{2,}/).filter(c => c.trim());
+                    return cells.join(' & ') + ' \\\\';
+                });
+                
+                const colCount = lines[0].split(/\t+|\s{2,}/).filter(c => c.trim()).length;
+                const colSpec = 'l'.repeat(colCount);
+                
+                return `\\begin{tabular}{${colSpec}}\n\\hline\n${rows.join('\n')}\n\\hline\n\\end{tabular}`;
+            }
+        }
+
+        function formatAsMarkdown(content, filename, structure, preserveImages) {
+            let output = '';
+            
+            // Add header based on structure
+            if (structure === 'article' || structure === 'notes') {
+                const title = filename.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' ');
+                output += `# ${title}\n\n`;
+                
+                if (structure === 'notes') {
+                    output += `## Abstract\n\n`;
+                    output += `*[Summary of the content]*\n\n`;
+                    output += `## Content\n\n`;
+                }
+            }
+
+            output += content;
+
+            if (preserveImages) {
+                output += `\n\n---\n\n`;
+                output += `<!-- Image Reference -->\n`;
+                output += `<!-- Upload your images to GitHub and use: -->\n`;
+                output += `<!-- ![Description](https://raw.githubusercontent.com/USERNAME/REPO/main/path/to/image.png) -->\n`;
+            }
+
+            return output;
+        }
+
+        function formatAsLaTeX(content, filename, structure, preserveImages) {
+            let output = '';
+            
+            // LaTeX document structure
+            output += `\\documentclass{article}\n`;
+            output += `\\usepackage{amsmath,amssymb}\n`;
+            output += `\\usepackage{graphicx}\n`;
+            output += `\\usepackage{booktabs}\n`;
+            output += `\\usepackage[utf8]{inputenc}\n\n`;
+            
+            const title = filename.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' ');
+            output += `\\title{${title}}\n`;
+            output += `\\author{}\n`;
+            output += `\\date{\\today}\n\n`;
+            output += `\\begin{document}\n`;
+            output += `\\maketitle\n\n`;
+
+            if (structure === 'notes') {
+                output += `\\begin{abstract}\n`;
+                output += `[Summary of the content]\n`;
+                output += `\\end{abstract}\n\n`;
+            }
+
+            // Convert markdown-style headers to LaTeX sections
+            content = content.replace(/^### (.+)$/gm, '\\subsubsection{$1}');
+            content = content.replace(/^## (.+)$/gm, '\\subsection{$1}');
+            content = content.replace(/^# (.+)$/gm, '\\section{$1}');
+            
+            // Convert bold and italic
+            content = content.replace(/\*\*(.+?)\*\*/g, '\\textbf{$1}');
+            content = content.replace(/\*(.+?)\*/g, '\\textit{$1}');
+
+            output += content;
+            
+            if (preserveImages) {
+                output += `\n\n% Image Reference\n`;
+                output += `% \\begin{figure}[h]\n`;
+                output += `%   \\centering\n`;
+                output += `%   \\includegraphics[width=0.8\\textwidth]{image.png}\n`;
+                output += `%   \\caption{Description}\n`;
+                output += `% \\end{figure}\n`;
+            }
+
+            output += `\n\\end{document}`;
+
+            return output;
+        }
+
+        function updateProgress(current, total, status) {
+            const percent = Math.round((current / total) * 100);
+            document.getElementById('progressStatus').textContent = status;
+            document.getElementById('progressPercent').textContent = percent + '%';
+            document.getElementById('progressFill').style.width = percent + '%';
+            document.getElementById('progressFile').textContent = `File ${current + 1} of ${total}`;
+            
+            // Estimate remaining time
+            if (current > 0) {
+                const avgTime = 2; // seconds per file estimate
+                const remaining = (total - current) * avgTime;
+                document.getElementById('progressTime').textContent = `Est. time: ${remaining}s remaining`;
+            }
+        }
+
+        function displayResults() {
+            outputSection.classList.add('active');
+            
+            // Update stats
+            document.getElementById('statFiles').textContent = stats.files;
+            document.getElementById('statChars').textContent = stats.chars.toLocaleString();
+            document.getElementById('statMath').textContent = stats.math;
+            document.getElementById('statTables').textContent = stats.tables;
+
+            // Combine all results
+            const fullContent = conversionResults.map(r => {
+                if (conversionResults.length > 1) {
+                    return `<!-- === ${r.name} === -->\n\n${r.content}`;
+                }
+                return r.content;
+            }).join('\n\n---\n\n');
+
+            // Display code output
+            document.getElementById('codeOutput').textContent = fullContent;
+            
+            // Display preview
+            const previewOutput = document.getElementById('previewOutput');
+            if (selectedFormat === 'markdown') {
+                previewOutput.innerHTML = renderMarkdownPreview(fullContent);
+            } else {
+                previewOutput.innerHTML = `<pre style="font-family: monospace; white-space: pre-wrap;">${escapeHtml(fullContent)}</pre>`;
+            }
+
+            // Re-render MathJax
+            if (typeof MathJax !== 'undefined') {
+                MathJax.typesetPromise([previewOutput]);
+            }
+        }
+
+        function renderMarkdownPreview(markdown) {
+            let html = markdown;
+            
+            // Headers
+            html = html.replace(/^### (.+)$/gm, '<h3>$1</h3>');
+            html = html.replace(/^## (.+)$/gm, '<h2>$1</h2>');
+            html = html.replace(/^# (.+)$/gm, '<h1>$1</h1>');
+            
+            // Bold and italic
+            html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+            html = html.replace(/\*(.+?)\*/g, '<em>$1</em>');
+            
+            // Code blocks
+            html = html.replace(/```(\w*)\n([\s\S]*?)```/g, '<pre><code>$2</code></pre>');
+            html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
+            
+            // Lists
+            html = html.replace(/^\* (.+)$/gm, '<li>$1</li>');
+            html = html.replace(/^(\d+)\. (.+)$/gm, '<li>$2</li>');
+            
+            // Paragraphs
+            html = html.replace(/\n\n/g, '</p><p>');
+            html = '<p>' + html + '</p>';
+            
+            // Clean up
+            html = html.replace(/<p><\/p>/g, '');
+            html = html.replace(/<p>(<h\d>)/g, '$1');
+            html = html.replace(/(<\/h\d>)<\/p>/g, '$1');
+
+            return html;
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            
+            document.querySelector(`.tab:nth-child(${tabName === 'code' ? 1 : 2})`).classList.add('active');
+            document.getElementById(tabName + 'Tab').classList.add('active');
+        }
+
+        function copyOutput() {
+            const output = document.getElementById('codeOutput').textContent;
+            navigator.clipboard.writeText(output).then(() => {
+                showToast('Copied to clipboard!');
+            }).catch(() => {
+                showToast('Failed to copy', true);
+            });
+        }
+
+        function downloadOutput() {
+            const output = document.getElementById('codeOutput').textContent;
+            const ext = selectedFormat === 'markdown' ? 'md' : 'tex';
+            const filename = `converted_output.${ext}`;
+            
+            const blob = new Blob([output], { type: 'text/plain;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            showToast(`Downloaded ${filename}`);
+        }
+
+        function showToast(message, isError = false) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = 'toast' + (isError ? ' error' : '');
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
