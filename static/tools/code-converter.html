@@ -31,11 +31,12 @@
     
     <style>
         /* ============================================
-           ORIGINAL UI STYLES - UNCHANGED
+           CSS VARIABLES - LIGHT & DARK THEMES
            ============================================ */
         :root {
             --primary: #3b82f6;
             --primary-dark: #2563eb;
+            --primary-light: #60a5fa;
             --success: #10b981;
             --warning: #f59e0b;
             --danger: #ef4444;
@@ -45,16 +46,18 @@
             --text-secondary: #64748b;
             --border: #e2e8f0;
             --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --code-bg: #1e293b;
+            --code-text: #f1f5f9;
         }
 
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --bg: #0f172a;
-                --card-bg: #1e293b;
-                --text: #f1f5f9;
-                --text-secondary: #94a3b8;
-                --border: #334155;
-            }
+        [data-theme="dark"] {
+            --bg: #0f172a;
+            --card-bg: #1e293b;
+            --text: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --border: #334155;
+            --code-bg: #0f172a;
+            --code-text: #f1f5f9;
         }
 
         * {
@@ -69,6 +72,7 @@
             color: var(--text);
             line-height: 1.6;
             min-height: 100vh;
+            transition: background 0.3s ease, color 0.3s ease;
         }
 
         .container {
@@ -120,6 +124,7 @@
             border-radius: 12px;
             border: 1px solid var(--border);
             text-align: center;
+            transition: background 0.3s ease, border-color 0.3s ease;
         }
 
         .feature-icon {
@@ -144,6 +149,48 @@
             box-shadow: var(--shadow);
             border: 1px solid var(--border);
             margin-bottom: 2rem;
+            transition: background 0.3s ease, border-color 0.3s ease;
+        }
+
+        /* ============================================
+           API PROVIDER SELECTOR
+           ============================================ */
+        .api-provider-selector {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .provider-btn {
+            flex: 1;
+            min-width: 200px;
+            padding: 1rem;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            background: var(--card-bg);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .provider-btn:hover {
+            border-color: var(--primary);
+        }
+
+        .provider-btn.active {
+            border-color: var(--primary);
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .provider-btn h4 {
+            margin-bottom: 0.25rem;
+            color: var(--text);
+        }
+
+        .provider-btn p {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
         }
 
         .api-key-section {
@@ -152,16 +199,27 @@
             border-radius: 12px;
             padding: 1rem;
             margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .api-key-section.deepseek {
+            background: rgba(16, 185, 129, 0.1);
+            border-color: rgba(16, 185, 129, 0.3);
         }
 
         .api-key-section h4 {
             margin-bottom: 0.5rem;
+            color: var(--text);
         }
 
         .api-key-section p {
             font-size: 0.85rem;
             color: var(--text-secondary);
             margin-bottom: 0.75rem;
+        }
+
+        .api-key-section a {
+            color: var(--primary);
         }
 
         .api-key-input {
@@ -177,6 +235,7 @@
             font-size: 0.9rem;
             background: var(--card-bg);
             color: var(--text);
+            transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease;
         }
 
         .api-key-input button {
@@ -188,6 +247,11 @@
             cursor: pointer;
             font-size: 0.9rem;
             white-space: nowrap;
+            transition: background 0.2s ease;
+        }
+
+        .api-key-input button:hover {
+            background: var(--primary-dark);
         }
 
         .api-status {
@@ -212,7 +276,7 @@
         }
 
         /* ============================================
-           USAGE MONITORING STYLES - NEW SECTION
+           USAGE MONITORING STYLES
            ============================================ */
         .usage-monitor {
             background: rgba(139, 92, 246, 0.1);
@@ -227,6 +291,7 @@
             display: flex;
             align-items: center;
             gap: 0.5rem;
+            color: var(--text);
         }
 
         .usage-grid {
@@ -241,6 +306,7 @@
             padding: 0.75rem;
             border-radius: 8px;
             text-align: center;
+            transition: background 0.3s ease;
         }
 
         .usage-stat-label {
@@ -272,6 +338,7 @@
             justify-content: space-between;
             font-size: 0.75rem;
             margin-bottom: 0.25rem;
+            color: var(--text-secondary);
         }
 
         .progress-bar-bg {
@@ -324,6 +391,8 @@
             padding: 0.5rem 0.75rem;
             margin-top: 0.75rem;
             font-size: 0.75rem;
+            color: var(--text-secondary);
+            transition: background 0.3s ease;
         }
 
         .last-request-info span {
@@ -340,6 +409,7 @@
             font-size: 0.7rem;
             cursor: pointer;
             margin-left: 0.5rem;
+            transition: background 0.2s ease;
         }
 
         .reset-btn:hover {
@@ -348,7 +418,7 @@
         }
 
         /* ============================================
-           REST OF ORIGINAL UI STYLES
+           UPLOAD ZONE STYLES
            ============================================ */
         .upload-zone {
             border: 2px dashed var(--border);
@@ -376,6 +446,7 @@
 
         .upload-zone h3 {
             margin-bottom: 0.5rem;
+            color: var(--text);
         }
 
         .upload-zone p {
@@ -389,6 +460,7 @@
             background: rgba(59, 130, 246, 0.1);
             border-radius: 8px;
             font-size: 0.85rem;
+            color: var(--text);
         }
 
         .paste-hint kbd {
@@ -434,6 +506,7 @@
 
         .format-btn h4 {
             margin-bottom: 0.25rem;
+            color: var(--text);
         }
 
         .format-btn p {
@@ -457,6 +530,7 @@
         .option-group label {
             font-weight: 600;
             font-size: 0.9rem;
+            color: var(--text);
         }
 
         .option-group select {
@@ -466,6 +540,7 @@
             background: var(--bg);
             color: var(--text);
             font-size: 1rem;
+            transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease;
         }
 
         .checkbox-group {
@@ -478,6 +553,10 @@
             width: 18px;
             height: 18px;
             accent-color: var(--primary);
+        }
+
+        .checkbox-group label {
+            font-weight: normal;
         }
 
         .progress-section {
@@ -493,6 +572,7 @@
             display: flex;
             justify-content: space-between;
             margin-bottom: 0.5rem;
+            color: var(--text);
         }
 
         .progress-bar {
@@ -530,6 +610,7 @@
             background: var(--bg);
             border-radius: 8px;
             margin-bottom: 0.5rem;
+            transition: background 0.3s ease;
         }
 
         .file-item-icon {
@@ -542,6 +623,7 @@
 
         .file-item-name {
             font-weight: 600;
+            color: var(--text);
         }
 
         .file-item-size {
@@ -656,6 +738,7 @@
             min-height: 300px;
             max-height: 600px;
             overflow-y: auto;
+            transition: background 0.3s ease, border-color 0.3s ease;
         }
 
         .code-output {
@@ -663,20 +746,22 @@
             font-size: 0.9rem;
             white-space: pre-wrap;
             word-break: break-word;
+            color: var(--text);
         }
 
         .preview-output {
             line-height: 1.8;
+            color: var(--text);
         }
 
-        .preview-output h1, .preview-output h2, .preview-output h3 { margin: 1rem 0 0.5rem; }
+        .preview-output h1, .preview-output h2, .preview-output h3 { margin: 1rem 0 0.5rem; color: var(--text); }
         .preview-output p { margin-bottom: 0.75rem; }
         .preview-output table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
         .preview-output th, .preview-output td { border: 1px solid var(--border); padding: 0.5rem; text-align: left; }
         .preview-output th { background: var(--border); }
         .preview-output code { background: var(--border); padding: 0.2rem 0.4rem; border-radius: 4px; }
-        .preview-output pre { background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 1rem; overflow-x: auto; }
-        .preview-output pre code { background: none; padding: 0; }
+        .preview-output pre { background: var(--code-bg); color: var(--code-text); border: 1px solid var(--border); border-radius: 8px; padding: 1rem; overflow-x: auto; }
+        .preview-output pre code { background: none; padding: 0; color: inherit; }
 
         .output-wrapper {
             position: relative;
@@ -693,6 +778,8 @@
             cursor: pointer;
             font-size: 0.85rem;
             z-index: 10;
+            color: var(--text);
+            transition: background 0.2s ease;
         }
 
         .copy-btn:hover { background: var(--border); }
@@ -705,6 +792,7 @@
             border-radius: 8px;
             margin-bottom: 1rem;
             flex-wrap: wrap;
+            transition: background 0.3s ease;
         }
 
         .stat { text-align: center; }
@@ -747,6 +835,7 @@
             transform: translateX(120%);
             transition: transform 0.3s ease;
             z-index: 1000;
+            color: var(--text);
         }
 
         .toast.show { transform: translateX(0); }
@@ -772,9 +861,121 @@
             align-items: center;
             gap: 0.5rem;
             font-size: 0.9rem;
+            color: var(--text);
         }
 
         .context-menu-item:hover { background: var(--bg); }
+
+        /* ============================================
+           THEME TOGGLE STYLES
+           ============================================ */
+        .theme-toggle {
+            position: fixed;
+            bottom: 1.5rem;
+            left: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--card-bg);
+            padding: 0.75rem 1rem;
+            border-radius: 50px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            cursor: pointer;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+
+        .theme-toggle-icon {
+            font-size: 1.25rem;
+            transition: transform 0.3s ease;
+        }
+
+        .theme-toggle-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .theme-toggle input {
+            display: none;
+        }
+
+        .theme-toggle-switch {
+            width: 44px;
+            height: 24px;
+            background: var(--border);
+            border-radius: 12px;
+            position: relative;
+            transition: background 0.3s ease;
+        }
+
+        .theme-toggle-switch::after {
+            content: '';
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            background: white;
+            border-radius: 50%;
+            top: 3px;
+            left: 3px;
+            transition: transform 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        [data-theme="dark"] .theme-toggle-switch {
+            background: var(--primary);
+        }
+
+        [data-theme="dark"] .theme-toggle-switch::after {
+            transform: translateX(20px);
+        }
+
+        /* ============================================
+           PASTE OVERLAY (for global paste feedback)
+           ============================================ */
+        .paste-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(59, 130, 246, 0.1);
+            border: 4px dashed var(--primary);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 999;
+            pointer-events: none;
+        }
+
+        .paste-overlay.active {
+            display: flex;
+        }
+
+        .paste-overlay-content {
+            background: var(--card-bg);
+            padding: 2rem 3rem;
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+
+        .paste-overlay-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .paste-overlay-text {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text);
+        }
 
         @media (max-width: 768px) {
             header h1 { font-size: 1.75rem; }
@@ -782,6 +983,12 @@
             .upload-zone { padding: 2rem 1rem; }
             .api-key-input { flex-direction: column; }
             .usage-grid { grid-template-columns: 1fr 1fr; }
+            .theme-toggle { 
+                bottom: 1rem; 
+                left: 1rem; 
+                padding: 0.5rem 0.75rem;
+            }
+            .theme-toggle-label { display: none; }
         }
     </style>
 </head>
@@ -820,14 +1027,27 @@
                 <p>2-5 seconds</p>
             </div>
             <div class="feature">
-                <div class="feature-icon">🌐</div>
-                <h3>Online</h3>
-                <p>No installation</p>
+                <div class="feature-icon">🔄</div>
+                <h3>Dual API</h3>
+                <p>Gemini & DeepSeek</p>
             </div>
         </div>
 
         <div class="card">
-            <!-- API Key Section -->
+            <!-- API Provider Selection -->
+            <h3 style="margin-bottom: 1rem;">🤖 Select AI Provider</h3>
+            <div class="api-provider-selector">
+                <div class="provider-btn active" data-provider="gemini" onclick="selectProvider('gemini')">
+                    <h4>✨ Google Gemini 3 Flash</h4>
+                    <p>1M input / 64K output tokens</p>
+                </div>
+                <div class="provider-btn" data-provider="deepseek" onclick="selectProvider('deepseek')">
+                    <h4>🔍 DeepSeek Vision</h4>
+                    <p>OpenAI-compatible API</p>
+                </div>
+            </div>
+
+            <!-- Gemini API Key Section -->
             <div class="api-key-section" id="geminiSection">
                 <h4>🔑 Google Gemini API Key (FREE)</h4>
                 <p>Get your free API key from <a href="https://aistudio.google.com/app/apikey" target="_blank">Google AI Studio</a> — takes 30 seconds!</p>
@@ -838,9 +1058,18 @@
                 <span class="api-status disconnected" id="geminiStatus">⚪ Not configured</span>
             </div>
 
-            <!-- ============================================
-                 USAGE MONITORING SECTION - NEW
-                 ============================================ -->
+            <!-- DeepSeek API Key Section -->
+            <div class="api-key-section deepseek" id="deepseekSection" style="display: none;">
+                <h4>🔑 DeepSeek API Key</h4>
+                <p>Get your API key from <a href="https://platform.deepseek.com/api_keys" target="_blank">DeepSeek Platform</a></p>
+                <div class="api-key-input">
+                    <input type="password" id="deepseekKeyInput" placeholder="Paste your DeepSeek API key here..." />
+                    <button onclick="saveDeepseekKey()">Save Key</button>
+                </div>
+                <span class="api-status disconnected" id="deepseekStatus">⚪ Not configured</span>
+            </div>
+
+            <!-- Usage Monitoring Section -->
             <div class="usage-monitor" id="usageMonitor">
                 <h4>
                     📊 API Usage Monitor
@@ -901,7 +1130,6 @@
                     <p>⚠️ <span id="warningMessage">Approaching free tier limit!</span></p>
                 </div>
             </div>
-            <!-- END USAGE MONITORING SECTION -->
 
             <h2 style="margin: 1.5rem 0 1rem;">📤 Upload Your Files</h2>
             
@@ -910,7 +1138,7 @@
                 <h3>Drop files here, click to upload, or paste screenshot</h3>
                 <p>Supports: PNG, JPG, JPEG, GIF, WebP, PDF, DOCX</p>
                 <div class="paste-hint">
-                    💡 <strong>Quick paste:</strong> Press <kbd>Ctrl</kbd>+<kbd>V</kbd> or <kbd>⌘</kbd>+<kbd>V</kbd> anywhere
+                    💡 <strong>Quick paste:</strong> Press <kbd>Ctrl</kbd>+<kbd>V</kbd> or <kbd>⌘</kbd>+<kbd>V</kbd> anywhere on the page
                 </div>
                 <input type="file" id="fileInput" class="file-input" multiple 
                        accept=".png,.jpg,.jpeg,.gif,.webp,.pdf,.docx,image/*">
@@ -1035,9 +1263,24 @@
         </div>
 
         <footer>
-            <p>🆓 100% Free | Powered by Google Gemini 2.5 Flash</p>
+            <p>🆓 100% Free | Powered by Gemini 3 Flash & DeepSeek Vision</p>
             <p style="margin-top: 0.5rem;"><a href="https://albert-mi.github.io/">← Back to Website</a></p>
         </footer>
+    </div>
+
+    <!-- Theme Toggle Button -->
+    <div class="theme-toggle" onclick="toggleTheme()">
+        <span class="theme-toggle-icon" id="themeIcon">🌙</span>
+        <span class="theme-toggle-label" id="themeLabel">Dark</span>
+        <div class="theme-toggle-switch"></div>
+    </div>
+
+    <!-- Paste Overlay for visual feedback -->
+    <div class="paste-overlay" id="pasteOverlay">
+        <div class="paste-overlay-content">
+            <div class="paste-overlay-icon">📋</div>
+            <div class="paste-overlay-text">Paste your image here!</div>
+        </div>
     </div>
 
     <div class="context-menu" id="contextMenu">
@@ -1052,37 +1295,41 @@
            ============================================ */
         let files = [];
         let selectedFormat = 'markdown';
+        let selectedProvider = 'gemini';
         let conversionResults = [];
         let geminiKey = localStorage.getItem('gemini_api_key') || '';
+        let deepseekKey = localStorage.getItem('deepseek_api_key') || '';
+        let currentTheme = localStorage.getItem('theme') || 'auto';
 
         /* ============================================
-           GEMINI API CONFIGURATION - FIXED
-           
-           KEY FIX: Changed model from "gemini-1.5-flash" to "gemini-2.5-flash"
-           
-           The error "models/gemini-1.5-flash is not found" occurred because:
-           1. The old model name was deprecated
-           2. Google updated to gemini-2.5-flash for v1beta API
+           API CONFIGURATIONS
            ============================================ */
         const GEMINI_CONFIG = {
-            // FIX: Use gemini-2.5-flash instead of gemini-1.5-flash
-            model: 'gemini-2.5-flash',
+            model: 'gemini-3-flash-preview',
             apiVersion: 'v1beta',
             baseUrl: 'https://generativelanguage.googleapis.com'
         };
 
+        const DEEPSEEK_CONFIG = {
+            model: 'deepseek-chat',
+            baseUrl: 'https://api.deepseek.com/v1'
+        };
+
         /* ============================================
-           USAGE MONITORING CONFIGURATION
-           
-           Google Free Tier Limits (Gemini 2.5 Flash):
-           - 1,500 requests per day (RPD)
-           - 15 requests per minute (RPM)
-           - 1,000,000 tokens per minute (TPM)
+           FREE TIER LIMITS
+           Gemini 3 Flash: 1M input / 64K output tokens
            ============================================ */
         const FREE_TIER_LIMITS = {
-            requestsPerDay: 1500,
-            requestsPerMinute: 15,
-            tokensPerMinute: 1000000
+            gemini: {
+                requestsPerDay: 1500,
+                requestsPerMinute: 15,
+                tokensPerMinute: 1000000
+            },
+            deepseek: {
+                requestsPerDay: 500,
+                requestsPerMinute: 60,
+                tokensPerMinute: 100000
+            }
         };
 
         let usageStats = {
@@ -1110,10 +1357,20 @@
            INITIALIZATION
            ============================================ */
         document.addEventListener('DOMContentLoaded', () => {
+            // Load API keys
             if (geminiKey) {
                 document.getElementById('geminiKeyInput').value = geminiKey;
-                updateGeminiStatus(true);
+                updateApiStatus('gemini', true);
             }
+            if (deepseekKey) {
+                document.getElementById('deepseekKeyInput').value = deepseekKey;
+                updateApiStatus('deepseek', true);
+            }
+            
+            // Initialize theme
+            initTheme();
+            
+            // Load usage stats
             loadUsageStats();
             updateConvertButton();
             updateUsageDisplay();
@@ -1122,17 +1379,126 @@
         });
 
         /* ============================================
+           THEME MANAGEMENT
+           ============================================ */
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            
+            if (savedTheme === 'dark') {
+                setTheme('dark');
+            } else if (savedTheme === 'light') {
+                setTheme('light');
+            } else {
+                // Auto-detect from system preference
+                if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                    setTheme('dark');
+                } else {
+                    setTheme('light');
+                }
+            }
+
+            // Listen for system theme changes
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+                if (localStorage.getItem('theme') === 'auto' || !localStorage.getItem('theme')) {
+                    setTheme(e.matches ? 'dark' : 'light');
+                }
+            });
+        }
+
+        function setTheme(theme) {
+            currentTheme = theme;
+            document.documentElement.setAttribute('data-theme', theme);
+            
+            const icon = document.getElementById('themeIcon');
+            const label = document.getElementById('themeLabel');
+            
+            if (theme === 'dark') {
+                icon.textContent = '☀️';
+                label.textContent = 'Light';
+            } else {
+                icon.textContent = '🌙';
+                label.textContent = 'Dark';
+            }
+        }
+
+        function toggleTheme() {
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            setTheme(newTheme);
+            localStorage.setItem('theme', newTheme);
+            showToast(`${newTheme === 'dark' ? '🌙' : '☀️'} ${newTheme.charAt(0).toUpperCase() + newTheme.slice(1)} mode enabled`);
+        }
+
+        /* ============================================
+           API PROVIDER MANAGEMENT
+           ============================================ */
+        function selectProvider(provider) {
+            selectedProvider = provider;
+            document.querySelectorAll('.provider-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.provider === provider);
+            });
+            
+            document.getElementById('geminiSection').style.display = provider === 'gemini' ? 'block' : 'none';
+            document.getElementById('deepseekSection').style.display = provider === 'deepseek' ? 'block' : 'none';
+            
+            updateConvertButton();
+            updateUsageDisplay();
+        }
+
+        function saveGeminiKey() {
+            geminiKey = document.getElementById('geminiKeyInput').value.trim();
+            if (geminiKey) {
+                localStorage.setItem('gemini_api_key', geminiKey);
+                updateApiStatus('gemini', true);
+                showToast('✅ Gemini API key saved!');
+            } else {
+                localStorage.removeItem('gemini_api_key');
+                updateApiStatus('gemini', false);
+            }
+            updateConvertButton();
+        }
+
+        function saveDeepseekKey() {
+            deepseekKey = document.getElementById('deepseekKeyInput').value.trim();
+            if (deepseekKey) {
+                localStorage.setItem('deepseek_api_key', deepseekKey);
+                updateApiStatus('deepseek', true);
+                showToast('✅ DeepSeek API key saved!');
+            } else {
+                localStorage.removeItem('deepseek_api_key');
+                updateApiStatus('deepseek', false);
+            }
+            updateConvertButton();
+        }
+
+        function updateApiStatus(provider, connected) {
+            const statusEl = document.getElementById(provider + 'Status');
+            statusEl.className = 'api-status ' + (connected ? 'connected' : 'disconnected');
+            statusEl.innerHTML = connected ? '🟢 Ready' : '⚪ Not configured';
+        }
+
+        function getActiveApiKey() {
+            return selectedProvider === 'gemini' ? geminiKey : deepseekKey;
+        }
+
+        function updateConvertButton() {
+            const hasKey = getActiveApiKey();
+            convertBtn.disabled = files.length === 0 || !hasKey;
+            document.getElementById('btnText').textContent = 
+                !hasKey && files.length > 0 ? '🔑 Enter API Key First' : '🚀 Convert Files';
+        }
+
+        /* ============================================
            USAGE MONITORING FUNCTIONS
            ============================================ */
         function loadUsageStats() {
-            const saved = localStorage.getItem('gemini_usage_stats');
+            const saved = localStorage.getItem('api_usage_stats');
             if (saved) {
                 try { usageStats = JSON.parse(saved); } catch (e) {}
             }
         }
 
         function saveUsageStats() {
-            localStorage.setItem('gemini_usage_stats', JSON.stringify(usageStats));
+            localStorage.setItem('api_usage_stats', JSON.stringify(usageStats));
         }
 
         function checkDailyReset() {
@@ -1173,26 +1539,27 @@
             checkDailyReset();
             const rpm = calculateRPM();
             const tpm = calculateTPM();
+            const limits = FREE_TIER_LIMITS[selectedProvider];
 
             document.getElementById('requestsToday').textContent = usageStats.requestsToday.toLocaleString();
             document.getElementById('totalTokens').textContent = usageStats.totalTokensToday.toLocaleString();
             document.getElementById('requestsPerMin').textContent = rpm;
 
-            const dailyPercent = (usageStats.requestsToday / FREE_TIER_LIMITS.requestsPerDay) * 100;
+            const dailyPercent = (usageStats.requestsToday / limits.requestsPerDay) * 100;
             document.getElementById('dailyRequestsBar').style.width = Math.min(dailyPercent, 100) + '%';
-            document.getElementById('dailyRequestsText').textContent = `${usageStats.requestsToday.toLocaleString()} / ${FREE_TIER_LIMITS.requestsPerDay.toLocaleString()}`;
+            document.getElementById('dailyRequestsText').textContent = `${usageStats.requestsToday.toLocaleString()} / ${limits.requestsPerDay.toLocaleString()}`;
             updateProgressBarColor('dailyRequestsBar', dailyPercent);
 
-            const tpmPercent = (tpm / FREE_TIER_LIMITS.tokensPerMinute) * 100;
+            const tpmPercent = (tpm / limits.tokensPerMinute) * 100;
             document.getElementById('tokensPerMinBar').style.width = Math.min(tpmPercent, 100) + '%';
-            document.getElementById('tokensPerMinText').textContent = `${(tpm/1000).toFixed(0)}K / 1M`;
+            document.getElementById('tokensPerMinText').textContent = `${(tpm/1000).toFixed(0)}K / ${(limits.tokensPerMinute/1000000).toFixed(0)}M`;
             updateProgressBarColor('tokensPerMinBar', tpmPercent);
 
             const tierStatus = document.getElementById('tierStatus');
-            if (dailyPercent >= 100 || rpm >= FREE_TIER_LIMITS.requestsPerMinute) {
+            if (dailyPercent >= 100 || rpm >= limits.requestsPerMinute) {
                 tierStatus.textContent = '❌ Limit';
                 tierStatus.className = 'usage-stat-value danger';
-            } else if (dailyPercent >= 80 || rpm >= 12) {
+            } else if (dailyPercent >= 80 || rpm >= limits.requestsPerMinute * 0.8) {
                 tierStatus.textContent = '⚠️ High';
                 tierStatus.className = 'usage-stat-value warning';
             } else {
@@ -1219,11 +1586,12 @@
         function updateWarningDisplay(dailyPercent, rpm, tpmPercent) {
             const warning = document.getElementById('usageWarning');
             const message = document.getElementById('warningMessage');
+            const limits = FREE_TIER_LIMITS[selectedProvider];
             
             if (dailyPercent >= 100) {
                 message.textContent = 'Daily limit reached! Wait until tomorrow.';
                 warning.classList.add('show');
-            } else if (rpm >= FREE_TIER_LIMITS.requestsPerMinute) {
+            } else if (rpm >= limits.requestsPerMinute) {
                 message.textContent = 'Rate limit! Wait 1 minute.';
                 warning.classList.add('show');
             } else if (dailyPercent >= 90) {
@@ -1236,11 +1604,13 @@
 
         function canMakeRequest() {
             const rpm = calculateRPM();
-            if (usageStats.requestsToday >= FREE_TIER_LIMITS.requestsPerDay) {
+            const limits = FREE_TIER_LIMITS[selectedProvider];
+            
+            if (usageStats.requestsToday >= limits.requestsPerDay) {
                 showToast('Daily limit reached!', true);
                 return false;
             }
-            if (rpm >= FREE_TIER_LIMITS.requestsPerMinute) {
+            if (rpm >= limits.requestsPerMinute) {
                 showToast('Rate limit! Wait 1 minute.', true);
                 return false;
             }
@@ -1264,34 +1634,6 @@
         }
 
         /* ============================================
-           API KEY MANAGEMENT
-           ============================================ */
-        function saveGeminiKey() {
-            geminiKey = document.getElementById('geminiKeyInput').value.trim();
-            if (geminiKey) {
-                localStorage.setItem('gemini_api_key', geminiKey);
-                updateGeminiStatus(true);
-                showToast('✅ API key saved!');
-            } else {
-                localStorage.removeItem('gemini_api_key');
-                updateGeminiStatus(false);
-            }
-            updateConvertButton();
-        }
-
-        function updateGeminiStatus(connected) {
-            const status = document.getElementById('geminiStatus');
-            status.className = 'api-status ' + (connected ? 'connected' : 'disconnected');
-            status.innerHTML = connected ? '🟢 Ready' : '⚪ Not configured';
-        }
-
-        function updateConvertButton() {
-            convertBtn.disabled = files.length === 0 || !geminiKey;
-            document.getElementById('btnText').textContent = 
-                !geminiKey && files.length > 0 ? '🔑 Enter API Key First' : '🚀 Convert Files';
-        }
-
-        /* ============================================
            FILE HANDLING
            ============================================ */
         uploadZone.addEventListener('click', () => fileInput.click());
@@ -1304,21 +1646,22 @@
         });
         fileInput.addEventListener('change', e => addFiles(Array.from(e.target.files)));
 
+        // Global paste handler - works anywhere on the page
         document.addEventListener('paste', handlePaste);
+        
+        // Context menu for right-click paste
         document.addEventListener('contextmenu', e => {
-            const rect = uploadZone.getBoundingClientRect();
-            if (e.clientX >= rect.left && e.clientX <= rect.right && e.clientY >= rect.top && e.clientY <= rect.bottom) {
-                e.preventDefault();
-                contextMenu.style.left = e.clientX + 'px';
-                contextMenu.style.top = e.clientY + 'px';
-                contextMenu.classList.add('show');
-            }
+            e.preventDefault();
+            contextMenu.style.left = e.clientX + 'px';
+            contextMenu.style.top = e.clientY + 'px';
+            contextMenu.classList.add('show');
         });
         document.addEventListener('click', () => contextMenu.classList.remove('show'));
 
         async function handlePaste(e) {
             const items = e.clipboardData?.items;
             if (!items) return;
+            
             for (const item of items) {
                 if (item.type.startsWith('image/')) {
                     e.preventDefault();
@@ -1327,6 +1670,11 @@
                         const file = new File([blob], `screenshot-${Date.now()}.png`, { type: blob.type });
                         addFiles([file]);
                         showToast('📷 Screenshot pasted!');
+                        
+                        // Flash the paste overlay briefly
+                        const overlay = document.getElementById('pasteOverlay');
+                        overlay.classList.add('active');
+                        setTimeout(() => overlay.classList.remove('active'), 300);
                     }
                     return;
                 }
@@ -1347,6 +1695,7 @@
                         }
                     }
                 }
+                showToast('No image found in clipboard', true);
             } catch (err) {
                 showToast('Try Ctrl+V instead', true);
             }
@@ -1412,10 +1761,10 @@
         }
 
         /* ============================================
-           CONVERSION - FIXED GEMINI API
+           CONVERSION LOGIC
            ============================================ */
         async function startConversion() {
-            if (!files.length || !geminiKey) return;
+            if (!files.length || !getActiveApiKey()) return;
             if (!canMakeRequest()) return;
 
             convertBtn.disabled = true;
@@ -1436,9 +1785,14 @@
 
                 try {
                     let result = '';
-                    if (file.type === 'image') result = await processWithGemini(file.file);
-                    else if (file.type === 'pdf') result = await processPdfWithGemini(file.file);
-                    else if (file.type === 'docx') result = await processDocxWithGemini(file.file);
+                    if (file.type === 'image') {
+                        result = await processImage(file.file);
+                    } else if (file.type === 'pdf') {
+                        result = await processPdf(file.file);
+                    } else if (file.type === 'docx') {
+                        result = await processDocx(file.file);
+                    }
+                    
                     conversionResults.push({ name: file.name, content: result });
                     file.status = 'complete';
                 } catch (error) {
@@ -1457,51 +1811,15 @@
             showToast(`✅ Done in ${elapsed}s!`);
         }
 
-        /* ============================================
-           GEMINI API CALL - FIXED
-           
-           FIX: Model changed to gemini-2.5-flash
-           ============================================ */
-        async function processWithGemini(file) {
-            const base64 = await fileToBase64(file);
-            const prompt = buildPrompt();
-
-            // FIX: Construct URL with correct model (gemini-2.5-flash)
-            const url = `${GEMINI_CONFIG.baseUrl}/${GEMINI_CONFIG.apiVersion}/models/${GEMINI_CONFIG.model}:generateContent?key=${geminiKey}`;
-
-            const response = await fetch(url, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    contents: [{
-                        parts: [
-                            { inline_data: { mime_type: file.type, data: base64 } },
-                            { text: prompt }
-                        ]
-                    }],
-                    generationConfig: { maxOutputTokens: 8192, temperature: 0.1, topP: 0.95 }
-                })
-            });
-
-            if (!response.ok) {
-                const err = await response.json();
-                throw new Error(err.error?.message || 'Gemini API error');
-            }
-
-            const data = await response.json();
-            
-            // Track usage from response metadata
-            if (data.usageMetadata) {
-                recordApiRequest(data.usageMetadata.promptTokenCount || 0, data.usageMetadata.candidatesTokenCount || 0);
+        async function processImage(file) {
+            if (selectedProvider === 'gemini') {
+                return await processWithGemini(file);
             } else {
-                recordApiRequest(500, 1000); // Estimate if not available
+                return await processWithDeepseek(file);
             }
-
-            const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
-            return text.replace(/^```[a-z]*\n?/i, '').replace(/\n?```$/i, '').trim();
         }
 
-        async function processPdfWithGemini(file) {
+        async function processPdf(file) {
             const arrayBuffer = await file.arrayBuffer();
             const pdf = await pdfjsLib.getDocument(arrayBuffer).promise;
             let results = [];
@@ -1519,24 +1837,90 @@
                 canvas.height = viewport.height;
                 await page.render({ canvasContext: canvas.getContext('2d'), viewport }).promise;
                 const blob = await new Promise(r => canvas.toBlob(r, 'image/png'));
-                const result = await processWithGemini(new File([blob], 'page.png', { type: 'image/png' }));
+                const result = await processImage(new File([blob], 'page.png', { type: 'image/png' }));
                 results.push(`<!-- Page ${i} -->\n${result}`);
             }
             return results.join('\n\n---\n\n');
         }
 
-        async function processDocxWithGemini(file) {
+        async function processDocx(file) {
             const arrayBuffer = await file.arrayBuffer();
             const result = await mammoth.extractRawText({ arrayBuffer });
             
+            if (selectedProvider === 'gemini') {
+                return await processTextWithGemini(result.value);
+            } else {
+                return await processTextWithDeepseek(result.value);
+            }
+        }
+
+        /* ============================================
+           GEMINI API - Updated for Gemini 3 Flash
+           ============================================ */
+        async function processWithGemini(file) {
+            const base64 = await fileToBase64(file);
+            const prompt = buildPrompt();
+
+            const url = `${GEMINI_CONFIG.baseUrl}/${GEMINI_CONFIG.apiVersion}/models/${GEMINI_CONFIG.model}:generateContent?key=${geminiKey}`;
+
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    contents: [{
+                        parts: [
+                            { inline_data: { mime_type: file.type, data: base64 } },
+                            { text: prompt }
+                        ]
+                    }],
+                    generationConfig: { 
+                        maxOutputTokens: 64000, 
+                        temperature: 0.1, 
+                        topP: 0.95 
+                    }
+                })
+            });
+
+            if (!response.ok) {
+                const err = await response.json();
+                throw new Error(err.error?.message || 'Gemini API error');
+            }
+
+            const data = await response.json();
+            
+            // Handle Gemini 3 response structure (may include thinking blocks)
+            let resultText = '';
+            if (data.candidates?.[0]?.content?.parts) {
+                for (const part of data.candidates[0].content.parts) {
+                    // Skip thinking blocks if present
+                    if (part.text && !part.thought) {
+                        resultText += part.text;
+                    }
+                }
+            }
+            
+            // Track usage from response metadata
+            if (data.usageMetadata) {
+                recordApiRequest(
+                    data.usageMetadata.promptTokenCount || 0, 
+                    data.usageMetadata.candidatesTokenCount || 0
+                );
+            } else {
+                recordApiRequest(500, 1000);
+            }
+
+            return cleanCodeOutput(resultText);
+        }
+
+        async function processTextWithGemini(text) {
             const url = `${GEMINI_CONFIG.baseUrl}/${GEMINI_CONFIG.apiVersion}/models/${GEMINI_CONFIG.model}:generateContent?key=${geminiKey}`;
             
             const response = await fetch(url, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    contents: [{ parts: [{ text: buildTextPrompt(result.value) }] }],
-                    generationConfig: { maxOutputTokens: 8192, temperature: 0.1 }
+                    contents: [{ parts: [{ text: buildTextPrompt(text) }] }],
+                    generationConfig: { maxOutputTokens: 64000, temperature: 0.1 }
                 })
             });
 
@@ -1547,10 +1931,190 @@
                 recordApiRequest(data.usageMetadata.promptTokenCount || 0, data.usageMetadata.candidatesTokenCount || 0);
             }
             
-            const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
-            return text.replace(/^```[a-z]*\n?/i, '').replace(/\n?```$/i, '').trim();
+            let resultText = '';
+            if (data.candidates?.[0]?.content?.parts) {
+                for (const part of data.candidates[0].content.parts) {
+                    if (part.text && !part.thought) {
+                        resultText += part.text;
+                    }
+                }
+            }
+            
+            return cleanCodeOutput(resultText);
         }
 
+        /* ============================================
+           DEEPSEEK API - OpenAI Compatible
+           ============================================ */
+        async function processWithDeepseek(file) {
+            const base64 = await fileToBase64(file);
+            const prompt = buildPrompt();
+
+            const response = await fetch(`${DEEPSEEK_CONFIG.baseUrl}/chat/completions`, {
+                method: 'POST',
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${deepseekKey}`
+                },
+                body: JSON.stringify({
+                    model: DEEPSEEK_CONFIG.model,
+                    messages: [{
+                        role: 'user',
+                        content: [
+                            {
+                                type: 'image_url',
+                                image_url: {
+                                    url: `data:${file.type};base64,${base64}`
+                                }
+                            },
+                            {
+                                type: 'text',
+                                text: prompt
+                            }
+                        ]
+                    }],
+                    max_tokens: 8192,
+                    temperature: 0.1
+                })
+            });
+
+            if (!response.ok) {
+                const err = await response.json();
+                throw new Error(err.error?.message || 'DeepSeek API error');
+            }
+
+            const data = await response.json();
+            
+            // Track usage
+            if (data.usage) {
+                recordApiRequest(data.usage.prompt_tokens || 0, data.usage.completion_tokens || 0);
+            }
+
+            const text = data.choices?.[0]?.message?.content || '';
+            return cleanCodeOutput(text);
+        }
+
+        async function processTextWithDeepseek(text) {
+            const response = await fetch(`${DEEPSEEK_CONFIG.baseUrl}/chat/completions`, {
+                method: 'POST',
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${deepseekKey}`
+                },
+                body: JSON.stringify({
+                    model: DEEPSEEK_CONFIG.model,
+                    messages: [{
+                        role: 'user',
+                        content: buildTextPrompt(text)
+                    }],
+                    max_tokens: 8192,
+                    temperature: 0.1
+                })
+            });
+
+            if (!response.ok) throw new Error('DeepSeek API error');
+            const data = await response.json();
+            
+            if (data.usage) {
+                recordApiRequest(data.usage.prompt_tokens || 0, data.usage.completion_tokens || 0);
+            }
+            
+            const resultText = data.choices?.[0]?.message?.content || '';
+            return cleanCodeOutput(resultText);
+        }
+
+        /* ============================================
+           PROMPT BUILDING - Format-Specific Instructions
+           ============================================ */
+        function buildPrompt() {
+            const detectMath = document.getElementById('detectMath').checked;
+            const detectTables = document.getElementById('detectTables').checked;
+            const addHeaders = document.getElementById('addHeaders').checked;
+
+            if (selectedFormat === 'markdown') {
+                return buildMarkdownPrompt(detectMath, detectTables, addHeaders);
+            } else {
+                return buildLatexPrompt(detectMath, detectTables, addHeaders);
+            }
+        }
+
+        function buildMarkdownPrompt(detectMath, detectTables, addHeaders) {
+            return `Convert this image to clean Markdown format.
+
+REQUIREMENTS:
+1. Preserve ALL text content accurately
+2. ${addHeaders ? 'Use # for main titles, ## for sections, ### for subsections' : 'Do not add headers'}
+3. ${detectMath ? `Math formatting:
+   - Use $...$ for inline math (e.g., $E=mc^2$, $\\alpha$, $\\frac{a}{b}$)
+   - Use $$...$$ for display/block math equations
+   - Convert all mathematical expressions to proper LaTeX notation` : 'Keep math expressions as plain text'}
+4. ${detectTables ? 'Format tables using Markdown table syntax with | column | separators |' : 'Convert tables to plain text lists'}
+5. Use **bold** for strong emphasis, *italic* for emphasis
+6. Use - for unordered lists, 1. 2. 3. for ordered lists
+7. Use > for blockquotes
+8. Use \`code\` for inline code
+
+OUTPUT ONLY THE MARKDOWN CODE. No explanations, no code blocks wrapping.`;
+        }
+
+        function buildLatexPrompt(detectMath, detectTables, addHeaders) {
+            return `Convert this image to clean LaTeX format.
+
+REQUIREMENTS:
+1. Preserve ALL text content accurately
+2. ${addHeaders ? `Use proper LaTeX sectioning commands:
+   - \\section{Title} for main sections
+   - \\subsection{Title} for subsections  
+   - \\subsubsection{Title} for sub-subsections` : 'Do not add section headers'}
+3. ${detectMath ? `Math formatting:
+   - Use $...$ for inline math (e.g., $E=mc^2$, $\\alpha$, $\\frac{a}{b}$)
+   - Use \\begin{align} ... \\end{align} for block/display equations
+   - Use \\begin{equation} ... \\end{equation} for single numbered equations
+   - Convert all mathematical expressions to proper LaTeX notation
+   - Use \\text{} for text within math mode` : 'Keep math expressions as plain text'}
+4. ${detectTables ? `Format tables using LaTeX tabular environment:
+   \\begin{tabular}{|c|c|c|}
+   \\hline
+   Header 1 & Header 2 & Header 3 \\\\
+   \\hline
+   Data & Data & Data \\\\
+   \\hline
+   \\end{tabular}` : 'Convert tables to plain text'}
+5. Use \\textbf{text} for bold, \\textit{text} for italic, \\underline{text} for underline
+6. Use \\begin{itemize} for unordered lists, \\begin{enumerate} for ordered lists
+7. Use proper LaTeX escaping for special characters: \\%, \\&, \\$, \\#, \\_
+
+OUTPUT ONLY THE LATEX CODE (document body content). No explanations, no preamble, no \\begin{document}.`;
+        }
+
+        function buildTextPrompt(text) {
+            if (selectedFormat === 'markdown') {
+                return `Format the following text as clean Markdown:
+
+${text}
+
+REQUIREMENTS:
+- Add appropriate headers using # ## ###
+- Convert any math expressions to $...$ (inline) or $$...$$ (block)
+- Format lists, emphasis, and structure properly
+- OUTPUT ONLY THE MARKDOWN CODE`;
+            } else {
+                return `Format the following text as clean LaTeX:
+
+${text}
+
+REQUIREMENTS:
+- Add appropriate section headers using \\section{}, \\subsection{}, \\subsubsection{}
+- Convert any math expressions to $...$ (inline) or \\begin{align}...\\end{align} (block)
+- Use \\textbf{} for bold, \\textit{} for italic
+- Use \\begin{itemize}/\\begin{enumerate} for lists
+- OUTPUT ONLY THE LATEX BODY CODE (no preamble)`;
+            }
+        }
+
+        /* ============================================
+           UTILITY FUNCTIONS
+           ============================================ */
         function fileToBase64(file) {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
@@ -1560,27 +2124,12 @@
             });
         }
 
-        function buildPrompt() {
-            const format = selectedFormat;
-            const detectMath = document.getElementById('detectMath').checked;
-            const detectTables = document.getElementById('detectTables').checked;
-            const addHeaders = document.getElementById('addHeaders').checked;
-
-            return `Convert this image to ${format === 'markdown' ? 'Markdown' : 'LaTeX'}.
-
-REQUIREMENTS:
-1. Preserve ALL text accurately
-2. ${addHeaders ? 'Use # ## ### for headers' : 'No headers'}
-3. ${detectMath ? 'Convert math: inline $E=mc^2$, block $$\\int_0^\\infty$$, Greek $\\alpha\\beta$, fractions $\\frac{a}{b}$' : 'Keep math as text'}
-4. ${detectTables ? 'Format tables with | col | col | syntax' : 'No tables'}
-5. Use **bold** *italic* for emphasis
-6. Lists: - for unordered, 1. for ordered
-
-OUTPUT ONLY THE ${format.toUpperCase()} CODE. No explanations.`;
-        }
-
-        function buildTextPrompt(text) {
-            return `Format as ${selectedFormat === 'markdown' ? 'Markdown' : 'LaTeX'}:\n\n${text}\n\nAdd headers, convert math to $...$ and $$...$$.\nOUTPUT ONLY CODE.`;
+        function cleanCodeOutput(text) {
+            // Remove markdown code block wrappers if present
+            return text
+                .replace(/^```[a-z]*\n?/gi, '')
+                .replace(/\n?```$/gi, '')
+                .trim();
         }
 
         function updateProgress(current, total, status) {
@@ -1593,7 +2142,9 @@ OUTPUT ONLY THE ${format.toUpperCase()} CODE. No explanations.`;
 
         function displayResults(elapsed) {
             outputSection.classList.add('active');
-            const fullContent = conversionResults.map(r => conversionResults.length > 1 ? `<!-- ${r.name} -->\n\n${r.content}` : r.content).join('\n\n---\n\n');
+            const fullContent = conversionResults.map(r => 
+                conversionResults.length > 1 ? `<!-- ${r.name} -->\n\n${r.content}` : r.content
+            ).join('\n\n---\n\n');
 
             document.getElementById('statFiles').textContent = conversionResults.length;
             document.getElementById('statChars').textContent = fullContent.length.toLocaleString();
@@ -1602,9 +2153,13 @@ OUTPUT ONLY THE ${format.toUpperCase()} CODE. No explanations.`;
 
             const preview = document.getElementById('previewOutput');
             if (selectedFormat === 'markdown') {
-                try { preview.innerHTML = marked.parse(fullContent); }
-                catch { preview.innerHTML = `<pre>${escapeHtml(fullContent)}</pre>`; }
+                try { 
+                    preview.innerHTML = marked.parse(fullContent); 
+                } catch { 
+                    preview.innerHTML = `<pre>${escapeHtml(fullContent)}</pre>`; 
+                }
             } else {
+                // For LaTeX, show as preformatted text
                 preview.innerHTML = `<pre>${escapeHtml(fullContent)}</pre>`;
             }
 
