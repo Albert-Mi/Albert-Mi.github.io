@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Images on WebHome of Xuan</title><link>https://albert-mi.github.io/post/images/</link><description>Recent content in Images on WebHome of Xuan</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Mon, 03 Nov 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://albert-mi.github.io/post/images/index.xml" rel="self" type="application/rss+xml"/><item><title>Wallpaper</title><link>https://albert-mi.github.io/p/wallpaper/</link><pubDate>Mon, 03 Nov 2025 00:00:00 +0000</pubDate><guid>https://albert-mi.github.io/p/wallpaper/</guid><description>&lt;p&gt;这是手机、电脑的壁纸相册页。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://haowallpaper.com/" target="_blank"&gt;哲风壁纸 ↗&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;style&gt;
+.gallery-grid{
+display:grid;
+grid-template-columns:repeat(4,minmax(0,1fr));
+gap:12px;
+}
+@media (max-width:1024px){ .gallery-grid{ grid-template-columns:repeat(3,minmax(0,1fr)); } }
+@media (max-width:768px){ .gallery-grid{ grid-template-columns:repeat(2,minmax(0,1fr)); } }
+@media (max-width:480px){ .gallery-grid{ grid-template-columns:repeat(1,minmax(0,1fr)); } }
+.gallery-grid .gallery-item{
+position:relative;
+aspect-ratio:1/1;
+border-radius:10px;
+overflow:hidden;
+display:flex;
+align-items:center;
+justify-content:center;
+background:rgba(0,0,0,.2);
+text-decoration:none;
+}
+.gallery-grid .gallery-item &gt; img{
+width:100% !important;
+height:100% !important;
+max-width:none !important;
+max-height:none !important;
+object-fit:contain !important;
+object-position:center center !important;
+display:block;
+}
+&lt;/style&gt;
+&lt;div class="gallery-grid"&gt;&lt;a class="gallery-item" href="https://albert-mi.github.io/p/wallpaper/%E3%80%90%E5%93%B2%E9%A3%8E%E5%A3%81%E7%BA%B8%E3%80%91%E4%B9%A6%E6%9E%B6-%E4%B9%A6%E6%A1%8C%E6%96%87%E5%85%B7.png" target="_blank" title="【哲风壁纸】书架-书桌文具.png"&gt;
+&lt;img src="https://albert-mi.github.io/p/wallpaper/%E3%80%90%E5%93%B2%E9%A3%8E%E5%A3%81%E7%BA%B8%E3%80%91%E4%B9%A6%E6%9E%B6-%E4%B9%A6%E6%A1%8C%E6%96%87%E5%85%B7.png" alt="【哲风壁纸】书架-书桌文具.png" loading="lazy"&gt;
+&lt;/a&gt;&lt;a class="gallery-item" href="https://albert-mi.github.io/p/wallpaper/%E3%80%90%E5%93%B2%E9%A3%8E%E5%A3%81%E7%BA%B8%E3%80%91%E5%B0%8F%E9%95%87-%E5%B1%B1%E8%84%89-%E5%B1%B1%E8%B0%B7.png" target="_blank" title="【哲风壁纸】小镇-山脉-山谷.png"&gt;
+&lt;img src="https://albert-mi.github.io/p/wallpaper/%E3%80%90%E5%93%B2%E9%A3%8E%E5%A3%81%E7%BA%B8%E3%80%91%E5%B0%8F%E9%95%87-%E5%B1%B1%E8%84%89-%E5%B1%B1%E8%B0%B7.png" alt="【哲风壁纸】小镇-山脉-山谷.png" loading="lazy"&gt;
+&lt;/a&gt;&lt;a class="gallery-item" href="https://albert-mi.github.io/p/wallpaper/%E3%80%90%E5%93%B2%E9%A3%8E%E5%A3%81%E7%BA%B8%E3%80%91%E8%87%AA%E7%84%B6-%E9%A3%8E%E6%99%AF.png" target="_blank" title="【哲风壁纸】自然-风景.png"&gt;
+&lt;img src="https://albert-mi.github.io/p/wallpaper/%E3%80%90%E5%93%B2%E9%A3%8E%E5%A3%81%E7%BA%B8%E3%80%91%E8%87%AA%E7%84%B6-%E9%A3%8E%E6%99%AF.png" alt="【哲风壁纸】自然-风景.png" loading="lazy"&gt;
+&lt;/a&gt;&lt;/div&gt;</description></item></channel></rss>

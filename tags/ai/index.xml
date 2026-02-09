@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>AI on WebHome of Xuan</title><link>https://albert-mi.github.io/tags/ai/</link><description>Recent content in AI on WebHome of Xuan</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Tue, 13 Jan 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://albert-mi.github.io/tags/ai/index.xml" rel="self" type="application/rss+xml"/><item><title>Code Converter - FREE Image to LaTeX/Markdown</title><link>https://albert-mi.github.io/p/code-converter/</link><pubDate>Tue, 13 Jan 2026 00:00:00 +0000</pubDate><guid>https://albert-mi.github.io/p/code-converter/</guid><description>&lt;img src="https://albert-mi.github.io/p/code-converter/cover.png" alt="Featured image of post Code Converter - FREE Image to LaTeX/Markdown" /&gt;&lt;h2 id="-launch-the-tool"&gt;🚀 Launch the Tool
+&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;&lt;a class="link" href="https://albert-mi.github.io/tools/code-converter.html" target="_blank" rel="noopener"
+&gt;➡️ Open Code Converter&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;100% FREE&lt;/strong&gt; converter using &lt;strong&gt;Google Gemini&lt;/strong&gt; (free tier: 60 requests/minute) — transforms screenshots into properly formatted LaTeX/Markdown with &lt;code&gt;#&lt;/code&gt; headers, &lt;code&gt;$...$&lt;/code&gt; math, and tables!&lt;/p&gt;
+&lt;h2 id="-why-its-free"&gt;🆓 Why It&amp;rsquo;s Free
+&lt;/h2&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Service&lt;/th&gt;
+&lt;th&gt;Free Tier&lt;/th&gt;
+&lt;th&gt;Speed&lt;/th&gt;
+&lt;th&gt;Quality&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Google Gemini&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;✅ 60 req/min&lt;/td&gt;
+&lt;td&gt;2-5s&lt;/td&gt;
+&lt;td&gt;⭐⭐⭐⭐⭐&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Claude API&lt;/td&gt;
+&lt;td&gt;❌ Paid&lt;/td&gt;
+&lt;td&gt;2-5s&lt;/td&gt;
+&lt;td&gt;⭐⭐⭐⭐⭐&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Mathpix&lt;/td&gt;
+&lt;td&gt;⚠️ 10/month&lt;/td&gt;
+&lt;td&gt;1-2s&lt;/td&gt;
+&lt;td&gt;⭐⭐⭐⭐⭐&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Tesseract&lt;/td&gt;
+&lt;td&gt;✅ Free&lt;/td&gt;
+&lt;td&gt;30-60s&lt;/td&gt;
+&lt;td&gt;⭐⭐&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;&lt;strong&gt;Google Gemini&amp;rsquo;s free tier&lt;/strong&gt; provides:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;60 requests per minute&lt;/strong&gt; (more than enough!)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;1 million tokens per minute&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;No credit card required&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;Same quality as paid APIs&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="-quick-setup-30-seconds"&gt;🔑 Quick Setup (30 seconds)
+&lt;/h2&gt;&lt;ol&gt;
+&lt;li&gt;Go to &lt;strong&gt;&lt;a class="link" href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener"
+&gt;Google AI Studio&lt;/a&gt;&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;Sign in with Google account&lt;/li&gt;
+&lt;li&gt;Click &lt;strong&gt;&amp;ldquo;Create API Key&amp;rdquo;&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;Paste in the tool — done!&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Your key is stored &lt;strong&gt;locally in your browser&lt;/strong&gt; only.&lt;/p&gt;
+&lt;h2 id="-features"&gt;✨ Features
+&lt;/h2&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Feature&lt;/th&gt;
+&lt;th&gt;Description&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;📷 Clipboard Paste&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;Ctrl+V&lt;/code&gt; to paste screenshots instantly&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;🔢 Math Formulas&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;Converts to &lt;code&gt;$E=mc^2$&lt;/code&gt; and &lt;code&gt;$$\int$$&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;📑 Section Headers&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;Auto-generates &lt;code&gt;#&lt;/code&gt;, &lt;code&gt;##&lt;/code&gt;, &lt;code&gt;###&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;📊 Tables&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;Proper Markdown/LaTeX table syntax&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;⚡ Fast&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;2-5 seconds per image&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;🌐 Multi-language&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;English, Chinese, mixed content&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id="-how-to-use"&gt;📸 How to Use
+&lt;/h2&gt;&lt;h3 id="method-1-paste-screenshot-fastest"&gt;Method 1: Paste Screenshot (Fastest)
+&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;Take screenshot (&lt;code&gt;Win+Shift+S&lt;/code&gt; or &lt;code&gt;Cmd+Shift+4&lt;/code&gt;)&lt;/li&gt;
+&lt;li&gt;Press &lt;code&gt;Ctrl+V&lt;/code&gt; anywhere on the page&lt;/li&gt;
+&lt;li&gt;Click &lt;strong&gt;Convert&lt;/strong&gt; → Done in 2-5 seconds!&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id="method-2-upload-files"&gt;Method 2: Upload Files
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;Drag &amp;amp; drop images/PDFs&lt;/li&gt;
+&lt;li&gt;Or click to browse files&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="method-3-external-tools-no-api"&gt;Method 3: External Tools (No API)
+&lt;/h3&gt;&lt;p&gt;If you prefer not to use any API, the tool links to free online converters:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;&lt;a class="link" href="https://simpletex.cn/ai/latex_ocr" target="_blank" rel="noopener"
+&gt;SimpleTex&lt;/a&gt;&lt;/strong&gt; — Best for math&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;a class="link" href="https://web.baimiaoapp.com/" target="_blank" rel="noopener"
+&gt;Baimiao OCR&lt;/a&gt;&lt;/strong&gt; — General OCR&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;a class="link" href="https://mathpix.com/" target="_blank" rel="noopener"
+&gt;Mathpix&lt;/a&gt;&lt;/strong&gt; — 10 free/month&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="-math-conversion-examples"&gt;🔢 Math Conversion Examples
+&lt;/h2&gt;&lt;p&gt;The AI correctly converts mathematical expressions:&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Image Content&lt;/th&gt;
+&lt;th&gt;Output&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;E = mc²&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;$E = mc^2$&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;α + β = γ&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;$\alpha + \beta = \gamma$&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;∫₀^∞ f(x)dx&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;$\int_0^\infty f(x) dx$&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Σᵢ₌₁ⁿ xᵢ&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;$\sum_{i=1}^n x_i$&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;√(a² + b²)&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;$\sqrt{a^2 + b^2}$&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id="rendered-examples"&gt;Rendered Examples
+&lt;/h3&gt;&lt;p&gt;Inline: $E = mc^2$, $\alpha + \beta = \gamma$&lt;/p&gt;
+&lt;p&gt;Block equations:
+&lt;/p&gt;
+$$
+\int_0^\infty e^{-x^2} dx = \frac{\sqrt{\pi}}{2}
+$$$$
+\sum_{i=1}^n i^2 = \frac{n(n+1)(2n+1)}{6}
+$$&lt;h2 id="-table-output"&gt;📊 Table Output
+&lt;/h2&gt;&lt;p&gt;Input image with table → Output:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-markdown" data-lang="markdown"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;| Name | Age | Score |
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;|------|-----|-------|
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;| Alice | 25 | 95 |
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;| Bob | 30 | 88 |
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h2 id="-header-generation"&gt;📑 Header Generation
+&lt;/h2&gt;&lt;p&gt;The AI automatically detects document structure:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
+&lt;/span&gt;&lt;span class="lnt"&gt; 2
+&lt;/span&gt;&lt;span class="lnt"&gt; 3
+&lt;/span&gt;&lt;span class="lnt"&gt; 4
+&lt;/span&gt;&lt;span class="lnt"&gt; 5
+&lt;/span&gt;&lt;span class="lnt"&gt; 6
+&lt;/span&gt;&lt;span class="lnt"&gt; 7
+&lt;/span&gt;&lt;span class="lnt"&gt; 8
+&lt;/span&gt;&lt;span class="lnt"&gt; 9
+&lt;/span&gt;&lt;span class="lnt"&gt;10
+&lt;/span&gt;&lt;span class="lnt"&gt;11
+&lt;/span&gt;&lt;span class="lnt"&gt;12
+&lt;/span&gt;&lt;span class="lnt"&gt;13
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-markdown" data-lang="markdown"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="gh"&gt;# Main Title
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="gu"&gt;## Section 1
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Content here...
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="gu"&gt;### Subsection 1.1
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;More content...
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="gu"&gt;## Section 2
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;...
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h2 id="-configuration-options"&gt;⚙️ Configuration Options
+&lt;/h2&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Option&lt;/th&gt;
+&lt;th&gt;Values&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Output Format&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;Markdown / LaTeX&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Document Type&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;Auto, Article, Notes, Textbook&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Language&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;Auto, English, Chinese, Mixed&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Math Detection&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;On/Off&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Table Formatting&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;On/Off&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Add Headers&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;On/Off&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id="-alternative-free-tools"&gt;🔗 Alternative Free Tools
+&lt;/h2&gt;&lt;p&gt;If you prefer browser-based tools without any API:&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Tool&lt;/th&gt;
+&lt;th&gt;Best For&lt;/th&gt;
+&lt;th&gt;Link&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;SimpleTex&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;Math/LaTeX&lt;/td&gt;
+&lt;td&gt;&lt;a class="link" href="https://simpletex.cn/ai/latex_ocr" target="_blank" rel="noopener"
+&gt;simpletex.cn&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Baimiao&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;Chinese OCR&lt;/td&gt;
+&lt;td&gt;&lt;a class="link" href="https://web.baimiaoapp.com/" target="_blank" rel="noopener"
+&gt;web.baimiaoapp.com&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Online OCR&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;General text&lt;/td&gt;
+&lt;td&gt;&lt;a class="link" href="https://www.onlineocr.net/" target="_blank" rel="noopener"
+&gt;onlineocr.net&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id="-tips"&gt;💡 Tips
+&lt;/h2&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;Clear screenshots&lt;/strong&gt; = better accuracy&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;One topic per image&lt;/strong&gt; for best structure detection&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Check preview tab&lt;/strong&gt; to verify math renders correctly&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Use LaTeX format&lt;/strong&gt; for academic papers with complex math&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id="-privacy"&gt;🔒 Privacy
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;API key stored &lt;strong&gt;locally in your browser&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;Images sent &lt;strong&gt;directly to Google&lt;/strong&gt; (not our servers)&lt;/li&gt;
+&lt;li&gt;No data stored or logged by this tool&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="-quick-links"&gt;🔗 Quick Links
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;&lt;a class="link" href="https://albert-mi.github.io/tools/code-converter.html" target="_blank" rel="noopener"
+&gt;🚀 Open Code Converter&lt;/a&gt;&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;a class="link" href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener"
+&gt;🔑 Get Free Gemini Key&lt;/a&gt;&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;a class="link" href="https://simpletex.cn/ai/latex_ocr" target="_blank" rel="noopener"
+&gt;📐 SimpleTex (No API)&lt;/a&gt;&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;p&gt;&lt;em&gt;100% Free • Powered by Google Gemini • No installation required&lt;/em&gt;&lt;/p&gt;</description></item></channel></rss>
