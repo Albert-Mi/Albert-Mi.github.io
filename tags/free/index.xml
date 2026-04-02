@@ -1,0 +1,625 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Free on WebHome of Xuan</title><link>https://albert-mi.github.io/tags/free/</link><description>Recent content in Free on WebHome of Xuan</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Thu, 05 Mar 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://albert-mi.github.io/tags/free/index.xml" rel="self" type="application/rss+xml"/><item><title>Prompt Engineer - FREE AI Prompt Generator</title><link>https://albert-mi.github.io/p/prompt-engineer/</link><pubDate>Thu, 05 Mar 2026 00:00:00 +0000</pubDate><guid>https://albert-mi.github.io/p/prompt-engineer/</guid><description>&lt;img src="https://albert-mi.github.io/p/prompt-engineer/cover.png" alt="Featured image of post Prompt Engineer - FREE AI Prompt Generator" /&gt;&lt;h2 id="-launch-the-tool"&gt;🚀 Launch the Tool
+&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;&lt;a class="link" href="https://albert-mi.github.io/tools/prompt-engineer.html" target="_blank" rel="noopener"
+&gt;➡️ Open Prompt Engineer&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;100% FREE&lt;/strong&gt; prompt generator using &lt;strong&gt;Google Gemini&lt;/strong&gt; (free tier: 60 requests/minute) — upload context files, describe your goal, and get scientifically-structured AI prompts instantly!&lt;/p&gt;
+&lt;h2 id="-why-its-free"&gt;🆓 Why It&amp;rsquo;s Free
+&lt;/h2&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Service&lt;/th&gt;
+&lt;th&gt;Free Tier&lt;/th&gt;
+&lt;th&gt;Speed&lt;/th&gt;
+&lt;th&gt;Quality&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Google Gemini&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;✅ 60 req/min&lt;/td&gt;
+&lt;td&gt;2-5s&lt;/td&gt;
+&lt;td&gt;⭐⭐⭐⭐⭐&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;DeepSeek API&lt;/td&gt;
+&lt;td&gt;✅ Free tier&lt;/td&gt;
+&lt;td&gt;2-5s&lt;/td&gt;
+&lt;td&gt;⭐⭐⭐⭐&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;ChatGPT Prompt Generators&lt;/td&gt;
+&lt;td&gt;❌ Paid&lt;/td&gt;
+&lt;td&gt;varies&lt;/td&gt;
+&lt;td&gt;⭐⭐⭐&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;&lt;strong&gt;Google Gemini&amp;rsquo;s free tier&lt;/strong&gt; provides:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;60 requests per minute&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;1 million tokens per minute&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;No credit card required&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;Same quality as paid APIs&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="-quick-setup-30-seconds"&gt;🔑 Quick Setup (30 seconds)
+&lt;/h2&gt;&lt;ol&gt;
+&lt;li&gt;Go to &lt;strong&gt;&lt;a class="link" href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener"
+&gt;Google AI Studio&lt;/a&gt;&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;Sign in with Google account&lt;/li&gt;
+&lt;li&gt;Click &lt;strong&gt;&amp;ldquo;Create API Key&amp;rdquo;&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;Paste in the tool — done!&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Your key is stored &lt;strong&gt;locally in your browser&lt;/strong&gt; only.&lt;/p&gt;
+&lt;h2 id="-what-this-tool-does"&gt;✨ What This Tool Does
+&lt;/h2&gt;&lt;p&gt;Upload your reference files (papers, code, documents, images) and describe your goal in one sentence. The tool generates a &lt;strong&gt;comprehensive, scientifically-structured prompt&lt;/strong&gt; that you can copy and paste into any AI (ChatGPT, Claude, Gemini, DeepSeek, etc.).&lt;/p&gt;
+&lt;h3 id="the-science-behind-it"&gt;The Science Behind It
+&lt;/h3&gt;&lt;p&gt;The generated prompts follow established prompt engineering best practices:&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Technique&lt;/th&gt;
+&lt;th&gt;Description&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Role Definition&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;Assigns a specific expert persona to the AI&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Context Framing&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;Provides structured background from your files&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Task Decomposition&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;Breaks complex goals into clear subtasks&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Chain-of-Thought&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;Guides step-by-step reasoning&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Output Specification&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;Defines format, length, and quality criteria&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Constraint Setting&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;Sets boundaries and edge case handling&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Few-Shot Examples&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;Provides input/output pairs when helpful&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id="-features"&gt;✨ Features
+&lt;/h2&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Feature&lt;/th&gt;
+&lt;th&gt;Description&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;📎 File Upload&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;Upload PDFs, images, code, text, markdown files&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;📷 Clipboard Paste&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;Ctrl+V&lt;/code&gt; to paste screenshots instantly&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;🌐 Bilingual&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;Generate prompts in English or Chinese (中文)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;📋 Multiple Styles&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;Structured, Chain-of-Thought, Few-Shot, System Prompt&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;🎯 Target AI&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;Optimize for ChatGPT, Claude, Gemini, DeepSeek&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;⚡ Fast&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;2-5 seconds per generation&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;📊 Usage Monitor&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;Track API usage in real-time&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;🌓 Dark/Light Mode&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;Automatic or manual theme switching&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;📱 Responsive&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;Works on desktop, tablet, and mobile&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id="-how-to-use"&gt;📸 How to Use
+&lt;/h2&gt;&lt;h3 id="step-1-upload-context-files-optional"&gt;Step 1: Upload Context Files (Optional)
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;Drag &amp;amp; drop files (PDF, images, code, text)&lt;/li&gt;
+&lt;li&gt;Or press &lt;code&gt;Ctrl+V&lt;/code&gt; to paste a screenshot&lt;/li&gt;
+&lt;li&gt;Or click the upload zone to browse&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="step-2-describe-your-goal"&gt;Step 2: Describe Your Goal
+&lt;/h3&gt;&lt;p&gt;Write a simple sentence describing what you want the AI to do:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&amp;ldquo;Analyze this research paper and generate a comprehensive literature review with key findings and methodology critique&amp;rdquo;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&amp;ldquo;Based on this code, generate complete unit tests with edge cases&amp;rdquo;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&amp;ldquo;根据这篇论文，生成一份详细的综述报告，包括方法论评价和未来研究方向&amp;rdquo;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id="step-3-configure-options"&gt;Step 3: Configure Options
+&lt;/h3&gt;&lt;p&gt;Choose your preferred settings in the sidebar:&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Option&lt;/th&gt;
+&lt;th&gt;Values&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Language&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;English / 中文&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Prompt Style&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;Structured, CoT, Few-Shot, System, Simple&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Target AI&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;General, ChatGPT, Claude, Gemini, DeepSeek&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Complexity&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;Auto, Simple, Medium, Detailed, Expert&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Chain-of-Thought&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;On/Off&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Include Examples&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;On/Off&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Constraints&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;On/Off&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Output Format&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;On/Off&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id="step-4-generate--copy"&gt;Step 4: Generate &amp;amp; Copy
+&lt;/h3&gt;&lt;p&gt;Click &lt;strong&gt;Generate Prompt&lt;/strong&gt; → wait 2-5 seconds → copy the result!&lt;/p&gt;
+&lt;h2 id="-prompt-style-examples"&gt;🧪 Prompt Style Examples
+&lt;/h2&gt;&lt;h3 id="structured-role--context--task"&gt;Structured (Role + Context + Task)
+&lt;/h3&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
+&lt;/span&gt;&lt;span class="lnt"&gt; 2
+&lt;/span&gt;&lt;span class="lnt"&gt; 3
+&lt;/span&gt;&lt;span class="lnt"&gt; 4
+&lt;/span&gt;&lt;span class="lnt"&gt; 5
+&lt;/span&gt;&lt;span class="lnt"&gt; 6
+&lt;/span&gt;&lt;span class="lnt"&gt; 7
+&lt;/span&gt;&lt;span class="lnt"&gt; 8
+&lt;/span&gt;&lt;span class="lnt"&gt; 9
+&lt;/span&gt;&lt;span class="lnt"&gt;10
+&lt;/span&gt;&lt;span class="lnt"&gt;11
+&lt;/span&gt;&lt;span class="lnt"&gt;12
+&lt;/span&gt;&lt;span class="lnt"&gt;13
+&lt;/span&gt;&lt;span class="lnt"&gt;14
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;# Role
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;You are an expert data scientist specializing in...
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;# Context
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;You have been provided with a dataset containing...
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;# Task
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;1. Clean and validate the data
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;2. Perform exploratory analysis
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;3. Build a predictive model
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;...
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;# Output Format
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Provide results in markdown with...
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h3 id="chain-of-thought"&gt;Chain-of-Thought
+&lt;/h3&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;span class="lnt"&gt;5
+&lt;/span&gt;&lt;span class="lnt"&gt;6
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Let&amp;#39;s approach this step by step:
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Step 1: First, examine the data structure...
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Step 2: Then, identify potential issues...
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Step 3: Next, apply appropriate transformations...
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;...
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h3 id="system-prompt-for-api"&gt;System Prompt (for API)
+&lt;/h3&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;span class="lnt"&gt;5
+&lt;/span&gt;&lt;span class="lnt"&gt;6
+&lt;/span&gt;&lt;span class="lnt"&gt;7
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;You are a professional code reviewer. Your role is to...
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;When reviewing code, always:
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;- Check for security vulnerabilities
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;- Evaluate performance implications
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;- Suggest concrete improvements with code examples
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;...
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h2 id="-supported-file-types"&gt;📊 Supported File Types
+&lt;/h2&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Category&lt;/th&gt;
+&lt;th&gt;Extensions&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Images&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;PNG, JPG, JPEG, GIF, WebP&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Documents&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;PDF, TXT, MD&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Code&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;PY, JS, TS, HTML, CSS, JSON, Java, C++, Go, Rust, Ruby, R&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Data&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;CSV, XML, YAML&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id="-tips-for-best-results"&gt;💡 Tips for Best Results
+&lt;/h2&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;Be specific&lt;/strong&gt; in your goal description — &amp;ldquo;analyze the methodology&amp;rdquo; beats &amp;ldquo;read this paper&amp;rdquo;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Upload relevant files&lt;/strong&gt; — the tool uses file content to generate context-aware prompts&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Choose the right style&lt;/strong&gt; — use &amp;ldquo;Structured&amp;rdquo; for complex tasks, &amp;ldquo;Simple&amp;rdquo; for quick ones&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Select target AI&lt;/strong&gt; — each AI has different strengths; the tool optimizes accordingly&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Use Expert complexity&lt;/strong&gt; for research or professional work&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Preview tab&lt;/strong&gt; lets you see the rendered prompt before copying&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id="-privacy"&gt;🔒 Privacy
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;API key stored &lt;strong&gt;locally in your browser&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;Files processed &lt;strong&gt;in your browser&lt;/strong&gt; (text extraction)&lt;/li&gt;
+&lt;li&gt;Images sent &lt;strong&gt;directly to Google/DeepSeek&lt;/strong&gt; (not our servers)&lt;/li&gt;
+&lt;li&gt;No data stored or logged by this tool&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="-quick-links"&gt;🔗 Quick Links
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;&lt;a class="link" href="https://albert-mi.github.io/tools/prompt-engineer.html" target="_blank" rel="noopener"
+&gt;🚀 Open Prompt Engineer&lt;/a&gt;&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;a class="link" href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener"
+&gt;🔑 Get Free Gemini Key&lt;/a&gt;&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;p&gt;&lt;em&gt;100% Free • Powered by Google Gemini • No installation required • Works on all devices&lt;/em&gt;&lt;/p&gt;</description></item><item><title>Code Converter - FREE Image to LaTeX/Markdown</title><link>https://albert-mi.github.io/p/code-converter/</link><pubDate>Tue, 13 Jan 2026 00:00:00 +0000</pubDate><guid>https://albert-mi.github.io/p/code-converter/</guid><description>&lt;img src="https://albert-mi.github.io/p/code-converter/cover.png" alt="Featured image of post Code Converter - FREE Image to LaTeX/Markdown" /&gt;&lt;h2 id="-launch-the-tool"&gt;🚀 Launch the Tool
+&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;&lt;a class="link" href="https://albert-mi.github.io/tools/code-converter.html" target="_blank" rel="noopener"
+&gt;➡️ Open Code Converter&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;100% FREE&lt;/strong&gt; converter using &lt;strong&gt;Google Gemini&lt;/strong&gt; (free tier: 60 requests/minute) — transforms screenshots into properly formatted LaTeX/Markdown with &lt;code&gt;#&lt;/code&gt; headers, &lt;code&gt;$...$&lt;/code&gt; math, and tables!&lt;/p&gt;
+&lt;h2 id="-why-its-free"&gt;🆓 Why It&amp;rsquo;s Free
+&lt;/h2&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Service&lt;/th&gt;
+&lt;th&gt;Free Tier&lt;/th&gt;
+&lt;th&gt;Speed&lt;/th&gt;
+&lt;th&gt;Quality&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Google Gemini&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;✅ 60 req/min&lt;/td&gt;
+&lt;td&gt;2-5s&lt;/td&gt;
+&lt;td&gt;⭐⭐⭐⭐⭐&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Claude API&lt;/td&gt;
+&lt;td&gt;❌ Paid&lt;/td&gt;
+&lt;td&gt;2-5s&lt;/td&gt;
+&lt;td&gt;⭐⭐⭐⭐⭐&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Mathpix&lt;/td&gt;
+&lt;td&gt;⚠️ 10/month&lt;/td&gt;
+&lt;td&gt;1-2s&lt;/td&gt;
+&lt;td&gt;⭐⭐⭐⭐⭐&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Tesseract&lt;/td&gt;
+&lt;td&gt;✅ Free&lt;/td&gt;
+&lt;td&gt;30-60s&lt;/td&gt;
+&lt;td&gt;⭐⭐&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;&lt;strong&gt;Google Gemini&amp;rsquo;s free tier&lt;/strong&gt; provides:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;60 requests per minute&lt;/strong&gt; (more than enough!)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;1 million tokens per minute&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;No credit card required&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;Same quality as paid APIs&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="-quick-setup-30-seconds"&gt;🔑 Quick Setup (30 seconds)
+&lt;/h2&gt;&lt;ol&gt;
+&lt;li&gt;Go to &lt;strong&gt;&lt;a class="link" href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener"
+&gt;Google AI Studio&lt;/a&gt;&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;Sign in with Google account&lt;/li&gt;
+&lt;li&gt;Click &lt;strong&gt;&amp;ldquo;Create API Key&amp;rdquo;&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;Paste in the tool — done!&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Your key is stored &lt;strong&gt;locally in your browser&lt;/strong&gt; only.&lt;/p&gt;
+&lt;h2 id="-features"&gt;✨ Features
+&lt;/h2&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Feature&lt;/th&gt;
+&lt;th&gt;Description&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;📷 Clipboard Paste&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;Ctrl+V&lt;/code&gt; to paste screenshots instantly&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;🔢 Math Formulas&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;Converts to &lt;code&gt;$E=mc^2$&lt;/code&gt; and &lt;code&gt;$$\int$$&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;📑 Section Headers&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;Auto-generates &lt;code&gt;#&lt;/code&gt;, &lt;code&gt;##&lt;/code&gt;, &lt;code&gt;###&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;📊 Tables&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;Proper Markdown/LaTeX table syntax&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;⚡ Fast&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;2-5 seconds per image&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;🌐 Multi-language&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;English, Chinese, mixed content&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id="-how-to-use"&gt;📸 How to Use
+&lt;/h2&gt;&lt;h3 id="method-1-paste-screenshot-fastest"&gt;Method 1: Paste Screenshot (Fastest)
+&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;Take screenshot (&lt;code&gt;Win+Shift+S&lt;/code&gt; or &lt;code&gt;Cmd+Shift+4&lt;/code&gt;)&lt;/li&gt;
+&lt;li&gt;Press &lt;code&gt;Ctrl+V&lt;/code&gt; anywhere on the page&lt;/li&gt;
+&lt;li&gt;Click &lt;strong&gt;Convert&lt;/strong&gt; → Done in 2-5 seconds!&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id="method-2-upload-files"&gt;Method 2: Upload Files
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;Drag &amp;amp; drop images/PDFs&lt;/li&gt;
+&lt;li&gt;Or click to browse files&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="method-3-external-tools-no-api"&gt;Method 3: External Tools (No API)
+&lt;/h3&gt;&lt;p&gt;If you prefer not to use any API, the tool links to free online converters:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;&lt;a class="link" href="https://simpletex.cn/ai/latex_ocr" target="_blank" rel="noopener"
+&gt;SimpleTex&lt;/a&gt;&lt;/strong&gt; — Best for math&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;a class="link" href="https://web.baimiaoapp.com/" target="_blank" rel="noopener"
+&gt;Baimiao OCR&lt;/a&gt;&lt;/strong&gt; — General OCR&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;a class="link" href="https://mathpix.com/" target="_blank" rel="noopener"
+&gt;Mathpix&lt;/a&gt;&lt;/strong&gt; — 10 free/month&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="-math-conversion-examples"&gt;🔢 Math Conversion Examples
+&lt;/h2&gt;&lt;p&gt;The AI correctly converts mathematical expressions:&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Image Content&lt;/th&gt;
+&lt;th&gt;Output&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;E = mc²&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;$E = mc^2$&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;α + β = γ&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;$\alpha + \beta = \gamma$&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;∫₀^∞ f(x)dx&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;$\int_0^\infty f(x) dx$&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Σᵢ₌₁ⁿ xᵢ&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;$\sum_{i=1}^n x_i$&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;√(a² + b²)&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;$\sqrt{a^2 + b^2}$&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id="rendered-examples"&gt;Rendered Examples
+&lt;/h3&gt;&lt;p&gt;Inline: $E = mc^2$, $\alpha + \beta = \gamma$&lt;/p&gt;
+&lt;p&gt;Block equations:
+&lt;/p&gt;
+$$
+\int_0^\infty e^{-x^2} dx = \frac{\sqrt{\pi}}{2}
+$$$$
+\sum_{i=1}^n i^2 = \frac{n(n+1)(2n+1)}{6}
+$$&lt;h2 id="-table-output"&gt;📊 Table Output
+&lt;/h2&gt;&lt;p&gt;Input image with table → Output:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-markdown" data-lang="markdown"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;| Name | Age | Score |
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;|------|-----|-------|
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;| Alice | 25 | 95 |
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;| Bob | 30 | 88 |
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h2 id="-header-generation"&gt;📑 Header Generation
+&lt;/h2&gt;&lt;p&gt;The AI automatically detects document structure:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
+&lt;/span&gt;&lt;span class="lnt"&gt; 2
+&lt;/span&gt;&lt;span class="lnt"&gt; 3
+&lt;/span&gt;&lt;span class="lnt"&gt; 4
+&lt;/span&gt;&lt;span class="lnt"&gt; 5
+&lt;/span&gt;&lt;span class="lnt"&gt; 6
+&lt;/span&gt;&lt;span class="lnt"&gt; 7
+&lt;/span&gt;&lt;span class="lnt"&gt; 8
+&lt;/span&gt;&lt;span class="lnt"&gt; 9
+&lt;/span&gt;&lt;span class="lnt"&gt;10
+&lt;/span&gt;&lt;span class="lnt"&gt;11
+&lt;/span&gt;&lt;span class="lnt"&gt;12
+&lt;/span&gt;&lt;span class="lnt"&gt;13
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-markdown" data-lang="markdown"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="gh"&gt;# Main Title
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="gu"&gt;## Section 1
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Content here...
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="gu"&gt;### Subsection 1.1
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;More content...
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="gu"&gt;## Section 2
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;...
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h2 id="-configuration-options"&gt;⚙️ Configuration Options
+&lt;/h2&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Option&lt;/th&gt;
+&lt;th&gt;Values&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Output Format&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;Markdown / LaTeX&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Document Type&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;Auto, Article, Notes, Textbook&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Language&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;Auto, English, Chinese, Mixed&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Math Detection&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;On/Off&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Table Formatting&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;On/Off&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Add Headers&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;On/Off&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id="-alternative-free-tools"&gt;🔗 Alternative Free Tools
+&lt;/h2&gt;&lt;p&gt;If you prefer browser-based tools without any API:&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Tool&lt;/th&gt;
+&lt;th&gt;Best For&lt;/th&gt;
+&lt;th&gt;Link&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;SimpleTex&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;Math/LaTeX&lt;/td&gt;
+&lt;td&gt;&lt;a class="link" href="https://simpletex.cn/ai/latex_ocr" target="_blank" rel="noopener"
+&gt;simpletex.cn&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Baimiao&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;Chinese OCR&lt;/td&gt;
+&lt;td&gt;&lt;a class="link" href="https://web.baimiaoapp.com/" target="_blank" rel="noopener"
+&gt;web.baimiaoapp.com&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Online OCR&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;General text&lt;/td&gt;
+&lt;td&gt;&lt;a class="link" href="https://www.onlineocr.net/" target="_blank" rel="noopener"
+&gt;onlineocr.net&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id="-tips"&gt;💡 Tips
+&lt;/h2&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;Clear screenshots&lt;/strong&gt; = better accuracy&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;One topic per image&lt;/strong&gt; for best structure detection&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Check preview tab&lt;/strong&gt; to verify math renders correctly&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Use LaTeX format&lt;/strong&gt; for academic papers with complex math&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id="-privacy"&gt;🔒 Privacy
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;API key stored &lt;strong&gt;locally in your browser&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;Images sent &lt;strong&gt;directly to Google&lt;/strong&gt; (not our servers)&lt;/li&gt;
+&lt;li&gt;No data stored or logged by this tool&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="-quick-links"&gt;🔗 Quick Links
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;&lt;a class="link" href="https://albert-mi.github.io/tools/code-converter.html" target="_blank" rel="noopener"
+&gt;🚀 Open Code Converter&lt;/a&gt;&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;a class="link" href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener"
+&gt;🔑 Get Free Gemini Key&lt;/a&gt;&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;a class="link" href="https://simpletex.cn/ai/latex_ocr" target="_blank" rel="noopener"
+&gt;📐 SimpleTex (No API)&lt;/a&gt;&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;p&gt;&lt;em&gt;100% Free • Powered by Google Gemini • No installation required&lt;/em&gt;&lt;/p&gt;</description></item></channel></rss>
