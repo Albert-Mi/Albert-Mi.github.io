@@ -8,7 +8,7 @@ excludeFromRSS = true
 excludeFromSitemap = true
 outputs = ["html", "json"]
 
-[ _build ]
+[build]
   render = "always"
   list = "always"
   publishResources = true
