@@ -1,6 +1,7 @@
 ---
 title: "From Transformer to Agent"
 date: 2026-07-17
+url: /p/from-transformer-to-agent-full/
 draft: false
 math: true
 toc: true
