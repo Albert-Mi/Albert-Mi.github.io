@@ -47,12 +47,8 @@
   font-size: 0.9rem;
 }
 
-.llm-docs-mobile-summary {
+.llm-docs-nav-disclosure {
   display: none;
-}
-
-.llm-docs-nav-disclosure:not([open]) > nav {
-  display: block !important;
 }
 .llm-docs-chapter-list,
 .llm-docs-section-list,
@@ -198,6 +194,7 @@
     overflow: visible;
   }
   .llm-docs-sidebar-label { margin-bottom: 0.75rem; }
+  .llm-docs-nav-disclosure { display: block; }
   .llm-docs-mobile-summary {
     display: list-item;
     padding: 0.75rem 0.85rem;
@@ -217,8 +214,8 @@
     font-size: 0.88rem;
     font-weight: 500;
   }
-  .llm-docs-nav-disclosure:not([open]) > nav { display: none !important; }
-  .llm-docs-nav-disclosure[open] > nav {
+  .llm-docs-nav-disclosure:not([open]) + .llm-docs-chapter-nav { display: none; }
+  .llm-docs-nav-disclosure[open] + .llm-docs-chapter-nav {
     display: block;
     max-height: 65vh;
     margin-top: 0.5rem;
