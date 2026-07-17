@@ -25,8 +25,16 @@
         <aside class="llm-docs-sidebar" aria-label="LLM chapters">
             <a class="llm-docs-brand" href="{{ $book.RelPermalink }}">LLM Notes</a>
             <p class="llm-docs-sidebar-label">From Transformer to Agent</p>
-            <nav>
-                <ol class="llm-docs-chapter-list">
+            <details class="llm-docs-nav-disclosure">
+                <summary class="llm-docs-mobile-summary">
+                    <span>章节目录</span>
+                    <span class="llm-docs-mobile-current">
+                        <span class="llm-docs-chapter-number">{{ .Params.page_number }}</span>
+                        <span>{{ .Title }}</span>
+                    </span>
+                </summary>
+                <nav>
+                    <ol class="llm-docs-chapter-list">
                     {{ range where $pages "Params.is_section" false }}
                         {{ $chapter := .Params.chapter }}
                         <li class="llm-docs-chapter">
@@ -49,8 +57,9 @@
                             {{ end }}
                         </li>
                     {{ end }}
-                </ol>
-            </nav>
+                    </ol>
+                </nav>
+            </details>
         </aside>
 
         <article class="llm-docs-content main-article" data-page-number="{{ .Params.page_number }}" data-root-heading-level="{{ .Params.root_heading_level }}">

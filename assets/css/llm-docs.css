@@ -47,6 +47,13 @@
   font-size: 0.9rem;
 }
 
+.llm-docs-mobile-summary {
+  display: none;
+}
+
+.llm-docs-nav-disclosure:not([open]) > nav {
+  display: block !important;
+}
 .llm-docs-chapter-list,
 .llm-docs-section-list,
 .llm-docs-local-toc ol {
@@ -184,7 +191,40 @@
 @media (max-width: 720px) {
   .llm-docs-page .main-container { padding: 0 1rem; }
   .llm-docs-shell { display: block; padding-top: 1rem; }
-  .llm-docs-sidebar { position: static; margin-bottom: 1.25rem; }
+  .llm-docs-sidebar {
+    position: static;
+    max-height: none;
+    margin-bottom: 1.25rem;
+    overflow: visible;
+  }
+  .llm-docs-sidebar-label { margin-bottom: 0.75rem; }
+  .llm-docs-mobile-summary {
+    display: list-item;
+    padding: 0.75rem 0.85rem;
+    border: 1px solid var(--card-separator-color, rgba(0, 0, 0, 0.08));
+    background: var(--card-background);
+    color: var(--card-text-color-main);
+    cursor: pointer;
+    font-weight: 700;
+    line-height: 1.35;
+  }
+  .llm-docs-mobile-current {
+    display: grid;
+    grid-template-columns: max-content minmax(0, 1fr);
+    gap: 0.5rem;
+    margin-top: 0.35rem;
+    color: var(--card-text-color-secondary);
+    font-size: 0.88rem;
+    font-weight: 500;
+  }
+  .llm-docs-nav-disclosure:not([open]) > nav { display: none !important; }
+  .llm-docs-nav-disclosure[open] > nav {
+    display: block;
+    max-height: 65vh;
+    margin-top: 0.5rem;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
   .llm-docs-content { padding: 1.25rem; }
   .llm-docs-pagination { flex-direction: column; }
 }
