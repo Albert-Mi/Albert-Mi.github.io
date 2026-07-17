@@ -2,6 +2,7 @@
 title: "From Transformer to Agent"
 date: 2026-07-17
 url: /p/from-transformer-to-agent-full/
+listLink: /docs/llm/01-transformer-alm-llm-agent/
 draft: false
 math: true
 toc: true
