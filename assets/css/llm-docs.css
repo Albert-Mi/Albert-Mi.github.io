@@ -1,0 +1,190 @@
+.llm-docs-page .left-sidebar {
+  display: none !important;
+}
+
+.llm-docs-page .main-container {
+  display: block;
+  max-width: 1440px;
+  padding: 0 2rem;
+}
+
+.llm-docs-page .main.full-width {
+  width: 100%;
+}
+
+.llm-docs-shell {
+  display: grid;
+  grid-template-columns: clamp(11rem, 18vw, 15rem) minmax(0, 50rem) clamp(9rem, 14vw, 12rem);
+  justify-content: center;
+  gap: clamp(1rem, 2.5vw, 2.5rem);
+  align-items: start;
+  padding: 2rem 0 4rem;
+}
+
+.llm-docs-sidebar,
+.llm-docs-local-toc {
+  position: sticky;
+  top: 1.5rem;
+  max-height: calc(100vh - 3rem);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+}
+
+.llm-docs-sidebar {
+  color: var(--card-text-color-secondary);
+}
+
+.llm-docs-brand {
+  color: var(--card-text-color-main);
+  font-size: 1.3rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.llm-docs-sidebar-label {
+  margin: 0.35rem 0 1.5rem;
+  font-size: 0.9rem;
+}
+
+.llm-docs-chapter-list,
+.llm-docs-section-list,
+.llm-docs-local-toc ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.llm-docs-chapter + .llm-docs-chapter {
+  margin-top: 0.35rem;
+}
+
+.llm-docs-chapter-list a {
+  display: grid;
+  grid-template-columns: 1.75rem minmax(0, 1fr);
+  gap: 0.5rem;
+  padding: 0.55rem 0.65rem;
+  border-inline-start: 2px solid transparent;
+  color: var(--card-text-color-secondary);
+  line-height: 1.45;
+  text-decoration: none;
+}
+
+.llm-docs-section-list {
+  margin: 0.2rem 0 0.65rem;
+}
+
+.llm-docs-section-list a {
+  grid-template-columns: 2.8rem minmax(0, 1fr);
+  padding-block: 0.38rem;
+  padding-inline-start: 1.35rem;
+  font-size: 0.88rem;
+}
+
+.llm-docs-chapter-list a:hover,
+.llm-docs-chapter-list a[aria-current="page"] {
+  border-inline-start-color: var(--accent-color);
+  background: var(--card-background-selected);
+  color: var(--card-text-color-main);
+}
+
+.llm-docs-chapter-number {
+  color: var(--accent-color);
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+}
+
+.llm-docs-content {
+  min-width: 0;
+  padding: 2.5rem clamp(1.25rem, 4vw, 3.5rem);
+  border: 1px solid var(--card-separator-color, rgba(0, 0, 0, 0.08));
+  background: var(--card-background);
+}
+
+.llm-docs-breadcrumb {
+  display: flex;
+  gap: 0.45rem;
+  margin-bottom: 2rem;
+  color: var(--card-text-color-tertiary);
+  font-size: 0.9rem;
+}
+
+.llm-docs-breadcrumb a {
+  color: var(--accent-color);
+  text-decoration: none;
+}
+
+.llm-docs-content .fta-document {
+  max-width: none;
+}
+
+.llm-docs-heading-number {
+  margin-inline-end: 0.5em;
+  font-variant-numeric: tabular-nums;
+}
+
+.llm-docs-local-toc {
+  padding-top: 0.4rem;
+}
+
+.llm-docs-local-toc p {
+  margin: 0 0 0.75rem;
+  color: var(--card-text-color-main);
+  font-weight: 700;
+}
+
+.llm-docs-local-toc li + li {
+  margin-top: 0.55rem;
+}
+
+.llm-docs-local-toc a {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: 0.45em;
+  color: var(--card-text-color-secondary);
+  font-size: 0.9rem;
+  line-height: 1.4;
+  text-decoration: none;
+}
+
+.llm-docs-local-toc a:hover {
+  color: var(--accent-color);
+}
+
+.llm-docs-toc-number {
+  color: var(--accent-color);
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+
+.llm-docs-local-toc[hidden] {
+  display: none;
+}
+
+.llm-docs-pagination {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 3rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--card-separator-color, rgba(0, 0, 0, 0.08));
+}
+
+.llm-docs-pagination a {
+  color: var(--accent-color);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+@media (max-width: 880px) {
+  .llm-docs-shell { grid-template-columns: minmax(11rem, 13rem) minmax(0, 1fr); }
+  .llm-docs-local-toc { display: none; }
+}
+
+@media (max-width: 720px) {
+  .llm-docs-page .main-container { padding: 0 1rem; }
+  .llm-docs-shell { display: block; padding-top: 1rem; }
+  .llm-docs-sidebar { position: static; margin-bottom: 1.25rem; }
+  .llm-docs-content { padding: 1.25rem; }
+  .llm-docs-pagination { flex-direction: column; }
+}

@@ -1,0 +1,77 @@
+{{ define "body-class" }}llm-docs-page{{ end }}
+
+{{ define "left-sidebar" }}{{ end }}
+{{ define "right-sidebar" }}{{ end }}
+
+{{ define "head" }}
+    {{ $docsStyle := resources.Get "css/llm-docs.css" | minify | fingerprint }}
+    {{ $docsScript := resources.Get "js/llm-docs-toc.js" | minify | fingerprint }}
+    <link rel="stylesheet" href="{{ "p/from-transformer-to-agent-full/from-transformer-to-agent.css" | relURL }}">
+    <link rel="stylesheet" href="{{ $docsStyle.RelPermalink }}" integrity="{{ $docsStyle.Data.Integrity }}">
+    <script defer src="{{ $docsScript.RelPermalink }}" integrity="{{ $docsScript.Data.Integrity }}"></script>
+{{ end }}
+
+{{ define "main" }}
+    {{ $page := . }}
+    {{ $book := .Parent }}
+    {{ $pages := $book.RegularPages.ByWeight }}
+    {{ $chapterPage := . }}
+    {{ if .Params.is_section }}
+        {{ range where $pages "Params.chapter_slug" .Params.chapter_slug }}
+            {{ if not .Params.is_section }}{{ $chapterPage = . }}{{ end }}
+        {{ end }}
+    {{ end }}
+    <div class="llm-docs-shell">
+        <aside class="llm-docs-sidebar" aria-label="LLM chapters">
+            <a class="llm-docs-brand" href="{{ $book.RelPermalink }}">LLM Notes</a>
+            <p class="llm-docs-sidebar-label">From Transformer to Agent</p>
+            <nav>
+                <ol class="llm-docs-chapter-list">
+                    {{ range where $pages "Params.is_section" false }}
+                        {{ $chapter := .Params.chapter }}
+                        <li class="llm-docs-chapter">
+                            <a class="llm-docs-chapter-link" href="{{ .RelPermalink }}" {{ if eq .RelPermalink $page.RelPermalink }}aria-current="page"{{ end }}>
+                                <span class="llm-docs-chapter-number">{{ .Params.page_number }}</span>
+                                <span>{{ .Title }}</span>
+                            </a>
+                            {{ $sections := where (where $pages "Params.is_section" true) "Params.chapter" $chapter }}
+                            {{ with $sections }}
+                                <ol class="llm-docs-section-list">
+                                    {{ range . }}
+                                        <li>
+                                            <a href="{{ .RelPermalink }}" {{ if eq .RelPermalink $page.RelPermalink }}aria-current="page"{{ end }}>
+                                                <span class="llm-docs-chapter-number">{{ .Params.page_number }}</span>
+                                                <span>{{ .Title }}</span>
+                                            </a>
+                                        </li>
+                                    {{ end }}
+                                </ol>
+                            {{ end }}
+                        </li>
+                    {{ end }}
+                </ol>
+            </nav>
+        </aside>
+
+        <article class="llm-docs-content main-article" data-page-number="{{ .Params.page_number }}" data-root-heading-level="{{ .Params.root_heading_level }}">
+            <nav class="llm-docs-breadcrumb" aria-label="Breadcrumb">
+                <a href="{{ $book.RelPermalink }}">LLM Notes</a><span>/</span>
+                {{ if .Params.is_section }}<a href="{{ $chapterPage.RelPermalink }}">{{ $chapterPage.Title }}</a><span>/</span>{{ end }}
+                <span>{{ .Title }}</span>
+            </nav>
+            {{ .Content }}
+            <nav class="llm-docs-pagination" aria-label="Page navigation">
+                {{ with .PrevInSection }}<a href="{{ .RelPermalink }}">Previous: {{ .Title }}</a>{{ else }}<span></span>{{ end }}
+                {{ with .NextInSection }}<a href="{{ .RelPermalink }}">Next: {{ .Title }}</a>{{ end }}
+            </nav>
+        </article>
+
+        <aside class="llm-docs-local-toc" aria-label="On this page">
+            <p>在本页</p>
+            <nav id="llm-docs-local-toc"></nav>
+        </aside>
+    </div>
+    {{ if or .Params.math .Site.Params.article.math }}
+        {{ partialCached "article/components/math.html" . }}
+    {{ end }}
+{{ end }}
