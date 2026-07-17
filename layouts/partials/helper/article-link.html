@@ -1,0 +1,5 @@
+{{- $link := .RelPermalink -}}
+{{- with .Params.listLink -}}
+    {{- $link = . -}}
+{{- end -}}
+{{- return $link -}}
