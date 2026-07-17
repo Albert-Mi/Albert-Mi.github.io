@@ -33,8 +33,9 @@
                         <span>{{ .Title }}</span>
                     </span>
                 </summary>
-                <nav>
-                    <ol class="llm-docs-chapter-list">
+            </details>
+            <nav class="llm-docs-chapter-nav">
+                <ol class="llm-docs-chapter-list">
                     {{ range where $pages "Params.is_section" false }}
                         {{ $chapter := .Params.chapter }}
                         <li class="llm-docs-chapter">
@@ -57,9 +58,8 @@
                             {{ end }}
                         </li>
                     {{ end }}
-                    </ol>
-                </nav>
-            </details>
+                </ol>
+            </nav>
         </aside>
 
         <article class="llm-docs-content main-article" data-page-number="{{ .Params.page_number }}" data-root-heading-level="{{ .Params.root_heading_level }}">
