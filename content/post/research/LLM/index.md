@@ -1,6 +1,6 @@
 ---
 title: "From Transformer to Agent"
-date: 2026-06-11
+date: 2026-07-17
 draft: false
 math: true
 toc: true
@@ -12,123 +12,123 @@ categories: ["Research"]
 <nav class="fta-toc" aria-label="Table of contents">
   <div class="fta-toc-title">Contents</div>
   <ol>
-    <li class="fta-toc-level-2"><a href="#section-1">Transformer、ALM、LLM和Agent</a></li>
-    <li class="fta-toc-level-2"><a href="#section-2">总览：Transformer 与 Titans 的核心差异</a></li>
-    <li class="fta-toc-level-3 fta-toc-sub"><a href="#section-3">Transformer 的标准流程</a></li>
-    <li class="fta-toc-level-4 fta-toc-sub"><a href="#section-4">Tokenization</a></li>
-    <li class="fta-toc-level-4 fta-toc-sub"><a href="#section-5">Embedding</a></li>
-    <li class="fta-toc-level-4 fta-toc-sub"><a href="#section-6">Positional Encoding</a></li>
-    <li class="fta-toc-level-4 fta-toc-sub"><a href="#section-7">Self-Attention</a></li>
-    <li class="fta-toc-level-5 fta-toc-sub"><a href="#pdf-query-key-value">Query、Key、Value 的严格定义</a></li>
-    <li class="fta-toc-level-5 fta-toc-sub"><a href="#pdf-scaled-dot-product">缩放点积注意力的完整推导</a></li>
-    <li class="fta-toc-level-5 fta-toc-sub"><a href="#pdf-causal-mask">因果掩码：自回归生成中的 Self-Attention 约束</a></li>
-    <li class="fta-toc-level-4 fta-toc-sub"><a href="#section-8">Multi-Head Attention</a></li>
-    <li class="fta-toc-level-4 fta-toc-sub"><a href="#section-9">FFN / Residual / LayerNorm</a></li>
-    <li class="fta-toc-level-4 fta-toc-sub"><a href="#section-10">Probability：从隐藏状态到下一个 token</a></li>
-    <li class="fta-toc-level-4 fta-toc-sub"><a href="#section-11">Encoder 与 Decoder：原始 Transformer 的两种模块</a></li>
-    <li class="fta-toc-level-5 fta-toc-sub"><a href="#pdf-encoder-context-representation">Encoder：把输入序列编码成上下文表示</a></li>
-    <li class="fta-toc-level-5 fta-toc-sub"><a href="#pdf-decoder-conditional-generation">Decoder：在条件上下文下逐步生成输出</a></li>
-    <li class="fta-toc-level-4 fta-toc-sub"><a href="#section-12">Encoder-only、Decoder-only 与 Encoder-Decoder 架构</a></li>
-    <li class="fta-toc-level-5 fta-toc-sub"><a href="#pdf-encoder-only">Encoder-only：面向表示学习的架构</a></li>
-    <li class="fta-toc-level-5 fta-toc-sub"><a href="#pdf-decoder-only">Decoder-only：面向自回归生成的架构</a></li>
-    <li class="fta-toc-level-5 fta-toc-sub"><a href="#pdf-encoder-decoder">Encoder-Decoder：面向条件生成的架构</a></li>
-    <li class="fta-toc-level-3 fta-toc-sub"><a href="#section-13">Transformer 的长上下文瓶颈</a></li>
-    <li class="fta-toc-level-4 fta-toc-sub"><a href="#pdf-time-space-complexity">时间与空间复杂度的严格分析</a></li>
-    <li class="fta-toc-level-5 fta-toc-sub"><a href="#pdf-attention-short-term-memory">为什么注意力本质上是一种"短期记忆"</a></li>
-    <li class="fta-toc-level-5 fta-toc-sub"><a href="#pdf-long-chain-dilemma">长链推理的矛盾</a></li>
-    <li class="fta-toc-level-3 fta-toc-sub"><a href="#section-14">记忆视角：Attention、KV Cache、线性记忆</a></li>
-    <li class="fta-toc-level-4 fta-toc-sub"><a href="#pdf-linear-memory-least-squares">线性记忆与最小二乘的对偶关系</a></li>
-    <li class="fta-toc-level-5 fta-toc-sub"><a href="#pdf-linear-to-nonlinear">从线性到非线性：Titans 的核心洞察</a></li>
-    <li class="fta-toc-level-3 fta-toc-sub"><a href="#section-15">Titans 的长期神经记忆</a></li>
-    <li class="fta-toc-level-4 fta-toc-sub"><a href="#section-16">Key-Value associative memory</a></li>
-    <li class="fta-toc-level-4 fta-toc-sub"><a href="#section-17">Surprise</a></li>
-    <li class="fta-toc-level-4 fta-toc-sub"><a href="#section-18">Momentum</a></li>
-    <li class="fta-toc-level-4 fta-toc-sub"><a href="#section-19">动量项与遗忘项的闭式展开</a></li>
-    <li class="fta-toc-level-4 fta-toc-sub"><a href="#section-20">Test-time learning</a></li>
-    <li class="fta-toc-level-5 fta-toc-sub"><a href="#pdf-train-inference-separation">训练与推理的参数更新分离</a></li>
-    <li class="fta-toc-level-5 fta-toc-sub"><a href="#pdf-read-write-separation">读取与写入的分离</a></li>
-    <li class="fta-toc-level-5 fta-toc-sub"><a href="#pdf-rnn-memory-difference">与 RNN 和记忆网络的本质区别</a></li>
-    <li class="fta-toc-level-5 fta-toc-sub"><a href="#pdf-parallel-training">训练时的并行化策略</a></li>
-    <li class="fta-toc-level-5 fta-toc-sub"><a href="#pdf-persistent-memory">Persistent Memory：任务级先验知识</a></li>
-    <li class="fta-toc-level-3 fta-toc-sub"><a href="#section-21">Titans 三种架构</a></li>
-    <li class="fta-toc-level-4 fta-toc-sub"><a href="#section-22">MAC</a></li>
-    <li class="fta-toc-level-4 fta-toc-sub"><a href="#section-23">MAG</a></li>
-    <li class="fta-toc-level-4 fta-toc-sub"><a href="#section-24">MAL</a></li>
-    <li class="fta-toc-level-4 fta-toc-sub"><a href="#section-25">三者对比表</a></li>
-    <li class="fta-toc-level-3 fta-toc-sub"><a href="#section-26">为什么 Titans 适合长链推理</a></li>
-    <li class="fta-toc-level-4 fta-toc-sub"><a href="#pdf-multistep-information-fidelity">把长链推理写成多步信息保真问题</a></li>
-    <li class="fta-toc-level-5 fta-toc-sub"><a href="#pdf-information-theory">信息论视角</a></li>
-    <li class="fta-toc-level-5 fta-toc-sub"><a href="#pdf-dynamical-stability">动力系统稳定性分析</a></li>
-    <li class="fta-toc-level-3 fta-toc-sub"><a href="#section-27">实验结果与适用边界</a></li>
-    <li class="fta-toc-level-4 fta-toc-sub"><a href="#section-28">从本文机制分析得到的实验预期</a></li>
-    <li class="fta-toc-level-4 fta-toc-sub"><a href="#section-29">成功之处</a></li>
-    <li class="fta-toc-level-3 fta-toc-sub"><a href="#section-30">局限、开放问题与总结</a></li>
-    <li class="fta-toc-level-4 fta-toc-sub"><a href="#section-31">不足与开放问题</a></li>
-    <li class="fta-toc-level-4 fta-toc-sub"><a href="#section-32">结论：给数学物理学生的统一理解框架</a></li>
-    <li class="fta-toc-level-3 fta-toc-sub"><a href="#section-33">数学附录</a></li>
-    <li class="fta-toc-level-4 fta-toc-sub"><a href="#section-34">概率建模基础</a></li>
-    <li class="fta-toc-level-5 fta-toc-sub"><a href="#pdf-autoregressive-factorization">自回归分解的严格推导</a></li>
-    <li class="fta-toc-level-5 fta-toc-sub"><a href="#pdf-negative-log-likelihood">负对数似然损失</a></li>
-    <li class="fta-toc-level-5 fta-toc-sub"><a href="#pdf-softmax-logit-probability">Softmax：从 logit 到概率</a></li>
-    <li class="fta-toc-level-5 fta-toc-sub"><a href="#pdf-softmax-jacobian-full">Softmax 雅可比矩阵的完整推导</a></li>
-    <li class="fta-toc-level-4 fta-toc-sub"><a href="#section-35">更深的数学：深记忆为什么比线性记忆更强？</a></li>
-    <li class="fta-toc-level-5 fta-toc-sub"><a href="#pdf-linear-memory-limit">线性记忆的表达能力上限</a></li>
-    <li class="fta-toc-level-5 fta-toc-sub"><a href="#pdf-two-layer-mlp-gradient">两层 MLP 记忆模块的梯度分析</a></li>
-    <li class="fta-toc-level-5 fta-toc-sub"><a href="#pdf-function-approximation">从函数逼近论看深记忆的优势</a></li>
-    <li class="fta-toc-level-4 fta-toc-sub"><a href="#section-36">符号表</a></li>
-    <li class="fta-toc-level-4 fta-toc-sub"><a href="#section-37">参考文献</a></li>
-    <li class="fta-toc-level-2"><a href="#section-38">LLM与Agent：从概率模型到闭环智能系统</a></li>
-    <li class="fta-toc-level-3 fta-toc-sub"><a href="#section-39">本章总览：为什么 LLM 需要变成 Agent</a></li>
-    <li class="fta-toc-level-3 fta-toc-sub"><a href="#section-40">第一层：LLM 作为概率生成模型</a></li>
-    <li class="fta-toc-level-4 fta-toc-sub"><a href="#section-41">概率建模基础回顾</a></li>
-    <li class="fta-toc-level-4 fta-toc-sub"><a href="#section-42">LLM 的训练：预训练、指令微调与偏好优化</a></li>
-    <li class="fta-toc-level-5 fta-toc-sub"><a href="#section-43">预训练：学习语言的统计结构</a></li>
-    <li class="fta-toc-level-5 fta-toc-sub"><a href="#section-44">指令微调：让模型学会"按指令办事"</a></li>
-    <li class="fta-toc-level-5 fta-toc-sub"><a href="#section-45">RLHF：用人类偏好校准模型（Reinforcement Learning from Human Feedback ）</a></li>
-    <li class="fta-toc-level-4 fta-toc-sub"><a href="#section-46">LLM 的推理：自回归生成与采样策略</a></li>
-    <li class="fta-toc-level-5 fta-toc-sub"><a href="#section-47">自回归生成循环</a></li>
-    <li class="fta-toc-level-5 fta-toc-sub"><a href="#section-48">贪心解码、温度采样、Top-k 与 Top-p</a></li>
-    <li class="fta-toc-level-4 fta-toc-sub"><a href="#section-49">LLM 的能力与局限：推理与幻觉</a></li>
-    <li class="fta-toc-level-5 fta-toc-sub"><a href="#section-50">推理能力从何而来</a></li>
-    <li class="fta-toc-level-5 fta-toc-sub"><a href="#section-51">幻觉的概率解释</a></li>
-    <li class="fta-toc-level-3 fta-toc-sub"><a href="#section-52">第二层：Agent 作为闭环决策系统</a></li>
-    <li class="fta-toc-level-4 fta-toc-sub"><a href="#section-53">Agent 的状态、目标与行动</a></li>
-    <li class="fta-toc-level-5 fta-toc-sub"><a href="#section-54">Agent 的抽象定义</a></li>
-    <li class="fta-toc-level-4 fta-toc-sub"><a href="#section-55">MDP 与 Bellman 方程</a></li>
-    <li class="fta-toc-level-4 fta-toc-sub"><a href="#section-56">Agent 的模块结构</a></li>
-    <li class="fta-toc-level-3 fta-toc-sub"><a href="#section-57">第三层：LLM Agent 的六步工作流</a></li>
-    <li class="fta-toc-level-4 fta-toc-sub"><a href="#section-58">理解任务</a></li>
-    <li class="fta-toc-level-4 fta-toc-sub"><a href="#section-59">分解规划</a></li>
-    <li class="fta-toc-level-5 fta-toc-sub"><a href="#section-60">任务分解的形式化</a></li>
-    <li class="fta-toc-level-5 fta-toc-sub"><a href="#section-61">搜索树</a></li>
-    <li class="fta-toc-level-4 fta-toc-sub"><a href="#section-62">行动选择</a></li>
-    <li class="fta-toc-level-5 fta-toc-sub"><a href="#section-63">ReAct：推理与行动交替</a></li>
-    <li class="fta-toc-level-4 fta-toc-sub"><a href="#section-64">工具调用</a></li>
-    <li class="fta-toc-level-4 fta-toc-sub"><a href="#section-65">观察、校验与修正</a></li>
-    <li class="fta-toc-level-5 fta-toc-sub"><a href="#section-66">外部校验：让语言模型进入实验闭环</a></li>
-    <li class="fta-toc-level-4 fta-toc-sub"><a href="#section-67">终止条件与最终输出</a></li>
-    <li class="fta-toc-level-3 fta-toc-sub"><a href="#section-68">RAG 与外部知识</a></li>
-    <li class="fta-toc-level-3 fta-toc-sub"><a href="#section-69">安全、对齐与可靠性</a></li>
-    <li class="fta-toc-level-4 fta-toc-sub"><a href="#section-70">为什么Agent需要安全层</a></li>
-    <li class="fta-toc-level-4 fta-toc-sub"><a href="#section-71">目标错配与评估指标</a></li>
-    <li class="fta-toc-level-4 fta-toc-sub"><a href="#section-72">准确性评估（Precision / Recall / F1）</a></li>
-    <li class="fta-toc-level-3 fta-toc-sub"><a href="#section-73">实现一个最小 Agent</a></li>
-    <li class="fta-toc-level-4 fta-toc-sub"><a href="#section-74">系统状态设计</a></li>
-    <li class="fta-toc-level-4 fta-toc-sub"><a href="#section-75">从零实现的参考架构</a></li>
-    <li class="fta-toc-level-3 fta-toc-sub"><a href="#section-76">结论：概率层、推理层、控制层</a></li>
-    <li class="fta-toc-level-2"><a href="#section-77">数学附录：几个常用推导</a></li>
-    <li class="fta-toc-level-3 fta-toc-sub"><a href="#section-78">Softmax 雅可比矩阵</a></li>
-    <li class="fta-toc-level-3 fta-toc-sub"><a href="#section-79">KL 散度非负性证明</a></li>
-    <li class="fta-toc-level-3 fta-toc-sub"><a href="#section-80">经验风险与真实风险</a></li>
-    <li class="fta-toc-level-3 fta-toc-sub"><a href="#section-81">数值方法的局部截断误差</a></li>
-    <li class="fta-toc-level-3 fta-toc-sub"><a href="#section-82">Euler和RK4解法对比</a></li>
-    <li class="fta-toc-level-2"><a href="#section-83">符号表</a></li>
-    <li class="fta-toc-level-2"><a href="#section-84">学习路线与实践作业</a></li>
-    <li class="fta-toc-level-4 fta-toc-sub"><a href="#section-85">建议路线</a></li>
-    <li class="fta-toc-level-4 fta-toc-sub"><a href="#section-86">作业一：手算采样分布</a></li>
-    <li class="fta-toc-level-4 fta-toc-sub"><a href="#section-87">作业二：实现谐振子数值分析的 Agent</a></li>
-    <li class="fta-toc-level-4 fta-toc-sub"><a href="#section-88">作业三：扩展分析</a></li>
-    <li class="fta-toc-level-2"><a href="#references">References</a></li>
+    <li class="fta-toc-level-2"><span class="fta-toc-number" aria-hidden="true">1</span><a href="#section-1">Transformer、ALM、LLM和Agent</a></li>
+    <li class="fta-toc-level-2"><span class="fta-toc-number" aria-hidden="true">2</span><a href="#section-2">总览：Transformer 与 Titans 的核心差异</a></li>
+    <li class="fta-toc-level-3 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">2.1</span><a href="#section-3">Transformer 的标准流程</a></li>
+    <li class="fta-toc-level-4 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">2.1.1</span><a href="#section-4">Tokenization</a></li>
+    <li class="fta-toc-level-4 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">2.1.2</span><a href="#section-5">Embedding</a></li>
+    <li class="fta-toc-level-4 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">2.1.3</span><a href="#section-6">Positional Encoding</a></li>
+    <li class="fta-toc-level-4 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">2.1.4</span><a href="#section-7">Self-Attention</a></li>
+    <li class="fta-toc-level-5 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">2.1.4.1</span><a href="#pdf-query-key-value">Query、Key、Value 的严格定义</a></li>
+    <li class="fta-toc-level-5 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">2.1.4.2</span><a href="#pdf-scaled-dot-product">缩放点积注意力的完整推导</a></li>
+    <li class="fta-toc-level-5 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">2.1.4.3</span><a href="#pdf-causal-mask">因果掩码：自回归生成中的 Self-Attention 约束</a></li>
+    <li class="fta-toc-level-4 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">2.1.5</span><a href="#section-8">Multi-Head Attention</a></li>
+    <li class="fta-toc-level-4 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">2.1.6</span><a href="#section-9">FFN / Residual / LayerNorm</a></li>
+    <li class="fta-toc-level-4 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">2.1.7</span><a href="#section-10">Probability：从隐藏状态到下一个 token</a></li>
+    <li class="fta-toc-level-4 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">2.1.8</span><a href="#section-11">Encoder 与 Decoder：原始 Transformer 的两种模块</a></li>
+    <li class="fta-toc-level-5 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">2.1.8.1</span><a href="#pdf-encoder-context-representation">Encoder：把输入序列编码成上下文表示</a></li>
+    <li class="fta-toc-level-5 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">2.1.8.2</span><a href="#pdf-decoder-conditional-generation">Decoder：在条件上下文下逐步生成输出</a></li>
+    <li class="fta-toc-level-4 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">2.1.9</span><a href="#section-12">Encoder-only、Decoder-only 与 Encoder-Decoder 架构</a></li>
+    <li class="fta-toc-level-5 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">2.1.9.1</span><a href="#pdf-encoder-only">Encoder-only：面向表示学习的架构</a></li>
+    <li class="fta-toc-level-5 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">2.1.9.2</span><a href="#pdf-decoder-only">Decoder-only：面向自回归生成的架构</a></li>
+    <li class="fta-toc-level-5 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">2.1.9.3</span><a href="#pdf-encoder-decoder">Encoder-Decoder：面向条件生成的架构</a></li>
+    <li class="fta-toc-level-3 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">2.2</span><a href="#section-13">Transformer 的长上下文瓶颈</a></li>
+    <li class="fta-toc-level-4 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">2.2.1</span><a href="#pdf-time-space-complexity">时间与空间复杂度的严格分析</a></li>
+    <li class="fta-toc-level-5 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">2.2.1.1</span><a href="#pdf-attention-short-term-memory">为什么注意力本质上是一种"短期记忆"</a></li>
+    <li class="fta-toc-level-5 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">2.2.1.2</span><a href="#pdf-long-chain-dilemma">长链推理的矛盾</a></li>
+    <li class="fta-toc-level-3 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">2.3</span><a href="#section-14">记忆视角：Attention、KV Cache、线性记忆</a></li>
+    <li class="fta-toc-level-4 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">2.3.1</span><a href="#pdf-linear-memory-least-squares">线性记忆与最小二乘的对偶关系</a></li>
+    <li class="fta-toc-level-5 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">2.3.1.1</span><a href="#pdf-linear-to-nonlinear">从线性到非线性：Titans 的核心洞察</a></li>
+    <li class="fta-toc-level-3 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">2.4</span><a href="#section-15">Titans 的长期神经记忆</a></li>
+    <li class="fta-toc-level-4 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">2.4.1</span><a href="#section-16">Key-Value associative memory</a></li>
+    <li class="fta-toc-level-4 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">2.4.2</span><a href="#section-17">Surprise</a></li>
+    <li class="fta-toc-level-4 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">2.4.3</span><a href="#section-18">Momentum</a></li>
+    <li class="fta-toc-level-4 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">2.4.4</span><a href="#section-19">动量项与遗忘项的闭式展开</a></li>
+    <li class="fta-toc-level-4 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">2.4.5</span><a href="#section-20">Test-time learning</a></li>
+    <li class="fta-toc-level-5 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">2.4.5.1</span><a href="#pdf-train-inference-separation">训练与推理的参数更新分离</a></li>
+    <li class="fta-toc-level-5 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">2.4.5.2</span><a href="#pdf-read-write-separation">读取与写入的分离</a></li>
+    <li class="fta-toc-level-5 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">2.4.5.3</span><a href="#pdf-rnn-memory-difference">与 RNN 和记忆网络的本质区别</a></li>
+    <li class="fta-toc-level-5 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">2.4.5.4</span><a href="#pdf-parallel-training">训练时的并行化策略</a></li>
+    <li class="fta-toc-level-5 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">2.4.5.5</span><a href="#pdf-persistent-memory">Persistent Memory：任务级先验知识</a></li>
+    <li class="fta-toc-level-3 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">2.5</span><a href="#section-21">Titans 三种架构</a></li>
+    <li class="fta-toc-level-4 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">2.5.1</span><a href="#section-22">MAC</a></li>
+    <li class="fta-toc-level-4 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">2.5.2</span><a href="#section-23">MAG</a></li>
+    <li class="fta-toc-level-4 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">2.5.3</span><a href="#section-24">MAL</a></li>
+    <li class="fta-toc-level-4 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">2.5.4</span><a href="#section-25">三者对比表</a></li>
+    <li class="fta-toc-level-3 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">2.6</span><a href="#section-26">为什么 Titans 适合长链推理</a></li>
+    <li class="fta-toc-level-4 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">2.6.1</span><a href="#pdf-multistep-information-fidelity">把长链推理写成多步信息保真问题</a></li>
+    <li class="fta-toc-level-5 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">2.6.1.1</span><a href="#pdf-information-theory">信息论视角</a></li>
+    <li class="fta-toc-level-5 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">2.6.1.2</span><a href="#pdf-dynamical-stability">动力系统稳定性分析</a></li>
+    <li class="fta-toc-level-3 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">2.7</span><a href="#section-27">实验结果与适用边界</a></li>
+    <li class="fta-toc-level-4 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">2.7.1</span><a href="#section-28">从本文机制分析得到的实验预期</a></li>
+    <li class="fta-toc-level-4 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">2.7.2</span><a href="#section-29">成功之处</a></li>
+    <li class="fta-toc-level-3 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">2.8</span><a href="#section-30">局限、开放问题与总结</a></li>
+    <li class="fta-toc-level-4 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">2.8.1</span><a href="#section-31">不足与开放问题</a></li>
+    <li class="fta-toc-level-4 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">2.8.2</span><a href="#section-32">结论：给数学物理学生的统一理解框架</a></li>
+    <li class="fta-toc-level-3 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">2.9</span><a href="#section-33">数学附录</a></li>
+    <li class="fta-toc-level-4 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">2.9.1</span><a href="#section-34">概率建模基础</a></li>
+    <li class="fta-toc-level-5 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">2.9.1.1</span><a href="#pdf-autoregressive-factorization">自回归分解的严格推导</a></li>
+    <li class="fta-toc-level-5 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">2.9.1.2</span><a href="#pdf-negative-log-likelihood">负对数似然损失</a></li>
+    <li class="fta-toc-level-5 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">2.9.1.3</span><a href="#pdf-softmax-logit-probability">Softmax：从 logit 到概率</a></li>
+    <li class="fta-toc-level-5 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">2.9.1.4</span><a href="#pdf-softmax-jacobian-full">Softmax 雅可比矩阵的完整推导</a></li>
+    <li class="fta-toc-level-4 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">2.9.2</span><a href="#section-35">更深的数学：深记忆为什么比线性记忆更强？</a></li>
+    <li class="fta-toc-level-5 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">2.9.2.1</span><a href="#pdf-linear-memory-limit">线性记忆的表达能力上限</a></li>
+    <li class="fta-toc-level-5 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">2.9.2.2</span><a href="#pdf-two-layer-mlp-gradient">两层 MLP 记忆模块的梯度分析</a></li>
+    <li class="fta-toc-level-5 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">2.9.2.3</span><a href="#pdf-function-approximation">从函数逼近论看深记忆的优势</a></li>
+    <li class="fta-toc-level-4 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">2.9.3</span><a href="#section-36">符号表</a></li>
+    <li class="fta-toc-level-4 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">2.9.4</span><a href="#section-37">参考文献</a></li>
+    <li class="fta-toc-level-2"><span class="fta-toc-number" aria-hidden="true">3</span><a href="#section-38">LLM与Agent：从概率模型到闭环智能系统</a></li>
+    <li class="fta-toc-level-3 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">3.1</span><a href="#section-39">本章总览：为什么 LLM 需要变成 Agent</a></li>
+    <li class="fta-toc-level-3 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">3.2</span><a href="#section-40">第一层：LLM 作为概率生成模型</a></li>
+    <li class="fta-toc-level-4 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">3.2.1</span><a href="#section-41">概率建模基础回顾</a></li>
+    <li class="fta-toc-level-4 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">3.2.2</span><a href="#section-42">LLM 的训练：预训练、指令微调与偏好优化</a></li>
+    <li class="fta-toc-level-5 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">3.2.2.1</span><a href="#section-43">预训练：学习语言的统计结构</a></li>
+    <li class="fta-toc-level-5 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">3.2.2.2</span><a href="#section-44">指令微调：让模型学会"按指令办事"</a></li>
+    <li class="fta-toc-level-5 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">3.2.2.3</span><a href="#section-45">RLHF：用人类偏好校准模型（Reinforcement Learning from Human Feedback ）</a></li>
+    <li class="fta-toc-level-4 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">3.2.3</span><a href="#section-46">LLM 的推理：自回归生成与采样策略</a></li>
+    <li class="fta-toc-level-5 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">3.2.3.1</span><a href="#section-47">自回归生成循环</a></li>
+    <li class="fta-toc-level-5 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">3.2.3.2</span><a href="#section-48">贪心解码、温度采样、Top-k 与 Top-p</a></li>
+    <li class="fta-toc-level-4 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">3.2.4</span><a href="#section-49">LLM 的能力与局限：推理与幻觉</a></li>
+    <li class="fta-toc-level-5 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">3.2.4.1</span><a href="#section-50">推理能力从何而来</a></li>
+    <li class="fta-toc-level-5 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">3.2.4.2</span><a href="#section-51">幻觉的概率解释</a></li>
+    <li class="fta-toc-level-3 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">3.3</span><a href="#section-52">第二层：Agent 作为闭环决策系统</a></li>
+    <li class="fta-toc-level-4 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">3.3.1</span><a href="#section-53">Agent 的状态、目标与行动</a></li>
+    <li class="fta-toc-level-5 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">3.3.1.1</span><a href="#section-54">Agent 的抽象定义</a></li>
+    <li class="fta-toc-level-4 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">3.3.2</span><a href="#section-55">MDP 与 Bellman 方程</a></li>
+    <li class="fta-toc-level-4 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">3.3.3</span><a href="#section-56">Agent 的模块结构</a></li>
+    <li class="fta-toc-level-3 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">3.4</span><a href="#section-57">第三层：LLM Agent 的六步工作流</a></li>
+    <li class="fta-toc-level-4 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">3.4.1</span><a href="#section-58">理解任务</a></li>
+    <li class="fta-toc-level-4 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">3.4.2</span><a href="#section-59">分解规划</a></li>
+    <li class="fta-toc-level-5 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">3.4.2.1</span><a href="#section-60">任务分解的形式化</a></li>
+    <li class="fta-toc-level-5 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">3.4.2.2</span><a href="#section-61">搜索树</a></li>
+    <li class="fta-toc-level-4 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">3.4.3</span><a href="#section-62">行动选择</a></li>
+    <li class="fta-toc-level-5 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">3.4.3.1</span><a href="#section-63">ReAct：推理与行动交替</a></li>
+    <li class="fta-toc-level-4 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">3.4.4</span><a href="#section-64">工具调用</a></li>
+    <li class="fta-toc-level-4 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">3.4.5</span><a href="#section-65">观察、校验与修正</a></li>
+    <li class="fta-toc-level-5 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">3.4.5.1</span><a href="#section-66">外部校验：让语言模型进入实验闭环</a></li>
+    <li class="fta-toc-level-4 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">3.4.6</span><a href="#section-67">终止条件与最终输出</a></li>
+    <li class="fta-toc-level-3 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">3.5</span><a href="#section-68">RAG 与外部知识</a></li>
+    <li class="fta-toc-level-3 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">3.6</span><a href="#section-69">安全、对齐与可靠性</a></li>
+    <li class="fta-toc-level-4 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">3.6.1</span><a href="#section-70">为什么Agent需要安全层</a></li>
+    <li class="fta-toc-level-4 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">3.6.2</span><a href="#section-71">目标错配与评估指标</a></li>
+    <li class="fta-toc-level-4 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">3.6.3</span><a href="#section-72">准确性评估（Precision / Recall / F1）</a></li>
+    <li class="fta-toc-level-3 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">3.7</span><a href="#section-73">实现一个最小 Agent</a></li>
+    <li class="fta-toc-level-4 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">3.7.1</span><a href="#section-74">系统状态设计</a></li>
+    <li class="fta-toc-level-4 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">3.7.2</span><a href="#section-75">从零实现的参考架构</a></li>
+    <li class="fta-toc-level-3 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">3.8</span><a href="#section-76">结论：概率层、推理层、控制层</a></li>
+    <li class="fta-toc-level-2"><span class="fta-toc-number" aria-hidden="true">4</span><a href="#section-77">数学附录：几个常用推导</a></li>
+    <li class="fta-toc-level-3 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">4.1</span><a href="#section-78">Softmax 雅可比矩阵</a></li>
+    <li class="fta-toc-level-3 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">4.2</span><a href="#section-79">KL 散度非负性证明</a></li>
+    <li class="fta-toc-level-3 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">4.3</span><a href="#section-80">经验风险与真实风险</a></li>
+    <li class="fta-toc-level-3 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">4.4</span><a href="#section-81">数值方法的局部截断误差</a></li>
+    <li class="fta-toc-level-3 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">4.5</span><a href="#section-82">Euler和RK4解法对比</a></li>
+    <li class="fta-toc-level-2"><span class="fta-toc-number" aria-hidden="true">5</span><a href="#section-83">符号表</a></li>
+    <li class="fta-toc-level-2"><span class="fta-toc-number" aria-hidden="true">6</span><a href="#section-84">学习路线与实践作业</a></li>
+    <li class="fta-toc-level-4 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">6.0.1</span><a href="#section-85">建议路线</a></li>
+    <li class="fta-toc-level-4 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">6.0.2</span><a href="#section-86">作业一：手算采样分布</a></li>
+    <li class="fta-toc-level-4 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">6.0.3</span><a href="#section-87">作业二：实现谐振子数值分析的 Agent</a></li>
+    <li class="fta-toc-level-4 fta-toc-sub"><span class="fta-toc-number" aria-hidden="true">6.0.4</span><a href="#section-88">作业三：扩展分析</a></li>
+    <li class="fta-toc-level-2"><span class="fta-toc-number" aria-hidden="true">7</span><a href="#references">References</a></li>
   </ol>
 </nav>
 <article class="fta-post">
