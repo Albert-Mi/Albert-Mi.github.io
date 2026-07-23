@@ -1,0 +1,367 @@
+<!doctype html><html lang=en-us dir=ltr><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><meta name=description content=" Transformer 的标准流程 Transformer 不能直接对自然语言字符串做矩阵乘法。文本进入模型需要三步：tokenization（切分为离散编号）、embedding（映射为连续向量）、位置编码（注入顺序信息）。三者合起来得到初始隐藏状态 $H^{(0)}\\in\\mathbb{R}^{n\\times d}$。\nTokenization 设 tokenization 函数为\n\\[ \\begin{aligned} T_{\\rm tok}: \\text{string} \\to (x_1, x_2, \\dots, x_n), \\quad x_i \\in \\mathcal{V}. \\end{aligned} \\](1.5) 常见方法为字节对编码（Byte Pair Encoding, BPE）。BPE 的核心思想是从字符级开始，反复合并最高频的相邻符号对，直到达到预设的词表大小。频繁出现的片段（如\" ing\"、\"tion\"）被合并成单个 token，稀有片段保持拆分。\ntoken 不等于中文词或英文单词。一个中文词可能是一个 token 也可能拆成多个；英文长词、公式名、代码变量也可能拆分。\nexplanation: 为什么不直接按字切分？ 按字符切分：词表小（如26字母+标点），但序列长度大，长距离依赖更难。按完整单词切分：序列短，但词表巨大（英语数十万词），且无法处理新词。bpe 折中：高频片段合并为 token，低频片段保持拆小——既控制词表大小，又能表示任意新词。\nexample 3 在我们的翻译例子中，英文句子 \"the cat sat on the mat because it was tired.\" 经 bpe tokenization 后得到约10个 token。中文目标句 \"猫坐在垫子上，因为它累了\" 经 tokenization 后得到约6个 token（中文 token 化策略与英文不同）。注意：中英文的 token 数通常不相等，这与书写系统的信息密度差异有关。\n"><title>Transformer 的标准流程</title><link rel=canonical href=https://albert-mi.github.io/docs/llm/02-01-transformer-standard-workflow/><link rel=stylesheet href=/scss/style.min.a99fe54029218fdc1c9075a9e89e670944c6f0e07062da10a9e2344ce161ca7f.css><meta property='og:title' content="Transformer 的标准流程"><meta property='og:description' content=" Transformer 的标准流程 Transformer 不能直接对自然语言字符串做矩阵乘法。文本进入模型需要三步：tokenization（切分为离散编号）、embedding（映射为连续向量）、位置编码（注入顺序信息）。三者合起来得到初始隐藏状态 $H^{(0)}\\in\\mathbb{R}^{n\\times d}$。\nTokenization 设 tokenization 函数为\n\\[ \\begin{aligned} T_{\\rm tok}: \\text{string} \\to (x_1, x_2, \\dots, x_n), \\quad x_i \\in \\mathcal{V}. \\end{aligned} \\](1.5) 常见方法为字节对编码（Byte Pair Encoding, BPE）。BPE 的核心思想是从字符级开始，反复合并最高频的相邻符号对，直到达到预设的词表大小。频繁出现的片段（如\" ing\"、\"tion\"）被合并成单个 token，稀有片段保持拆分。\ntoken 不等于中文词或英文单词。一个中文词可能是一个 token 也可能拆成多个；英文长词、公式名、代码变量也可能拆分。\nexplanation: 为什么不直接按字切分？ 按字符切分：词表小（如26字母+标点），但序列长度大，长距离依赖更难。按完整单词切分：序列短，但词表巨大（英语数十万词），且无法处理新词。bpe 折中：高频片段合并为 token，低频片段保持拆小——既控制词表大小，又能表示任意新词。\nexample 3 在我们的翻译例子中，英文句子 \"the cat sat on the mat because it was tired.\" 经 bpe tokenization 后得到约10个 token。中文目标句 \"猫坐在垫子上，因为它累了\" 经 tokenization 后得到约6个 token（中文 token 化策略与英文不同）。注意：中英文的 token 数通常不相等，这与书写系统的信息密度差异有关。\n"><meta property='og:url' content='https://albert-mi.github.io/docs/llm/02-01-transformer-standard-workflow/'><meta property='og:site_name' content='WebHome of Xuan'><meta property='og:type' content='article'><meta property='article:section' content='Docs'><meta name=twitter:title content="Transformer 的标准流程"><meta name=twitter:description content=" Transformer 的标准流程 Transformer 不能直接对自然语言字符串做矩阵乘法。文本进入模型需要三步：tokenization（切分为离散编号）、embedding（映射为连续向量）、位置编码（注入顺序信息）。三者合起来得到初始隐藏状态 $H^{(0)}\\in\\mathbb{R}^{n\\times d}$。\nTokenization 设 tokenization 函数为\n\\[ \\begin{aligned} T_{\\rm tok}: \\text{string} \\to (x_1, x_2, \\dots, x_n), \\quad x_i \\in \\mathcal{V}. \\end{aligned} \\](1.5) 常见方法为字节对编码（Byte Pair Encoding, BPE）。BPE 的核心思想是从字符级开始，反复合并最高频的相邻符号对，直到达到预设的词表大小。频繁出现的片段（如\" ing\"、\"tion\"）被合并成单个 token，稀有片段保持拆分。\ntoken 不等于中文词或英文单词。一个中文词可能是一个 token 也可能拆成多个；英文长词、公式名、代码变量也可能拆分。\nexplanation: 为什么不直接按字切分？ 按字符切分：词表小（如26字母+标点），但序列长度大，长距离依赖更难。按完整单词切分：序列短，但词表巨大（英语数十万词），且无法处理新词。bpe 折中：高频片段合并为 token，低频片段保持拆小——既控制词表大小，又能表示任意新词。\nexample 3 在我们的翻译例子中，英文句子 \"the cat sat on the mat because it was tired.\" 经 bpe tokenization 后得到约10个 token。中文目标句 \"猫坐在垫子上，因为它累了\" 经 tokenization 后得到约6个 token（中文 token 化策略与英文不同）。注意：中英文的 token 数通常不相等，这与书写系统的信息密度差异有关。\n"><link rel="shortcut icon" href=/favicon.png><script defer src="/js/secret-entrance.js?v=20251101"></script><link rel=stylesheet href=/p/from-transformer-to-agent-full/from-transformer-to-agent.css><link rel=stylesheet href=/css/llm-docs.min.ff589c3aa78b505bb14bf37bbdf538998f01cfe824ef14d3baeddd114928bb17.css integrity="sha256-/1icOqeLUFuxS/N7vfU4mY8Bz+gk7xTTuu3dEUkouxc="><script defer src=/js/llm-docs-toc.min.3f0d1aca7102718bf741ad5a801d99943f4ad9edefd43759b37188ef4ddb0ce0.js integrity="sha256-Pw0aynECcYv3Qa1agB2ZlD9K2e3v1DdZs3GI703bDOA="></script></head><body class=llm-docs-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky"><button class="hamburger hamburger--spin" type=button id=toggle-menu aria-label="Toggle Menu">
+<span class=hamburger-box><span class=hamburger-inner></span></span></button><header><figure class=site-avatar><a href=/><img src=/img/Portrait_hu_f58ed74a4d3066f7.png width=300 height=301 class=site-logo loading=lazy alt=Avatar>
+</a><span class=emoji>🚀</span></figure><div class=site-meta><h1 class=site-name><a href=/>WebHome of Xuan</a></h1><h2 class=site-description>Xuan の小窝</h2></div></header><ol class=menu-social><li><a href=https://github.com/Albert-Mi target=_blank title=GitHub rel=me><svg class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6.0 00-1.3-3.2 4.2 4.2.0 00-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3.0 00-6.2.0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2.0 00-.1 3.2A4.6 4.6.0 004 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg></a></li><li><a href=https://twitter.com target=_blank title=Twitter rel=me><svg class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M22 4.01c-1 .49-1.98.689-3 .99-1.121-1.265-2.783-1.335-4.38-.737S11.977 6.323 12 8v1c-3.245.083-6.135-1.395-8-4 0 0-4.182 7.433 4 11-1.872 1.247-3.739 2.088-6 2 3.308 1.803 6.913 2.423 10.034 1.517 3.58-1.04 6.522-3.723 7.651-7.742a13.84 13.84.0 00.497-3.753C20.18 7.773 21.692 5.25 22 4.009z"/></svg></a></li></ol><ol class=menu id=main-menu><li><a href=/secret/><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-1a7 7 0 00-7-7h-2a7 7 0 00-7 7v1"/><circle cx="12" cy="7" r="4"/></svg>
+<span>🔒 Secret Area</span></a></li><li><a href=/><svg class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="5 12 3 12 12 3 21 12 19 12"/><path d="M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/><path d="M9 21v-6a2 2 0 012-2h2a2 2 0 012 2v6"/></svg>
+<span>Home</span></a></li><li><a href=/bookmarks/><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bookmark-icon lucide-bookmark"><path d="m19 21-7-4-7 4V5a2 2 0 012-2h10a2 2 0 012 2v16z"/></svg>
+<span>Bookmarks</span></a></li><li><a href=/archives/><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-archive-icon lucide-archive"><rect width="20" height="5" x="2" y="3" rx="1"/><path d="M4 8v11a2 2 0 002 2h12a2 2 0 002-2V8"/><path d="M10 12h4"/></svg>
+<span>Archives</span></a></li><li><a href=/search/><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search-icon lucide-search"><path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/></svg>
+<span>Search</span></a></li><li class=menu-bottom-section><ol class=menu><li id=dark-mode-toggle><svg class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<svg class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<span>Dark Mode</span></li></ol></li></ol></aside><main class="main full-width"><div class=llm-docs-shell><aside class=llm-docs-sidebar aria-label="LLM chapters"><a class=llm-docs-brand href=/docs/llm/>LLM Notes</a><p class=llm-docs-sidebar-label>From Transformer to Agent</p><details class=llm-docs-nav-disclosure><summary class=llm-docs-mobile-summary><span>章节目录</span>
+<span class=llm-docs-mobile-current><span class=llm-docs-chapter-number>2.1</span>
+<span>Transformer 的标准流程</span></span></summary></details><nav class=llm-docs-chapter-nav><ol class=llm-docs-chapter-list><li class=llm-docs-chapter><a class=llm-docs-chapter-link href=/docs/llm/01-transformer-alm-llm-agent/><span class=llm-docs-chapter-number>1</span>
+<span>Transformer、ALM、LLM和Agent</span></a></li><li class=llm-docs-chapter><a class=llm-docs-chapter-link href=/docs/llm/02-transformer-and-titans/><span class=llm-docs-chapter-number>2</span>
+<span>总览：Transformer 与 Titans 的核心差异</span></a><ol class=llm-docs-section-list><li><a href=/docs/llm/02-01-transformer-standard-workflow/ aria-current=page><span class=llm-docs-chapter-number>2.1</span>
+<span>Transformer 的标准流程</span></a></li><li><a href=/docs/llm/02-02-transformer-context-bottleneck/><span class=llm-docs-chapter-number>2.2</span>
+<span>Transformer 的长上下文瓶颈</span></a></li><li><a href=/docs/llm/02-03-memory-attention-kv-cache/><span class=llm-docs-chapter-number>2.3</span>
+<span>记忆视角：Attention、KV Cache、线性记忆</span></a></li><li><a href=/docs/llm/02-04-titans-neural-memory/><span class=llm-docs-chapter-number>2.4</span>
+<span>Titans 的长期神经记忆</span></a></li><li><a href=/docs/llm/02-05-titans-architectures/><span class=llm-docs-chapter-number>2.5</span>
+<span>Titans 三种架构</span></a></li><li><a href=/docs/llm/02-06-titans-long-chain-reasoning/><span class=llm-docs-chapter-number>2.6</span>
+<span>为什么 Titans 适合长链推理</span></a></li><li><a href=/docs/llm/02-07-experiments-and-boundaries/><span class=llm-docs-chapter-number>2.7</span>
+<span>实验结果与适用边界</span></a></li><li><a href=/docs/llm/02-08-limitations-and-summary/><span class=llm-docs-chapter-number>2.8</span>
+<span>局限、开放问题与总结</span></a></li><li><a href=/docs/llm/02-09-mathematical-appendix/><span class=llm-docs-chapter-number>2.9</span>
+<span>数学附录</span></a></li></ol></li><li class=llm-docs-chapter><a class=llm-docs-chapter-link href=/docs/llm/03-llm-and-agent/><span class=llm-docs-chapter-number>3</span>
+<span>LLM与Agent：从概率模型到闭环智能系统</span></a><ol class=llm-docs-section-list><li><a href=/docs/llm/03-01-why-llm-needs-agent/><span class=llm-docs-chapter-number>3.1</span>
+<span>本章总览：为什么 LLM 需要变成 Agent</span></a></li><li><a href=/docs/llm/03-02-llm-probabilistic-model/><span class=llm-docs-chapter-number>3.2</span>
+<span>第一层：LLM 作为概率生成模型</span></a></li><li><a href=/docs/llm/03-03-agent-closed-loop-system/><span class=llm-docs-chapter-number>3.3</span>
+<span>第二层：Agent 作为闭环决策系统</span></a></li><li><a href=/docs/llm/03-04-llm-agent-workflow/><span class=llm-docs-chapter-number>3.4</span>
+<span>第三层：LLM Agent 的六步工作流</span></a></li><li><a href=/docs/llm/03-05-rag-and-external-knowledge/><span class=llm-docs-chapter-number>3.5</span>
+<span>RAG 与外部知识</span></a></li><li><a href=/docs/llm/03-06-safety-alignment-reliability/><span class=llm-docs-chapter-number>3.6</span>
+<span>安全、对齐与可靠性</span></a></li><li><a href=/docs/llm/03-07-minimal-agent/><span class=llm-docs-chapter-number>3.7</span>
+<span>实现一个最小 Agent</span></a></li><li><a href=/docs/llm/03-08-conclusion/><span class=llm-docs-chapter-number>3.8</span>
+<span>结论：概率层、推理层、控制层</span></a></li></ol></li><li class=llm-docs-chapter><a class=llm-docs-chapter-link href=/docs/llm/04-mathematical-appendix/><span class=llm-docs-chapter-number>4</span>
+<span>数学附录：几个常用推导</span></a><ol class=llm-docs-section-list><li><a href=/docs/llm/04-01-softmax-jacobian/><span class=llm-docs-chapter-number>4.1</span>
+<span>Softmax 雅可比矩阵</span></a></li><li><a href=/docs/llm/04-02-kl-divergence/><span class=llm-docs-chapter-number>4.2</span>
+<span>KL 散度非负性证明</span></a></li><li><a href=/docs/llm/04-03-empirical-and-true-risk/><span class=llm-docs-chapter-number>4.3</span>
+<span>经验风险与真实风险</span></a></li><li><a href=/docs/llm/04-04-local-truncation-error/><span class=llm-docs-chapter-number>4.4</span>
+<span>数值方法的局部截断误差</span></a></li><li><a href=/docs/llm/04-05-euler-vs-rk4/><span class=llm-docs-chapter-number>4.5</span>
+<span>Euler和RK4解法对比</span></a></li></ol></li><li class=llm-docs-chapter><a class=llm-docs-chapter-link href=/docs/llm/05-notation/><span class=llm-docs-chapter-number>5</span>
+<span>符号表</span></a></li><li class=llm-docs-chapter><a class=llm-docs-chapter-link href=/docs/llm/06-learning-path-and-exercises/><span class=llm-docs-chapter-number>6</span>
+<span>学习路线与实践作业</span></a><ol class=llm-docs-section-list><li><a href=/docs/llm/06-00-01-learning-route/><span class=llm-docs-chapter-number>6.0.1</span>
+<span>建议路线</span></a></li><li><a href=/docs/llm/06-00-02-sampling-exercise/><span class=llm-docs-chapter-number>6.0.2</span>
+<span>作业一：手算采样分布</span></a></li><li><a href=/docs/llm/06-00-03-harmonic-agent-exercise/><span class=llm-docs-chapter-number>6.0.3</span>
+<span>作业二：实现谐振子数值分析的 Agent</span></a></li><li><a href=/docs/llm/06-00-04-extended-analysis/><span class=llm-docs-chapter-number>6.0.4</span>
+<span>作业三：扩展分析</span></a></li></ol></li><li class=llm-docs-chapter><a class=llm-docs-chapter-link href=/docs/llm/07-references/><span class=llm-docs-chapter-number>7</span>
+<span>References</span></a></li></ol></nav></aside><article class="llm-docs-content main-article" data-page-number=2.1 data-root-heading-level=3><nav class=llm-docs-breadcrumb aria-label=Breadcrumb><a href=/docs/llm/>LLM Notes</a><span>/</span>
+<a href=/docs/llm/02-transformer-and-titans/>总览：Transformer 与 Titans 的核心差异</a><span>/</span>
+<span>Transformer 的标准流程</span></nav><div class=fta-document><article class=fta-post><h3 id=section-3>Transformer 的标准流程</h3><p>Transformer 不能直接对自然语言字符串做矩阵乘法。文本进入模型需要三步：tokenization（切分为离散编号）、embedding（映射为连续向量）、位置编码（注入顺序信息）。三者合起来得到初始隐藏状态 $H^{(0)}\in\mathbb{R}^{n\times d}$。</p><h4 id=section-4>Tokenization</h4><p>设 tokenization 函数为</p><div class="fta-math fta-numbered-math" data-equations=1.5>\[
+\begin{aligned}
+T_{\rm tok}: \text{string} \to (x_1, x_2, \dots, x_n), \quad x_i \in \mathcal{V}.
+\end{aligned}
+\]<span class=fta-equation-numbers aria-label="公式 1.5"><span class=fta-equation-number aria-hidden=true>(1.5)</span></span></div><p>常见方法为字节对编码（Byte Pair Encoding, BPE）。BPE 的核心思想是从字符级开始，反复合并最高频的相邻符号对，直到达到预设的词表大小。频繁出现的片段（如"ing"、"tion"）被合并成单个 token，稀有片段保持拆分。</p><p>Token 不等于中文词或英文单词。一个中文词可能是一个 token 也可能拆成多个；英文长词、公式名、代码变量也可能拆分。</p><aside class="fta-callout fta-explanation"><div class=fta-callout-title>Explanation: 为什么不直接按字切分？</div><p>按字符切分：词表小（如26字母+标点），但序列长度大，长距离依赖更难。按完整单词切分：序列短，但词表巨大（英语数十万词），且无法处理新词。BPE 折中：高频片段合并为 token，低频片段保持拆小——既控制词表大小，又能表示任意新词。</p></aside><aside class="fta-callout fta-example"><div class=fta-callout-title>Example 3</div><p>在我们的翻译例子中，英文句子 "The cat sat on the mat because it was tired." 经 BPE tokenization 后得到约10个 token。中文目标句 "猫坐在垫子上，因为它累了" 经 tokenization 后得到约6个 token（中文 token 化策略与英文不同）。注意：中英文的 token 数通常不相等，这与书写系统的信息密度差异有关。</p></aside><h4 id=section-5>Embedding</h4><p>设词表大小为 $V$，隐藏维度为 $d$。<strong>嵌入矩阵</strong>（Embedding Matrix）为</p><div class="fta-math fta-numbered-math" data-equations=1.6>\[
+\begin{aligned}
+E_{\rm emb} \in \mathbb{R}^{V\times d}.
+\end{aligned}
+\]<span class=fta-equation-numbers aria-label="公式 1.6"><span class=fta-equation-number aria-hidden=true>(1.6)</span></span></div><p>$E_{\rm emb}$ 的第 $i$ 行是第 $i$ 个 token 的可学习向量表示。若第 $t$ 个 token 编号为 $x_t$，则其嵌入向量为</p><div class="fta-math fta-numbered-math" data-equations=1.7>\[
+\begin{aligned}
+e_t = E_{\rm emb}[x_t] \in \mathbb{R}^d.
+\end{aligned}
+\]<span class=fta-equation-numbers aria-label="公式 1.7"><span class=fta-equation-number aria-hidden=true>(1.7)</span></span></div><p>这等价于用一个 one-hot 向量 $u_t\in\mathbb{R}^V$（第 $x_t$ 位为1，其余为0）左乘 $E_{\rm emb}$：$e_t = u_t^\top E_{\rm emb}$。</p><p>对长度为 $n$ 的序列，将所有 token 向量按行堆叠：</p><div class="fta-math fta-numbered-math" data-equations=1.8>\[
+\begin{aligned}
+X = \begin{bmatrix} e_1, e_2, \dots, e_n \end{bmatrix}^\top \in \mathbb{R}^{n\times d}.
+\end{aligned}
+\]<span class=fta-equation-numbers aria-label="公式 1.8"><span class=fta-equation-number aria-hidden=true>(1.8)</span></span></div><p>$X$ 的每一行对应一个位置，每一列对应一个特征维度。</p><p>Embedding 的物理类比：把离散标签映射到连续相空间中的点。离散 token 本身无法做微分，但向量 $e_t$ 可以参与矩阵乘法和梯度更新。训练过程中，语义相近的 token 的嵌入向量往往在空间中靠近——这是训练目标（预测下一个 token）强加的结构，而非人为指定。</p><aside class="fta-callout fta-example"><div class=fta-callout-title>Example 4</div><p>在我们的翻译例子中，英文源句的10个 token 各自获得一个 $d$ 维嵌入向量。设 $d=4$（简化），token "cat"（第2个位置）的嵌入向量为：</p><div class="fta-math fta-numbered-math" data-equations=1.9>\[
+\begin{aligned}
+e_2 = [0.3, 0.6, -0.4, 0.7].
+\end{aligned}
+\]<span class=fta-equation-numbers aria-label="公式 1.9"><span class=fta-equation-number aria-hidden=true>(1.9)</span></span></div><p>这个向量的每个维度没有单独的语义含义——它们是训练过程中自动学到的分布式表示。但训练完成后，"cat" 和语义相近的 "dog" 等动物名词往往在某些维度上有相似的激活模式。</p></aside><h4 id=section-6>Positional Encoding</h4><p>自注意力层主要由矩阵乘法和行归一化组成，其对输入行的置换是等变的（输入打乱，输出也跟着打乱）。如果只给模型一组 token 向量而不告诉顺序，模型无法区分"猫追狗"和"狗追猫"。因此需要位置编码。</p><figure class=fta-figure><img src=/p/from-transformer-to-agent-full/TransEmbedding.png alt=Embedding loading=lazy><figcaption>Embedding</figcaption></figure><p>令 $P\in\mathbb{R}^{n\times d}$ 为位置编码矩阵，第 $t$ 行 $P_t\in\mathbb{R}^d$ 表示第 $t$ 个位置的位置信息。初始隐藏状态为</p><div class="fta-math fta-numbered-math" data-equations=1.10>\[
+\begin{aligned}
+H_t^{(0)} = e_t + P_t.
+\end{aligned}
+\]<span class=fta-equation-numbers aria-label="公式 1.10"><span class=fta-equation-number aria-hidden=true>(1.10)</span></span></div><p>经典 Transformer 使用正弦位置编码。对位置 $p$（从1开始计数）和维度索引 $i$（从0开始）：</p><div class="fta-math fta-numbered-math" data-equations=1.11>\[
+\begin{aligned}
+P_{p,2i} = \sin\!\left(\frac{p}{10000^{2i/d}}\right),\quad
+P_{p,2i+1} = \cos\!\left(\frac{p}{10000^{2i/d}}\right).
+\end{aligned}
+\]<span class=fta-equation-numbers aria-label="公式 1.11"><span class=fta-equation-number aria-hidden=true>(1.11)</span></span></div><p>其中 $\omega_i=10000^{-2i/d}$ 决定了第 $i$ 对的角频率——低频（$i$ 小）变化慢，编码大范围位置；高频（$i$ 大）变化快，编码局部位置差异。相对位移 $\Delta$ 对应一个二维旋转变换。对任意位置 $p$ 和位移 $\Delta$：</p><div class="fta-math fta-numbered-math" data-equations=1.12,1.13>\[
+\begin{aligned}
+\sin(\omega_i(p+\Delta)) &= \sin(\omega_i p)\cos(\omega_i \Delta) + \cos(\omega_i p)\sin(\omega_i \Delta),\\
+\cos(\omega_i(p+\Delta)) &= \cos(\omega_i p)\cos(\omega_i \Delta) - \sin(\omega_i p)\sin(\omega_i \Delta).
+\end{aligned}
+\]<span class=fta-equation-numbers aria-label="公式 1.12、1.13"><span class=fta-equation-number aria-hidden=true>(1.12)</span><span class=fta-equation-number aria-hidden=true>(1.13)</span></span></div><p>这意味着 $\text{PE}(p+\Delta)$ 可以通过一个仅依赖于 $\Delta$ 的旋转矩阵从 $\text{PE}(p)$ 线性变换得到。因此，模型可以从向量关系中推断相对距离——两个位置越远，它们编码之间的"角度"越大。</p><aside class="fta-callout fta-example"><div class=fta-callout-title>Example 5</div><p>在我们的翻译句子中，10个位置分别获得不同的位置编码。设 $d=8$，前两个频率维度：</p><ul><li>$i=0$: $\omega_0 = 1$，波长 $= 2\pi$（高频，区分相邻 token）</li><li>$i=1$: $\omega_1 = 10000^{-2/8} = 10000^{-0.25} \approx 0.1$，波长 $\approx 62.8$（低频，区分大段位置）</li></ul><p>因此，对于位置 $p$，位置编码的前四个分量可以写为</p><div class="fta-math fta-numbered-math" data-equations=1.14>\[
+\begin{aligned}
+\bigl[
+\sin(p),\,
+\cos(p),\,
+\sin(0.1 p),\,
+\cos(0.1 p)
+\bigr].
+\end{aligned}
+\]<span class=fta-equation-numbers aria-label="公式 1.14"><span class=fta-equation-number aria-hidden=true>(1.14)</span></span></div><p>在句子<code>The cat sat on the mat because it was tired</code>, 中， "cat" 位于位置 $p=2$，而 "it" 位于位置 $p=8$。二者的相对距离为 $\Delta = 6$, 高频分量可以帮助模型区分相邻的 token，例如 "cat" 和 "sat"；低频分量则可以让模型感知 "it" 与 "cat" 之间相隔了 6 个位置。具体地，在低频分量 $i=1$ 上，二者产生的相位差为</p><div class="fta-math fta-numbered-math" data-equations=1.15>\[
+\begin{aligned}
+\omega_1 \Delta \approx 0.1 \times 6 = 0.6.
+\end{aligned}
+\]<span class=fta-equation-numbers aria-label="公式 1.15"><span class=fta-equation-number aria-hidden=true>(1.15)</span></span></div><p>虽然 "cat" 和 "it" 在序列中相隔较远，但它们的位置编码间仍然保留了可计算的相对位置信息。</p><p>在 Self-Attention 中，当模型计算$q_8^\top k_2$时， 来自位置 8 的 token "it"， 来自位置 2 的 token "cat"。由于二者的输入表示分别包含位置编码</p><div class="fta-math fta-numbered-math" data-equations=1.16>\[
+\begin{aligned}
+H^{(0)}_8 = e_8 + P_8,
+\quad
+H^{(0)}_2 = e_2 + P_2,
+\end{aligned}
+\]<span class=fta-equation-numbers aria-label="公式 1.16"><span class=fta-equation-number aria-hidden=true>(1.16)</span></span></div><p>因此，位置编码使得模型既可以区分相邻的 "cat" 和 "sat"，也可以感知 "it" 与 "cat" 之间存在 6 个位置的距离。在计算点积注意力, 内积 $q_8 \cdot k_2$ $(q_8^\top k_2)$ 时，位置编码为注意力分数贡献了额外的相对位置信息，并与 token 的语义信息叠加在一起，两者一起比较。</p></aside><aside class="fta-callout fta-summary"><div class=fta-callout-title>Summary</div><p>文本进入 Transformer 的三步预处理：Tokenization 将字符串切分为离散编号；Embedding 将编号映射为连续向量；位置编码将顺序信息叠加到向量上。三者合起来得到初始隐藏状态 $H^{(0)}$。</p></aside><h4 id=section-7>Self-Attention</h4><figure class=fta-figure><img src=/p/from-transformer-to-agent-full/TransAttention.png alt=Self-Attention loading=lazy><figcaption>Self-Attention</figcaption></figure><h5 id=pdf-query-key-value>Query、Key、Value 的严格定义</h5><p>设输入隐藏状态为</p><div class="fta-math fta-numbered-math" data-equations=1.17>\[
+\begin{aligned}
+H = \begin{bmatrix} h_1, h_2, \dots, h_n \end{bmatrix}^\top \in \mathbb{R}^{n\times d}.
+\end{aligned}
+\]<span class=fta-equation-numbers aria-label="公式 1.17"><span class=fta-equation-number aria-hidden=true>(1.17)</span></span></div><p>其中 $h_i\in\mathbb{R}^d$ 是第 $i$ 个 token 位置的表示向量。自注意力为每个位置构造三个角色，通过三个可训练的权重矩阵实现：</p><div class="fta-math fta-numbered-math" data-equations=1.18>\[
+\begin{aligned}
+Q = HW_Q \in \mathbb{R}^{n\times d_k}, \quad
+K = HW_K \in \mathbb{R}^{n\times d_k}, \quad
+V = HW_V \in \mathbb{R}^{n\times d_v}.
+\end{aligned}
+\]<span class=fta-equation-numbers aria-label="公式 1.18"><span class=fta-equation-number aria-hidden=true>(1.18)</span></span></div><p>其中 $W_Q, W_K \in \mathbb{R}^{d\times d_k}$，$W_V \in \mathbb{R}^{d\times d_v}$。</p><p>每个 token 位置的三个向量含义如下：</p><ul><li>$q_t$（Query，第 $t$ 行）："我在寻找什么信息？"</li><li>$k_t$（Key，第 $t$ 行）："我有什么标签/索引？"</li><li>$v_t$（Value，第 $t$ 行）："如果被关注，我提供什么内容？"</li></ul><h5 id=pdf-scaled-dot-product>缩放点积注意力的完整推导</h5><p>注意力机制的核心计算是：用 Query 与所有 Key 做内积来度量"匹配程度"，然后按匹配程度对 Value 做加权平均。</p><p><strong>第一步——计算注意力打分矩阵：</strong></p><div class="fta-math fta-numbered-math" data-equations=1.19>\[
+\begin{aligned}
+S = \frac{QK^\top}{\sqrt{d_k}} \in \mathbb{R}^{n\times n}, \quad
+S_{ij} = \frac{q_i \cdot k_j}{\sqrt{d_k}}.
+\end{aligned}
+\]<span class=fta-equation-numbers aria-label="公式 1.19"><span class=fta-equation-number aria-hidden=true>(1.19)</span></span></div><p>$S_{ij}$ 表示第 $i$ 个位置对第 $j$ 个位置的"匹配程度"。$S_{ij}$ 大则第 $i$ 个位置倾向于关注第 $j$ 个位置。</p><p><strong>第二步——Softmax 行归一化：</strong></p><div class="fta-math fta-numbered-math" data-equations=1.20>\[
+\begin{aligned}
+A_{ij} = \frac{\exp(S_{ij})}{\sum_{r=1}^{n}\exp(S_{ir})}, \quad
+\sum_{j=1}^{n} A_{ij} = 1.
+\end{aligned}
+\]<span class=fta-equation-numbers aria-label="公式 1.20"><span class=fta-equation-number aria-hidden=true>(1.20)</span></span></div><p>$A_{ij}$ 的含义是：在计算第 $i$ 个位置的输出时，给第 $j$ 个位置的 Value 分配多少权重。$A$ 的每一行都是一个概率分布。</p><p><strong>第三步——加权求和输出：</strong></p><div class="fta-math fta-numbered-math" data-equations=1.21>\[
+\begin{aligned}
+O = A V \in \mathbb{R}^{n\times d_v}, \quad
+o_i = \sum_{j=1}^{n} A_{ij} v_j.
+\end{aligned}
+\]<span class=fta-equation-numbers aria-label="公式 1.21"><span class=fta-equation-number aria-hidden=true>(1.21)</span></span></div><p>$O_i$表示第$j$个位置得到的权重与对应结果的匹配，权重高则内容被凸显，权重低则内容关注度低。</p><aside class="fta-callout fta-explanation"><div class=fta-callout-title>Explanation: 条件期望解释</div><p>若把 $A_{i\cdot}$ 视为在位置索引集合 $\{1,\dots,n\}$ 上的概率分布，那么输出就是条件期望：</p><div class="fta-math fta-numbered-math" data-equations=1.22>\[
+\begin{aligned}
+o_i = \mathbb{E}_{j\sim A_{i\cdot}}[v_j].
+\end{aligned}
+\]<span class=fta-equation-numbers aria-label="公式 1.22"><span class=fta-equation-number aria-hidden=true>(1.22)</span></span></div><p>因此，自注意力本质上是在做一种<strong>数据依赖的条件平均</strong>：根据当前 query 的内容，动态决定从哪些位置"读取"信息以及读多少。</p></aside><aside class="fta-callout fta-example"><div class=fta-callout-title>Example 6</div><p>例子中，设 $d_k=4$，计算 "it"（第8个 token）对 "cat"（第2个 token）的注意力权重。设：</p><div class="fta-math fta-numbered-math" data-equations=1.23>\[
+\begin{aligned}
+q_8 = [0.3, 0.9, -0.2, 0.1], \quad
+k_2 = [0.4, 0.8, -0.1, 0.2],
+\quad
+k_8=[0.1, -0.2, 0.3, -0.4].
+\end{aligned}
+\]<span class=fta-equation-numbers aria-label="公式 1.23"><span class=fta-equation-number aria-hidden=true>(1.23)</span></span></div><p>点积 $q_8\cdot k_2 = 0.88$，缩放后 $S_{8,2} = 0.88/2 = 0.44$。</p><p>而 $q_8$ 与自身位置8的 key 的点积为 $q_9\cdot k_8=-0.25$，缩放后 $S_{8,8} = -0.125$。</p><p>这说明经过 softmax 后，"it" 会对远处的 "cat" 分配较高的注意力权重，而对自身分配较低的权重——这正是跨语言代词消解所需的行为。</p></aside><aside class="fta-callout fta-explanation"><div class=fta-callout-title>Explanation: 为什么要除以 $\sqrt{d_k}$：完整的概率论推导</div><p>这是 Transformer 原论文最著名但常被轻描淡写的细节。我们给出完整的逐步推导。</p><p><strong>假设条件：</strong> Query 向量 $q$ 和 Key 向量 $k$ 的各分量相互独立，各分量都经过适当初始化，使得</p><div class="fta-math fta-numbered-math" data-equations=1.24>\[
+\begin{aligned}
+\mathbb{E}[q_\alpha] = \mathbb{E}[k_\alpha] = 0, \quad
+\mathrm{Var}(q_\alpha) = \mathrm{Var}(k_\alpha) = 1, \quad \alpha=1,\dots,d_k.
+\end{aligned}
+\]<span class=fta-equation-numbers aria-label="公式 1.24"><span class=fta-equation-number aria-hidden=true>(1.24)</span></span></div><p>这是合理的假设，因为层归一化和合适的权重初始化可以近似满足这些条件。</p><p><strong>点积的均值：</strong>考虑到独立性：$\mathbb{E}[q_\alpha k_\alpha] = \mathbb{E}[q_\alpha]\mathbb{E}[k_\alpha] = 0 \cdot 0 = 0$</p><div class="fta-math fta-numbered-math" data-equations=1.25>\[
+\begin{aligned}
+\mathbb{E}[q\cdot k] = \mathbb{E}\!\left[\sum_{\alpha=1}^{d_k} q_\alpha k_\alpha\right]
+= \sum_{\alpha=1}^{d_k} \mathbb{E}[q_\alpha]\mathbb{E}[k_\alpha] = 0.
+\end{aligned}
+\]<span class=fta-equation-numbers aria-label="公式 1.25"><span class=fta-equation-number aria-hidden=true>(1.25)</span></span></div><p><strong>点积的方差：</strong> 首先计算每一项 $q_\alpha k_\alpha$ 的方差。因为均值为0，</p><div class="fta-math fta-numbered-math" data-equations=1.26>\[
+\begin{aligned}
+\mathrm{Var}(q_\alpha k_\alpha) = \mathbb{E}[q_\alpha^2 k_\alpha^2] - \mathbb{E}[q_\alpha k_\alpha]^2.
+\end{aligned}
+\]<span class=fta-equation-numbers aria-label="公式 1.26"><span class=fta-equation-number aria-hidden=true>(1.26)</span></span></div><p>由独立性 $\mathbb{E}[q_\alpha^2 k_\alpha^2] = \mathbb{E}[q_\alpha^2]\mathbb{E}[k_\alpha^2]$，又因为 $\mathrm{Var}(q_\alpha)=1$ 所以 $\mathbb{E}[q_\alpha^2]=1$，同理 $\mathbb{E}[k_\alpha^2]=1$。因此</p><div class="fta-math fta-numbered-math" data-equations=1.27>\[
+\begin{aligned}
+\mathbb{E}[q_\alpha^2 k_\alpha^2] = 1 \cdot 1 = 1,\quad
+\mathbb{E}[q_\alpha k_\alpha] = 0 \cdot 0 = 0.
+\end{aligned}
+\]<span class=fta-equation-numbers aria-label="公式 1.27"><span class=fta-equation-number aria-hidden=true>(1.27)</span></span></div><p>于是 $\mathrm{Var}(q_\alpha k_\alpha) = 1 - 0 = 1$。</p><p>考虑到$\mathrm{Var}(cX)=c^2\mathrm{Var}(X)$；因为不同分量相互独立，独立随机变量之和的方差等于方差之和：</p><div class="fta-math fta-numbered-math" data-equations=1.28>\[
+\begin{aligned}
+\mathrm{Var}(q\cdot k) = \sum_{\alpha=1}^{d_k} \mathrm{Var}(q_\alpha k_\alpha) = d_k.
+\end{aligned}
+\]<span class=fta-equation-numbers aria-label="公式 1.28"><span class=fta-equation-number aria-hidden=true>(1.28)</span></span></div><p><strong>结论：</strong> 点积 $q\cdot k$ 的标准差为 $\sqrt{d_k}$。若 $d_k=64$，点积的典型值为 $0 \pm 8$ 左右；若 $d_k=1024$，典型值就是 $0 \pm 32$。不做缩放的话，softmax 的输入绝对值会随 $d_k$ 增大而增大，导致 softmax 输出趋近于 one-hot（最大值位置概率接近1，其余接近0）。</p><p>当 softmax 输出接近 one-hot 时，其雅可比矩阵接近零矩阵（因为方差接近0），梯度几乎为零——这就是<strong>梯度消失</strong>。除以 $\sqrt{d_k}$ 将方差拉回到 $O(1)$：</p><div class="fta-math fta-numbered-math" data-equations=1.29>\[
+\begin{aligned}
+\mathrm{Var}\!\left(\frac{q\cdot k}{\sqrt{d_k}}\right) = \frac{d_k}{d_k} = 1.
+\end{aligned}
+\]<span class=fta-equation-numbers aria-label="公式 1.29"><span class=fta-equation-number aria-hidden=true>(1.29)</span></span></div></aside><aside class="fta-callout fta-explanation"><div class=fta-callout-title>Explanation: 统计物理类比</div><p>这对应在不同维度下保持"有效温度"不变。若不缩放，$d_k$ 增大相当于温度降低，系统冻结到少数状态；$1/\sqrt{d_k}$ 即在不同 $d_k$ 下保持同一温度尺度，使 softmax 的"熵"在不同维度下可比。</p></aside><h5 id=pdf-causal-mask>因果掩码：自回归生成中的 Self-Attention 约束</h5><p>自回归模型预测 $x_t$ 时只能使用 $x_{&lt;t}$。在 Transformer 中通过<strong>因果掩码</strong>（Causal Mask）实现。定义掩码矩阵 $M\in\mathbb{R}^{n\times n}$：</p><div class="fta-math fta-numbered-math" data-equations=1.30>\[
+\begin{aligned}
+M_{ij} = \begin{cases}
+0, & j \le i,\\
+-\infty, & j > i.
+\end{cases}
+\end{aligned}
+\]<span class=fta-equation-numbers aria-label="公式 1.30"><span class=fta-equation-number aria-hidden=true>(1.30)</span></span></div><p>带掩码的注意力为</p><div class="fta-math fta-numbered-math" data-equations=1.31>\[
+\begin{aligned}
+A = \operatorname{softmax}\!\left(\frac{QK^\top}{\sqrt{d_k}} + M\right).
+\end{aligned}
+\]<span class=fta-equation-numbers aria-label="公式 1.31"><span class=fta-equation-number aria-hidden=true>(1.31)</span></span></div><p>当 $j>i$ 时，$S_{ij}+M_{ij} = S_{ij} - \infty = -\infty$，因此 $\exp(-\infty)=0$，$A_{ij}=0$。第 $i$ 个位置的输出 $o_i = \sum_{j=1}^{i} A_{ij} v_j$ 只依赖当前及过去位置。</p><aside class="fta-callout fta-example"><div class=fta-callout-title>Example 7</div><p>在我们的翻译任务中，当模型生成中文输出序列时，因果掩码确保生成第 $t$ 个中文 token 时只能看到已生成的前 $t-1$ 个 token 和完整的英文源句（源句作为编码器的输出不受掩码限制，只有解码器的自注意力需要掩码）。</p></aside><h4 id=section-8>Multi-Head Attention</h4><p>单个注意力头只能在一个表示子空间中计算相似度。多头注意力（Multi-Head Attention, MHA）使用 $H$ 个并行的注意力头，每个头有自己的投影矩阵。第 $r$ 个头计算：</p><div class="fta-math fta-numbered-math" data-equations=1.32>\[
+\begin{aligned}
+\text{head}^{(r)} = \Attn\!\left(HW_Q^{(r)},\, HW_K^{(r)},\, HW_V^{(r)}\right),
+\end{aligned}
+\]<span class=fta-equation-numbers aria-label="公式 1.32"><span class=fta-equation-number aria-hidden=true>(1.32)</span></span></div><p>其中 $W_Q^{(r)}, W_K^{(r)} \in \mathbb{R}^{d\times d_k}$，$W_V^{(r)} \in \mathbb{R}^{d\times d_v}$，通常取 $d_k = d_v = d / H$。</p><p>随后将所有头的输出沿最后一个维度拼接，经过一个线性变换 $W_O \in \mathbb{R}^{H d_v \times d}$ 映射回原始维度：</p><div class="fta-math fta-numbered-math" data-equations=1.33>\[
+\begin{aligned}
+\operatorname{MHA}(H) = [\text{head}^{(1)}; \text{head}^{(2)}; \cdots; \text{head}^{(H)}]\,W_O.
+\end{aligned}
+\]<span class=fta-equation-numbers aria-label="公式 1.33"><span class=fta-equation-number aria-hidden=true>(1.33)</span></span></div><p>在线性代数上，每个头定义了一个双线性型：</p><div class="fta-math fta-numbered-math" data-equations=1.34>\[
+\begin{aligned}
+\langle h_i, h_j \rangle_r
+=\left(h_i^\top W_Q^{(r)}\right)\left(h_j^\top W_k^{(r)}\right)^\top
+= h_i^\top W_Q^{(r)} \left(W_K^{(r)}\right)^\top h_j.
+\end{aligned}
+\]<span class=fta-equation-numbers aria-label="公式 1.34"><span class=fta-equation-number aria-hidden=true>(1.34)</span></span></div><p>不同头学习不同的双线性几何——一个头可能关注局部语法搭配，另一个关注长距离指代，第三个关注语义相似性。</p><figure class=fta-figure style=--fta-figure-width:511px><img src=/p/from-transformer-to-agent-full/TransMultiHeadAttention.png alt=多头注意力结构图 loading=lazy decoding=async><figcaption>多头注意力：输入 $H$ 被投影到多个子空间，各头独立计算注意力后再拼接。</figcaption></figure><aside class="fta-callout fta-example"><div class=fta-callout-title>Example 8</div><p>在句子<code>The cat sat on the mat because it was tired</code>， "cat" 在位置 2，"it" 在位置 8。</p><p>当模型处理 "it" 时，一个注意力头可能主要关注位置 2 的 "cat"，用于判断代词 "it" 的指代对象；另一个注意力头可能关注位置 10 的 "tired"，用于理解 "it was tired" 这一状态描述；还有一些注意力头可能关注 "sat"、"mat" 等局部上下文信息。</p><p>因此，多头注意力并不是简单重复同一个注意力计算，而是通过不同的投影矩阵</p><div class=fta-math>\[\nW_Q^{(h)},\quad W_K^{(h)},\quad W_V^{(h)}\n\]</div><p>在不同表示子空间中计算注意力。不同 head 可以捕捉不同类型的关系，例如指代关系、主谓关系、局部短语关系和语义状态关系。</p></aside><h4 id=section-9>FFN / Residual / LayerNorm</h4><p>每个 Transformer 层除了注意力还包含<strong>前馈网络</strong>（Feed-Forward Network, FFN），也叫<strong>多层感知机</strong>（Multi-Layer Perceptron，MLP）：</p><div class="fta-math fta-numbered-math" data-equations=1.35>\[
+\begin{aligned}
+\operatorname{FFN}(u) = W_2\,\sigma(W_1 u + b_1) + b_2,
+\end{aligned}
+\]<span class=fta-equation-numbers aria-label="公式 1.35"><span class=fta-equation-number aria-hidden=true>(1.35)</span></span></div><p>其中 $W_1\in\mathbb{R}^{d_{\rm ff}\times d}$，$W_2\in\mathbb{R}^{d\times d_{\rm ff}}$，$\sigma$ 是非线性激活函数（如 ReLU 或 GELU）。注意力负责位置间信息混合，FFN 负责每个位置内部的独立的非线性变换。</p><figure class=fta-figure><img src=/p/from-transformer-to-agent-full/TransMLP.png alt="Multi-Layer Perception" loading=lazy><figcaption>Multi-Layer Perception</figcaption></figure><p><strong>残差连接</strong>和<strong>层归一化</strong>（Residual和Layer Normalization）确保深层网络可训练。</p><p>残差连接的思想是：与其让每一层"从头学习"输入到输出的完整映射，不如让它只学习"与输入的差异"（即残差 $\text{MHA}(H)=\text{Result}(H)-H$），让网络每一层只学习“要补充或修改什么”，而不是从零重建整个表示。这样梯度可以通过恒等路径直通浅层，避免深层网络因连续求导导致的梯度消失。</p><p>Residual 的核心操作是：输出=原输入+新计算出来的变化量。原来的表示是$H$, 多头注意力计算出的新信息是$\text{MHA}(H)$, 所以有$R(H)=H+\text{MHA}(H)$. 防止深层网络中数值越来越大、越来越小或分布漂移，使训练更稳定，还需要把每个 token 的向量$u=(u_1,u_2,\dots,u_d)$重新调整到稳定的数值范围$\mathrm{LayerNorm}(u)=\gamma\frac{u-\mu}{\sqrt{\sigma^2+\epsilon}}+\beta$。其中 $\mu$ 是这个向量内部各维度的均值，$\sigma^2$ 是方差，$\gamma,\beta$ 是可学习参数。直观来说，LayerNorm把这个 token 向量的均值拉到接近 $0$；把方差拉到稳定范围；再用可学习参数 $\gamma,\beta$ 允许模型自己决定最终尺度。所以有</p><div class="fta-math fta-numbered-math" data-equations=1.36>\[
+\begin{aligned}
+H' = \operatorname{LayerNorm}(H + \operatorname{MHA}(H))
+\end{aligned}
+\]<span class=fta-equation-numbers aria-label="公式 1.36"><span class=fta-equation-number aria-hidden=true>(1.36)</span></span></div><p>在用MHA经过层归一化之后，FFN 对每个 token 又单独做非线性加工，所以需要再归一化一次</p><div class="fta-math fta-numbered-math" data-equations=1.37>\[
+\begin{aligned}
+H''= \operatorname{LayerNorm}(H' + \operatorname{FFN}(H'))
+\end{aligned}
+\]<span class=fta-equation-numbers aria-label="公式 1.37"><span class=fta-equation-number aria-hidden=true>(1.37)</span></span></div><aside class="fta-callout fta-example"><div class=fta-callout-title>Example 9</div><p>考虑翻译句子<code>The cat sat on the mat because it was tired</code>，共10个token。设某一层 Transformer 的输入隐状态为 $H\in\mathbb{R}^{10\times d}$，其中第 $t$ 行 $H_t\in\mathbb{R}^d$ 表示第 $t$ 个 token 的当前表示。</p><p>在多头自注意力层中，对于位置 $8$ 的 `it" ，某个注意力头可能让 `it" 吸收 `cat" 的信息，另一个头可能关注 “tired”，还有头关注 “because” 或 “mat”。多头注意力的输出记为 $\mathrm{MHA}(H)$，则对位置 $8$ 而言，第一次残差连接和层归一化为</p><div class="fta-math fta-numbered-math" data-equations=1.38>\[
+\begin{aligned}
+H'_8 = \mathrm{LayerNorm}\bigl(H_8+\mathrm{MHA}(H)_8\bigr)
+\end{aligned}
+\]<span class=fta-equation-numbers aria-label="公式 1.38"><span class=fta-equation-number aria-hidden=true>(1.38)</span></span></div><p>其中 $H$保留了 `it" 自身的原始信息，而MHA$(H)$则包含从其他位置聚合来的上下文信息。因此，残差连接使得模型不是完全用注意力输出替换原表示，而是在原有表示基础上补充上下文信息。</p><p>对于位置 $8$ 的 `it"，FFN处理的是已经融合上下文后的向量 $H'_8$：</p><div class="fta-math fta-numbered-math" data-equations=1.39>\[
+\begin{aligned}
+\mathrm{FFN}(H'_8) = W_2\sigma(W_1H'_8+b_1)+b_2.
+\end{aligned}
+\]<span class=fta-equation-numbers aria-label="公式 1.39"><span class=fta-equation-number aria-hidden=true>(1.39)</span></span></div><p>模型根据 `it" 已经获得的上下文信息，FFN进一步提取更高层的语义特征，例如 `it" 是一个代词、它可能指代 `cat"，并且 "tired" 描述的是这个被指代对象的状态。</p><p>最后，再进行一次残差连接和层归一化。对位置 $8$ 而言</p><div class="fta-math fta-numbered-math" data-equations=1.40>\[
+\begin{aligned}
+H''_8 = \mathrm{LayerNorm}\bigl(H'_8+\mathrm{FFN}(H'_8)\bigr).
+\end{aligned}
+\]<span class=fta-equation-numbers aria-label="公式 1.40"><span class=fta-equation-number aria-hidden=true>(1.40)</span></span></div><p>因此，经过一个完整的 Transformer 层后，`it" 的表示不仅保留了自身作为代词的信息，还融合了 `cat" 的指代信息、`because" 的因果结构信息以及 `tired" 的状态信息。这使得模型在翻译时更可能生成<code>这只猫坐在垫子上，因为它累了。</code> 而不是错误地把 `it" 理解为 `mat"。</p><p>这个例子体现了三者的分工：$\mathrm{MHA}$ 负责让不同 token 之间交换信息，$\mathrm{FFN}$ 负责对每个 token 的表示进行非线性加工，残差连接保留原有信息并帮助梯度传播，$\mathrm{LayerNorm}$ 则稳定每一层的数值分布，使深层 Transformer 更容易训练。</p></aside><aside class="fta-callout fta-summary"><div class=fta-callout-title>Summary</div><p>Transformer 层的完整结构：</p><div class="fta-math fta-numbered-math" data-equations=1.41>\[
+\begin{aligned}
+H\to\mathrm{MHA}\to
+\mathrm{Residual+LayerNorm}
+\to\mathrm{FFN}
+\to\mathrm{Residual+LayerNorm}
+\to H''
+\end{aligned}
+\]<span class=fta-equation-numbers aria-label="公式 1.41"><span class=fta-equation-number aria-hidden=true>(1.41)</span></span></div><p>然后H"进入下一层。注意力是位置间耦合，因果掩码防止信息从未来泄露，FFN 是位置内非线性，残差和归一化让深层网络可训练。</p></aside><h4 id=section-10>Probability：从隐藏状态到下一个 token</h4><p>经过多层 Transformer block 之后，模型得到当前位置的隐藏向量。对于生成任务，最后一层 Decoder 在第 $t$ 个位置输出隐藏向量 $h_t \in \mathbb{R}^{d}$。为了生成下一个 token，模型先通过一个线性输出层把隐藏向量映射到词表大小的 logit 向量：</p><div class="fta-math fta-numbered-math" data-equations=1.42>\[
+\begin{aligned}
+z_t = W_{\mathrm{out}} h_t + b_{\mathrm{out}},
+\quad z_t \in \mathbb{R}^{V}.
+\end{aligned}
+\]<span class=fta-equation-numbers aria-label="公式 1.42"><span class=fta-equation-number aria-hidden=true>(1.42)</span></span></div><p>其中 $V$ 是词表大小，$z_{t,j}$ 表示第 $j$ 个候选 token 的原始打分。Logit 本身不是概率，它可以为正、为负，也不要求所有分量之和为 $1$。为了把这些原始分数转化为概率分布，需要使用 softmax。</p><figure class=fta-figure><img src=/p/from-transformer-to-agent-full/TransDecoding.png alt=Decoder loading=lazy><figcaption>Decoder</figcaption></figure><p>Softmax 的作用是把一组任意实数logit转化为非负且总和为 $1$ 的概率分布。对于第 $t$ 个生成位置,若不使用额外采样策略，则直接对原始 logits $z_t$ 做归一化：</p><div class="fta-math fta-numbered-math" data-equations=1.43>\[
+\begin{aligned}
+p_{t,j}
+=
+P_{\theta}(x_t=j\mid x_{&lt;t})
+=
+\frac{\exp(z_{t,j})}{\sum_{k=1}^{V}\exp(z_{t,k})},
+\quad
+\sum_{j=1}^{V}p_{t,j}=1.
+\end{aligned}
+\]<span class=fta-equation-numbers aria-label="公式 1.43"><span class=fta-equation-number aria-hidden=true>(1.43)</span></span></div><p>这里 $p_{t,j}$ 表示模型认为第 $t$ 个 token 取词表中第 $j$ 个候选 token 的概率。Logit 越大，经过指数函数和归一化之后，对应 token 的概率通常越大。</p><p>在实际解码时，模型通常会先对 logits 做温度缩放、Top-k 或 Top-p 过滤等不同策略，得到处理后的 logits $\tilde z_t$，再进行 softmax：</p><div class="fta-math fta-numbered-math" data-equations=1.44>\[
+\begin{aligned}
+p_{t,j}=\frac{\exp(\tilde z_{t,j})}{\sum_{k=1}^{V}\exp(\tilde z_{t,k})}
+\end{aligned}
+\]<span class=fta-equation-numbers aria-label="公式 1.44"><span class=fta-equation-number aria-hidden=true>(1.44)</span></span></div><ol><li>贪心解码</li><p>贪心解码是最直接的解码方法：每一步都选择概率最大的 token。若当前位置的概率分布为 $p_t$，则输出 token 为：</p><div class="fta-math fta-numbered-math" data-equations=1.45>\[
+\begin{aligned}
+x_t=\arg\max_{j\in\{1,\ldots,V\}} p_{t,j}
+=\arg\max_{j\in\{1,\ldots,V\}} z_{t,j}.
+\end{aligned}
+\]<span class=fta-equation-numbers aria-label="公式 1.45"><span class=fta-equation-number aria-hidden=true>(1.45)</span></span></div><p>第二个等号成立是因为 softmax 不改变 logit 的大小顺序。也就是说，概率最大的 token 与 logit 最大的 token 是同一个。</p><p>贪心解码的优点是稳定、确定、速度快；缺点是过于保守。由于每一步都只选当前最优 token，它可能错过整体上更自然或更多样的句子。</p><li>温度采样</li><p>温度采样在 softmax 之前对 logit 做缩放：</p><div class="fta-math fta-numbered-math" data-equations=1.46>\[
+\begin{aligned}
+p_{t,j}(\tau)
+=\frac{\exp(z_{t,j}/\tau)}
+{\sum_{k=1}^{V}\exp(z_{t,k}/\tau)},
+\quad \tau>0.
+\end{aligned}
+\]<span class=fta-equation-numbers aria-label="公式 1.46"><span class=fta-equation-number aria-hidden=true>(1.46)</span></span></div><p>其中 $\tau$ 是温度参数。若 $\tau&lt;1$，则不同 logit 之间的差距被放大，概率分布更尖锐，模型更倾向于选择高分 token；若 $\tau>1$，则 logit 差距被压缩，概率分布更平坦，低分 token 也有更多机会被采样。</p><p>因此，温度控制的是生成的随机性：</p><div class="fta-math fta-numbered-math" data-equations=1.47,1.48>\[
+\begin{aligned}
+\tau \downarrow \quad &\Rightarrow \quad \text{分布更尖锐，输出更确定},\\
+\tau \uparrow \quad &\Rightarrow \quad \text{分布更平坦，输出更多样}.
+\end{aligned}
+\]<span class=fta-equation-numbers aria-label="公式 1.47、1.48"><span class=fta-equation-number aria-hidden=true>(1.47)</span><span class=fta-equation-number aria-hidden=true>(1.48)</span></span></div><p>当 $\tau \to 0$ 时，温度采样趋近于贪心解码；当 $\tau$ 较大时，模型会产生更多随机性，但也更容易生成不稳定或不合适的 token。</p><li>Top-k 采样</li><p>Top-k 采样先保留 logit 最高的 $k$ 个候选 token，其余 token 的 logit 设为 $-\infty$，然后再做 softmax。设 $\mathcal{K}_t$ 表示当前位置 logit 最大的 $k$ 个 token 的集合，则：</p><div class="fta-math fta-numbered-math" data-equations=1.49>\[
+\begin{aligned}
+\tilde{z}_{t,j}
+=
+\begin{cases}
+z_{t,j}, & j\in \mathcal{K}_t,\\
+-\infty, & j\notin \mathcal{K}_t,
+\end{cases}
+\quad
+p_{t,j}^{\mathrm{top}\text{-}k}
+=
+\frac{\exp(\tilde{z}_{t,j})}
+{\sum_{r=1}^{V}\exp(\tilde{z}_{t,r})}.
+\end{aligned}
+\]<span class=fta-equation-numbers aria-label="公式 1.49"><span class=fta-equation-number aria-hidden=true>(1.49)</span></span></div><p>因为 $\exp(-\infty)=0$，所以不在 Top-k 集合中的 token 概率为 $0$。Top-k 的作用是限制采样范围，避免从大量低概率 token 中采到不合理结果。</p><p>例如图中的情形可以理解为：只保留前 $5$ 个候选 token，其余 token 的 logit 被设为 $-\infty$，最后 softmax 只在这 $5$ 个候选上重新分配概率。</p><li>Top-p 采样</li><p>Top-p 采样也叫 nucleus sampling。它不是固定保留 $k$ 个 token，而是按照概率从高到低排序，选择最小的候选集合，使这些 token 的累计概率至少达到 $p$。</p><p>设排序后的 token 索引为 $j_1,j_2,\ldots,j_V$，满足$p_{t,j_1}\ge p_{t,j_2}\ge \cdots \ge p_{t,j_V}$. Top-p 选择最小的 $m$，使：</p><div class="fta-math fta-numbered-math" data-equations=1.50>\[
+\begin{aligned}
+\sum_{\ell=1}^{m}p_{t,j_{\ell}}\ge p.
+\end{aligned}
+\]<span class=fta-equation-numbers aria-label="公式 1.50"><span class=fta-equation-number aria-hidden=true>(1.50)</span></span></div><p>于是候选集合为：$\mathcal{P}_t=\{j_1,j_2,\ldots,j_m\}$. 然后与 Top-k 类似，只在 $\mathcal{P}_t$ 中重新归一化并采样。</p><p>Top-p 的优点是候选集合大小会自动变化。若模型非常确定，少数几个 token 的累计概率就能超过 $p$；若模型不确定，则会保留更多候选 token。因此 Top-p 通常比固定 Top-k 更灵活。</p></ol><aside class="fta-callout fta-example"><div class=fta-callout-title>Example 10</div><p>翻译例子：<code>``The cat sat on the mat because it was tired.''</code></p><p>目标输出可以是：<code>``猫坐在垫子上，因为它累了。''</code></p><p>Encoder 先读取完整英文句子，并形成上下文化表示。Decoder 在生成中文时是自回归的：它已经生成了前缀 "猫坐在垫子上，因为"，现在需要预测下一个中文 token。此时 Decoder 的最后一层输出隐藏向量 $h_t$，再通过输出层得到 logit：</p><div class="fta-math fta-numbered-math" data-equations=1.51>\[
+\begin{aligned}
+z_t = W_{\mathrm{out}}h_t+b_{\mathrm{out}}.
+\end{aligned}
+\]<span class=fta-equation-numbers aria-label="公式 1.51"><span class=fta-equation-number aria-hidden=true>(1.51)</span></span></div><p>假设几个候选 token 的 logit 大致为：</p><div class="fta-math fta-numbered-math" data-equations=1.52>\[
+\begin{aligned}
+z(\text{``它''})=5.2,\quad
+z(\text{``垫子''})=3.1,\quad
+z(\text{``猫''})=2.8,\quad
+z(\text{``很''})=1.4.
+\end{aligned}
+\]<span class=fta-equation-numbers aria-label="公式 1.52"><span class=fta-equation-number aria-hidden=true>(1.52)</span></span></div><p>经过 softmax 后，"它" 的概率最大。这是因为前面的 Transformer 层已经通过 attention 让英文中的 "it" 关注到 "cat"，并且结合中文前缀 "因为" 判断下一个 token 很可能是代词 "它"。</p><p>如果使用贪心解码，模型会直接选择：</p><div class="fta-math fta-numbered-math" data-equations=1.53>\[
+\begin{aligned}
+x_t=\arg\max_j p_{t,j}=\text{``它''}.
+\end{aligned}
+\]<span class=fta-equation-numbers aria-label="公式 1.53"><span class=fta-equation-number aria-hidden=true>(1.53)</span></span></div><p>如果使用温度采样，当 $\tau&lt;1$ 时，"它" 的优势会被进一步放大，模型几乎一定生成 "它"；当 $\tau>1$ 时，"猫" 或其他候选 token 的概率会相对上升，生成结果会更随机。</p><p>如果使用 Top-k，且 $k=3$，模型只会在 "它"、"垫子"、"猫" 这三个高分候选中重新归一化并采样，低分 token 直接被排除。</p><p>如果使用 Top-p，且 $p=0.9$，模型会从概率最高的 token 开始累加，直到累计概率超过 $0.9$。如果 "它" 和 "猫" 已经贡献了大部分概率，那么其他低概率 token 就不会进入采样集合。</p><p>因此，在这个翻译例子中，softmax 给出候选 token 的概率分布，而贪心解码、温度采样、Top-k 和 Top-p 决定模型最终如何从这些概率中选出下一个中文 token。</p></aside><aside class="fta-callout fta-summary"><div class=fta-callout-title>Summary</div><p>Softmax 负责把 logit 转化为概率分布；贪心解码直接选择概率最大的 token；温度采样通过 $\tau$ 控制分布的尖锐或平坦；Top-k 只保留概率最高的 $k$ 个候选；Top-p 保留累计概率达到阈值 $p$ 的最小候选集合。它们共同决定了模型从概率分布到实际输出 token 的方式。</p></aside><h4 id=section-11>Encoder 与 Decoder：原始 Transformer 的两种模块</h4><p>前面介绍的 tokenization、embedding、位置编码、self-attention、multi-head attention、FFN、残差连接和 LayerNorm，是原本 Transformer 的基本组成部分，可以分成两类：</p><ul><li><strong>Encoder</strong>：负责把输入序列编码成上下文化表示；</li><li><strong>Decoder</strong>：负责在已有输出前缀的条件下逐步生成目标序列。</li></ul><p>设源序列为 $x=(x_1,\dots,x_n)$，目标序列为 $y=(y_1,\dots,y_m)$。 Transformer 建模的是条件生成问题：</p><div class="fta-math fta-numbered-math" data-equations=1.54>\[
+\begin{aligned}
+P(y|x) = \prod_{t=1}^{m} P(y_t \mid y_{&lt;t},x).
+\end{aligned}
+\]<span class=fta-equation-numbers aria-label="公式 1.54"><span class=fta-equation-number aria-hidden=true>(1.54)</span></span></div><p>其中，Encoder 负责处理完整输入 $x$，Decoder 负责根据已经生成的目标前缀 $y_{&lt;t}$ 和 Encoder 输出，预测下一个目标 token $y_t$。</p><h5 id=pdf-encoder-context-representation>Encoder：把输入序列编码成上下文表示</h5><p>源序列经过 tokenization、embedding 和位置编码后，得到初始隐藏状态：</p><div class="fta-math fta-numbered-math" data-equations=1.55>\[
+\begin{aligned}
+H_{\rm enc}^{(0)} \in \mathbb{R}^{n\times d}.
+\end{aligned}
+\]<span class=fta-equation-numbers aria-label="公式 1.55"><span class=fta-equation-number aria-hidden=true>(1.55)</span></span></div><p>Encoder 的每一层主要包含两个部分：</p><ul><li><strong>双向 self-attention</strong>：输入序列中的每个 token 都可以关注同一序列中的所有 token；</li><li><strong>FFN、残差连接和 LayerNorm</strong>：对每个位置的表示做非线性变换并稳定训练。</li></ul><p>第 $\ell$ 层 Encoder 可以写成：</p><div class="fta-math fta-numbered-math" data-equations=1.56,1.57>\[
+\begin{aligned}
+\widetilde{H}_{\rm enc}^{(\ell)}& = \operatorname{LayerNorm}\!\left(H_{\rm enc}^{(\ell-1)}+\operatorname{MHA}\!\left(H_{\rm enc}^{(\ell-1)}\right)\right),\\
+H_{\rm enc}^{(\ell)} &= \operatorname{LayerNorm}\!\left(\widetilde{H}_{\rm enc}^{(\ell)}+\operatorname{FFN}\!\left(\widetilde{H}_{\rm enc}^{(\ell)}\right)\right).
+\end{aligned}
+\]<span class=fta-equation-numbers aria-label="公式 1.56、1.57"><span class=fta-equation-number aria-hidden=true>(1.56)</span><span class=fta-equation-number aria-hidden=true>(1.57)</span></span></div><p>经过 $L_{\rm enc}$ 层后，得到 Encoder 的最终输出：</p><div class="fta-math fta-numbered-math" data-equations=1.58>\[
+\begin{aligned}
+Z = H_{\rm enc}^{(L_{\rm enc})} \in \mathbb{R}^{n\times d}.
+\end{aligned}
+\]<span class=fta-equation-numbers aria-label="公式 1.58"><span class=fta-equation-number aria-hidden=true>(1.58)</span></span></div><p>这里的 $Z$ 可以理解为输入序列 $x$ 的上下文化表示。$Z$ 的每一行仍然对应源序列中的一个 token，但每个位置已经融合了整句输入的信息。</p><h5 id=pdf-decoder-conditional-generation>Decoder：在条件上下文下逐步生成输出</h5><p>Decoder 的输入是目标序列的前缀。生成第 $t$ 个 token 时，Decoder 只能看到已经生成的 $y_{&lt;t}$，不能看到未来的 $y_t,y_{t+1},\dots$。</p><p>目标前缀经过 embedding 和位置编码后得到：</p><div class="fta-math fta-numbered-math" data-equations=1.59>\[
+\begin{aligned}
+H_{\rm dec}^{(0)} \in \mathbb{R}^{t\times d}.
+\end{aligned}
+\]<span class=fta-equation-numbers aria-label="公式 1.59"><span class=fta-equation-number aria-hidden=true>(1.59)</span></span></div><p>Decoder 的每一层包含三部分：</p><ul><li><strong>因果 self-attention</strong>：只允许当前位置关注过去位置；</li><li><strong>cross-attention</strong>：用 Decoder 当前表示作为 Query，读取 Encoder 输出 $Z$；</li><li><strong>FFN、残差连接和 LayerNorm</strong>：进一步加工每个位置的表示。</li></ul><p>第 $\ell$ 层 Decoder 可以写成：</p><div class="fta-math fta-numbered-math" data-equations=1.60,1.61,1.62>\[
+\begin{aligned}
+\widetilde{H}_{\rm dec}^{(\ell)} &= \operatorname{LayerNorm}\!\left(H_{\rm dec}^{(\ell-1)}+\operatorname{MHA}_{\rm causal}\!\left(H_{\rm dec}^{(\ell-1)}\right)\right),\\
+\widehat{H}_{\rm dec}^{(\ell)}& = \operatorname{LayerNorm}\!\left(\widetilde{H}_{\rm dec}^{(\ell)}+\operatorname{CrossAttn}\!\left(\widetilde{H}_{\rm dec}^{(\ell)},Z\right)\right),\\
+H_{\rm dec}^{(\ell)} &= \operatorname{LayerNorm}\!\left(\widehat{H}_{\rm dec}^{(\ell)}+\operatorname{FFN}\!\left(\widehat{H}_{\rm dec}^{(\ell)}\right)\right).
+\end{aligned}
+\]<span class=fta-equation-numbers aria-label="公式 1.60、1.61、1.62"><span class=fta-equation-number aria-hidden=true>(1.60)</span><span class=fta-equation-number aria-hidden=true>(1.61)</span><span class=fta-equation-number aria-hidden=true>(1.62)</span></span></div><p>最后，Decoder 输出位置 $t$ 的隐藏向量 $h_t$，并通过线性层和 softmax 得到下一个 token 的概率：</p><div class="fta-math fta-numbered-math" data-equations=1.63>\[
+\begin{aligned}
+p_t = \operatorname{softmax}(W_{\rm out}h_t).
+\end{aligned}
+\]<span class=fta-equation-numbers aria-label="公式 1.63"><span class=fta-equation-number aria-hidden=true>(1.63)</span></span></div><p>因此，下一个 token 的条件概率可以写成：</p><div class="fta-math fta-numbered-math" data-equations=1.64>\[
+\begin{aligned}
+P(y_t \mid y_{&lt;t},x) = p_t[y_t].
+\end{aligned}
+\]<span class=fta-equation-numbers aria-label="公式 1.64"><span class=fta-equation-number aria-hidden=true>(1.64)</span></span></div><aside class="fta-callout fta-explanation"><div class=fta-callout-title>Explanation: Cross-Attention 的具体含义</div><p>在 Decoder 的 cross-attention 中，Query 来自 Decoder 当前状态，Key 和 Value 来自 Encoder 输出 $Z$。因此可以写成：</p><div class="fta-math fta-numbered-math" data-equations=1.65>\[
+\begin{aligned}
+Q_{\rm dec} = \widetilde{H}_{\rm dec}^{(\ell)}W_Q,\quad K_{\rm enc}=ZW_K,\quad V_{\rm enc}=ZW_V.
+\end{aligned}
+\]<span class=fta-equation-numbers aria-label="公式 1.65"><span class=fta-equation-number aria-hidden=true>(1.65)</span></span></div><p>对应的 cross-attention 为：</p><div class="fta-math fta-numbered-math" data-equations=1.66>\[
+\begin{aligned}
+\operatorname{CrossAttn}\!\left(\widetilde{H}_{\rm dec}^{(\ell)},Z\right) = \operatorname{softmax}\!\left(\frac{Q_{\rm dec}K_{\rm enc}^{\top}}{\sqrt{d_k}}\right)V_{\rm enc}.
+\end{aligned}
+\]<span class=fta-equation-numbers aria-label="公式 1.66"><span class=fta-equation-number aria-hidden=true>(1.66)</span></span></div><p>这说明，Decoder 在生成目标 token 时，并不是只看目标前缀 $y_{&lt;t}$，还会通过 cross-attention 动态读取源序列表示 $Z$。</p><p>因此，Decoder 有两种注意力：</p><ul><li>因果 self-attention 负责“看已经生成的目标前缀”；</li><li>cross-attention 负责“看 Encoder 对源序列的编码结果”。</li></ul></aside><figure class=fta-figure style=--fta-figure-width:420px><img src=/p/from-transformer-to-agent-full/TransEncoderDecoder.png alt="Transformer Encoder-Decoder 流程图" loading=lazy decoding=async><figcaption>原始 Transformer 的 Encoder--Decoder 流程：Encoder 编码源序列，Decoder 结合目标前缀和 Encoder 输出逐步生成目标 token。</figcaption></figure><aside class="fta-callout fta-example"><div class=fta-callout-title>Example 11</div><p>在本文的翻译例子中，源句为："<code>The cat sat on the mat because it was tired.</code>" 目标句可以是：<code>“猫坐在垫子上，因为它累了。”</code></p><p>Encoder 读取完整英文句子后，得到上下文化表示 $Z$。当 Decoder 生成中文中的“它”时：</p><ul><li>因果 self-attention 只能看到已经生成的中文前缀，例如“猫 坐 在 垫子 上 ， 因为”；</li><li>cross-attention 可以读取英文源句的编码结果 $Z$，从而关注英文中的 "it"、"cat" 等位置。</li></ul><p>因此，生成“它”这个 token 的条件概率可以写成：</p><div class="fta-math fta-numbered-math" data-equations=1.67>\[
+\begin{aligned}
+P\!\left(\text{``它''}\mid \text{``猫 坐 在 垫子 上 ， 因为''},x\right).
+\end{aligned}
+\]<span class=fta-equation-numbers aria-label="公式 1.67"><span class=fta-equation-number aria-hidden=true>(1.67)</span></span></div><p>生成“累了”时，Decoder 会利用更长的中文前缀和同一个 Encoder 输出 $Z$，逐步完成整句翻译。</p></aside><aside class="fta-callout fta-summary"><div class=fta-callout-title>Summary</div><p>Encoder 和 Decoder 是原始 Transformer 的两类模块：</p><ul><li>Encoder 负责对输入序列 $x$ 做双向上下文编码，得到 $Z$；</li><li>Decoder 负责根据目标前缀 $y_{&lt;t}$ 和 Encoder 输出 $Z$，逐步生成目标 token；</li><li>原始 Transformer 建模的是条件概率 $P(y|x)$。</li></ul><p>因此，原始 Transformer 可以理解为：</p><div class="fta-math fta-numbered-math" data-equations=1.68>\[
+\begin{aligned}
+\text{Encoder-Decoder Transformer} = \text{输入编码} + \text{条件自回归生成}.
+\end{aligned}
+\]<span class=fta-equation-numbers aria-label="公式 1.68"><span class=fta-equation-number aria-hidden=true>(1.68)</span></span></div></aside><h4 id=section-12>Encoder-only、Decoder-only 与 Encoder-Decoder 架构</h4><p>在原始 Transformer 中，Encoder 和 Decoder 同时存在。但在后续发展中，人们发现可以根据任务类型保留其中一部分结构，于是形成了三类常见架构：</p><ul><li><strong>Encoder-only</strong>：只使用 Encoder，适合理解和表示学习任务；</li><li><strong>Decoder-only</strong>：只使用带因果掩码的 Decoder，适合自回归生成任务；</li><li><strong>Encoder-Decoder</strong>：同时使用 Encoder 和 Decoder，适合条件生成任务。</li></ul><p>三者共享 Transformer block 的基本思想，但由于可见信息不同、训练目标不同，最终模型性质也不同。</p><h5 id=pdf-encoder-only>Encoder-only：面向表示学习的架构</h5><p>Encoder-only 架构只保留双向 self-attention。输入序列 $x=(x_1,x_2,\dots,x_n)$ 经过多层 Encoder 后，得到上下文化表示：</p><div class="fta-math fta-numbered-math" data-equations=1.69>\[
+\begin{aligned}
+H^{(L)} = \operatorname{Encoder}(x_1,x_2,\dots,x_n).
+\end{aligned}
+\]<span class=fta-equation-numbers aria-label="公式 1.69"><span class=fta-equation-number aria-hidden=true>(1.69)</span></span></div><p>由于 Encoder 的 self-attention 是双向的，因此每个位置都可以看到整个输入序列。 这类模型更适合做理解型任务，例如：文本分类；命名实体识别；句子匹配；语义检索；表示学习。</p><p>典型训练目标是掩码语言建模（Masked Language Modeling, MLM）。设被遮住的位置集合为 $\mathcal{M}$，则训练目标可以写成：</p><div class="fta-math fta-numbered-math" data-equations=1.70>\[
+\begin{aligned}
+\prod_{i\in\mathcal{M}} P(x_i \mid x_{\backslash \mathcal{M}}).
+\end{aligned}
+\]<span class=fta-equation-numbers aria-label="公式 1.70"><span class=fta-equation-number aria-hidden=true>(1.70)</span></span></div><p>代表模型是 BERT 类模型。</p><h5 id=pdf-decoder-only>Decoder-only：面向自回归生成的架构</h5><p>Decoder-only 架构保留带因果掩码的 self-attention，不再显式区分源序列和目标序列。 它直接对单个 token 序列建模：</p><div class="fta-math fta-numbered-math" data-equations=1.71>\[
+\begin{aligned}
+P(x_1,x_2,\dots,x_n) = \prod_{t=1}^{n} P(x_t \mid x_{&lt;t}).
+\end{aligned}
+\]<span class=fta-equation-numbers aria-label="公式 1.71"><span class=fta-equation-number aria-hidden=true>(1.71)</span></span></div><p>这正是ALM的概率分解方式。 由于每一步都只依赖前文，因此 Decoder-only 模型可以自然地用于文本生成：给定 prompt；预测下一个 token；把生成的 token 接回上下文；继续预测下一个 token。</p><p>现代通用 LLM 大多采用 Decoder-only 架构，例如 GPT 类模型和 LLaMA 类模型。</p><h5 id=pdf-encoder-decoder>Encoder-Decoder：面向条件生成的架构</h5><p>Encoder-Decoder 架构同时保留 Encoder 和 Decoder。 它不是直接建模单个序列的联合概率，而是建模输入序列到输出序列的条件概率：</p><div class="fta-math fta-numbered-math" data-equations=1.72>\[
+\begin{aligned}
+P(y|x) = \prod_{t=1}^{m} P(y_t \mid y_{&lt;t},x).
+\end{aligned}
+\]<span class=fta-equation-numbers aria-label="公式 1.72"><span class=fta-equation-number aria-hidden=true>(1.72)</span></span></div><p>这类架构适合输入和输出都比较明确的序列到序列任务，例如：机器翻译；文本摘要；条件问答生成；指令到结构化输出的转换。</p><p>代表模型包括原始 Transformer、T5、BART 等。</p><aside class="fta-callout fta-explanation"><div class=fta-callout-title>Explanation: 三类架构的关键差别：可见信息不同</div><p>三类 Transformer 架构的本质差别，不是是否使用 attention，而是每个位置允许看到哪些信息。</p><ul><li><strong>Encoder-only</strong>：每个位置可以看到整个输入序列，所以适合理解；</li><li><strong>Decoder-only</strong>：每个位置只能看到前文，所以适合从左到右生成；</li><li><strong>Encoder-Decoder</strong>：Encoder 可以看完整输入，Decoder 只能看目标前缀，但可以通过 cross-attention 读取 Encoder 输出。</li></ul><p>因此，三者对应三种不同的条件结构：</p><div class="fta-math fta-numbered-math" data-equations=1.73,1.74,1.75>\[
+\begin{aligned}
+\text{Encoder-only:}&\quad P(x_i \mid x_{\backslash \mathcal{M}})\\
+\text{Decoder-only:}&\quad P(x_t \mid x_{&lt;t}),\\
+\text{Encoder-Decoder:}&\quad P(y_t \mid y_{&lt;t},x).
+\end{aligned}
+\]<span class=fta-equation-numbers aria-label="公式 1.73、1.74、1.75"><span class=fta-equation-number aria-hidden=true>(1.73)</span><span class=fta-equation-number aria-hidden=true>(1.74)</span><span class=fta-equation-number aria-hidden=true>(1.75)</span></span></div><p>这也解释了为什么 BERT 更像“阅读理解模型”，GPT 更像“续写生成模型”，而原始 Transformer 更像“输入到输出的翻译模型”。</p></aside><figure class=fta-figure style=--fta-figure-width:513px><img src=/p/from-transformer-to-agent-full/TransArchitectureComparison.png alt="Transformer 三类架构对比图" loading=lazy decoding=async><figcaption>三类常见 Transformer 架构：Encoder-only 偏重表示学习，Decoder-only 偏重自回归生成，Encoder-Decoder 偏重条件生成。</figcaption></figure><aside class="fta-callout fta-example"><div class=fta-callout-title>Example 12</div><p>三类架构可以用同一个主题任务来比较。</p><ul><li><strong>Encoder-only：理解任务</strong></li><p>输入句子：<code>The cat was tired.</code></p><p>任务是判断句子情感、识别实体或生成句向量。此时模型更关心整句表示 $H^{(L)}$，而不是逐步生成下一个 token。</p><li><strong>Decoder-only：续写任务</strong></li><p>输入前缀：<code>The cat sat on the mat because</code></p><p>模型需要预测下一个 token：$P(x_t \mid x_{&lt;t}).$ 它可能继续生成 "it was tired"。这就是 GPT 类 LLM 的基本生成方式。</p><li><strong>Encoder-Decoder：翻译任务</strong></li><p>输入完整英文句子：<code>The cat sat on the mat because it was tired.</code></p><p>输出中文句子：<code>“猫坐在垫子上，因为它累了。”</code>此时模型建模的是：</p><div class="fta-math fta-numbered-math" data-equations=1.76>\[
+\begin{aligned}
+P(y|x) = \prod_{t=1}^{m} P(y_t \mid y_{&lt;t},x).
+\end{aligned}
+\]<span class=fta-equation-numbers aria-label="公式 1.76"><span class=fta-equation-number aria-hidden=true>(1.76)</span></span></div></ul><p>因此，三类架构的差别不在于是否基于 Transformer，而在于输入输出形式、可见信息范围和训练目标不同。</p></aside><div class=fta-table-scroll><table class=fta-table><tr><th><strong>架构</strong></th><th><strong>可见信息</strong></th><th><strong>主要目标</strong></th><th><strong>代表模型</strong></th></tr><tr><td>Encoder-only</td><td>整个输入序列，双向可见</td><td>表示学习、理解任务</td><td>BERT</td></tr><tr><td>Decoder-only</td><td>只能看见前文，单向生成</td><td>自回归生成 $P(x_t|x_{&lt;t})$</td><td>GPT, LLaMA</td></tr><tr><td>Encoder-Decoder</td><td>输入全可见，输出端单向生成</td><td>条件生成 $P(y_t|y_{&lt;t},x)$</td><td>Transformer, T5, BART</td></tr></table></div><aside class="fta-callout fta-summary"><div class=fta-callout-title>Summary</div><p>Transformer 的三类典型组织方式如下：</p><ul><li><strong>Encoder-only</strong>：只保留 Encoder，适合理解和表示学习；</li><li><strong>Decoder-only</strong>：只保留因果 Decoder，适合自回归文本生成，现代通用 LLM 的主流结构；</li><li><strong>Encoder-Decoder</strong>：同时使用 Encoder 和 Decoder，适合翻译、摘要等条件生成任务。</li></ul><p>因此，encoding 和 decoding 可以分成两层理解：</p><ul><li>在输入处理层面，tokenization、embedding 和位置编码属于输入 encoding；</li><li>在模型架构层面，Encoder 负责上下文化表示，Decoder 负责条件生成或自回归生成。</li></ul><p>这也说明：BERT、GPT 和原始 Transformer 都基于 Transformer block，但它们的结构组织方式和任务目标不同。</p></aside></article></div><nav class=llm-docs-pagination aria-label="Page navigation"><a href=/docs/llm/02-02-transformer-context-bottleneck/>Previous: Transformer 的长上下文瓶颈</a>
+<a href=/docs/llm/02-transformer-and-titans/>Next: 总览：Transformer 与 Titans 的核心差异</a></nav></article><aside class=llm-docs-local-toc aria-label="On this page"><p>在本页</p><nav id=llm-docs-local-toc></nav></aside></div><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css integrity=sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV crossorigin=anonymous><script src=https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js integrity=sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG+vnGctmUb0ZY0l8 crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js integrity=sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05 crossorigin=anonymous defer></script><script>window.addEventListener("DOMContentLoaded",()=>{const e=[".main-article",".widget--toc"];e.forEach(e=>{const t=document.querySelector(e);t&&renderMathInElement(t,{delimiters:[{left:"$$",right:"$$",display:!0},{left:"$",right:"$",display:!1},{left:"\\(",right:"\\)",display:!1},{left:"\\[",right:"\\]",display:!0}],ignoredClasses:["gist"]})})})</script></main></div><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=/ts/main.c922af694cc257bf1ecc41c0dd7b0430f9114ec280ccf67cd2c6ad55f5316c4e.js defer></script><script>(function(){const e=document.createElement("link");e.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",e.type="text/css",e.rel="stylesheet",document.head.appendChild(e)})()</script></body></html>

@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Stack on WebHome of Xuan</title><link>https://albert-mi.github.io/tags/stack/</link><description>Recent content in Stack on WebHome of Xuan</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Tue, 04 Nov 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://albert-mi.github.io/tags/stack/index.xml" rel="self" type="application/rss+xml"/><item><title>项目结构与说明（Begining）</title><link>https://albert-mi.github.io/p/%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E8%AF%B4%E6%98%8Ebegining/</link><pubDate>Tue, 04 Nov 2025 00:00:00 +0000</pubDate><guid>https://albert-mi.github.io/p/%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E8%AF%B4%E6%98%8Ebegining/</guid><description>&lt;blockquote&gt;
+&lt;p&gt;主题：Hugo + Stack v3（见 &lt;code&gt;config/_default/module.toml&lt;/code&gt;）&lt;br&gt;
+生成方式：Hugo Modules &amp;amp; GitHub Actions 自动部署&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;本文根据当前仓库快照撰写，目录与说明&lt;strong&gt;一一对应&lt;/strong&gt;，方便快速定位与维护。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h1 id="顶层仓库根"&gt;顶层（仓库根）
+&lt;/h1&gt;&lt;p&gt;.
+├─ .devcontainer/
+├─ .github/workflows/
+├─ .vscode/
+├─ archetypes/
+├─ assets/
+├─ config/_default/
+├─ content/
+├─ layouts/
+├─ static/
+├─ go.mod / go.sum
+├─ README.md / LICENSE
+└─ .gitignore&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;go.mod / go.sum&lt;/strong&gt;&lt;br&gt;
+Hugo Modules 依赖定义（引入主题 &lt;code&gt;github.com/CaiJimmy/hugo-theme-stack/v3&lt;/code&gt; 等）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;README.md / LICENSE&lt;/strong&gt;&lt;br&gt;
+仓库自述与授权信息。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;.gitignore&lt;/strong&gt;&lt;br&gt;
+忽略发布目录、系统文件等。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h1 id="devcontainer"&gt;&lt;code&gt;.devcontainer/&lt;/code&gt;
+&lt;/h1&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Dockerfile，devcontainer.json&lt;/strong&gt;&lt;br&gt;
+VS Code/Dev Containers 开发环境定义。用于提供一致的本地开发容器（Node/Hugo 等版本统一）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h1 id="githubworkflows"&gt;&lt;code&gt;.github/workflows/&lt;/code&gt;
+&lt;/h1&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;deploy.yml&lt;/strong&gt;&lt;br&gt;
+GitHub Actions 部署流程：构建 Hugo 静态站点并发布到 GitHub Pages。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;update-theme.yml&lt;/strong&gt;&lt;br&gt;
+自动更新主题版本或依赖（按设定的触发策略）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h1 id="vscode"&gt;&lt;code&gt;.vscode/&lt;/code&gt;
+&lt;/h1&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;tasks.json&lt;/strong&gt;&lt;br&gt;
+VS Code 任务配置（如一键构建/预览）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h1 id="archetypes"&gt;&lt;code&gt;archetypes/&lt;/code&gt;
+&lt;/h1&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;images.md&lt;/strong&gt;&lt;br&gt;
+自定义 &lt;strong&gt;Archetype&lt;/strong&gt;（文章蓝本）。用于快速创建“图片/图集类”文章时，自动生成 front matter 与基础结构（如需要可继续扩展字段）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h1 id="assets"&gt;&lt;code&gt;assets/&lt;/code&gt;
+&lt;/h1&gt;&lt;p&gt;Hugo 资源管线入口（可被处理/打包）。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;css/&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;gallery.css&lt;/code&gt;：相册页的样式草案（注意：当前相册页主要由短代码内联样式控制，此文件可作为后续外置样式的汇总位置）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;js/&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;gallery.js&lt;/code&gt;：相册交互脚本（如有需要，可在短代码或主题头部 partial 中引入）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;icons/&lt;/strong&gt;&lt;br&gt;
+站点内使用的 SVG 图标（archive/bookmark/search 等）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;img/&lt;/strong&gt;&lt;br&gt;
+站点静态素材（头像等），但仍通过 Hugo 资源管线管理。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;scss/custom.scss&lt;/strong&gt;&lt;br&gt;
+主题样式的增量/覆盖（Sass 版，可与 Stack 主题的 Pipe 配合）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;smail.png&lt;/strong&gt;&lt;br&gt;
+单文件资源示例。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h1 id="config_default"&gt;&lt;code&gt;config/_default/&lt;/code&gt;
+&lt;/h1&gt;&lt;p&gt;Hugo 主配置（TOML）。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;config.toml&lt;/strong&gt;&lt;br&gt;
+站点基础配置（站点名、语言、构建等）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;params.toml&lt;/strong&gt;&lt;br&gt;
+Stack 主题的参数开关（社交链接、外观、页眉页脚等）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;menu.toml&lt;/strong&gt;&lt;br&gt;
+顶部/侧边导航菜单。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;permalinks.toml&lt;/strong&gt;&lt;br&gt;
+各内容类型的永久链接规则。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;markup.toml&lt;/strong&gt;&lt;br&gt;
+Markdown 渲染细节（如代码高亮、Goldmark 设置）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;related.toml&lt;/strong&gt;&lt;br&gt;
+相关文章算法配置。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;_languages.toml&lt;/strong&gt;&lt;br&gt;
+多语言设定（若启用）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;module.toml&lt;/strong&gt;&lt;br&gt;
+Hugo Modules 引用。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h1 id="content"&gt;&lt;code&gt;content/&lt;/code&gt;
+&lt;/h1&gt;&lt;p&gt;站点内容源（Markdown 为主）。&lt;/p&gt;
+&lt;p&gt;content/
+├─ _index.md
+├─ page/
+│ ├─ archives/index.md
+│ ├─ links/index.md
+│ ├─ search/index.md
+│ └─ secret/index.md
+├─ bookmarks/index.md
+├─ post/
+│ ├─ Cat-state-encoding/ # 文章：猫态编码（含多张配图）
+│ ├─ images/
+│ │ ├─ _index.md
+│ │ └─ Wallpaper/ # 相册页（见下）
+│ │ ├─ index.md # 使用 gallery 短代码调用资源
+│ │ ├─ Arise.jpg / Beauties.jpg / &amp;hellip;
+│ ├─ markdown-syntax/index.md # Markdown 示例
+│ ├─ math-typesetting/index.md # 数学公式示例
+│ ├─ shortcodes/
+│ │ ├─ index.md
+│ │ └─ cover.jpg
+│ └─ others/
+│ └─ kemu3light.md # 科目三灯光考试文章
+└─ private/
+├─ _index.md
+├─ links.md
+└─ twitter.md&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;content/page/&lt;/strong&gt;&lt;br&gt;
+非博客型页面（归档、链接、搜索、私密入口说明等）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;content/bookmarks/index.md&lt;/strong&gt;&lt;br&gt;
+书签页入口（结合 &lt;code&gt;static/bookmarks_10_27_25.html&lt;/code&gt; 使用）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;content/post/images/Wallpaper/&lt;/strong&gt;&lt;br&gt;
+当前&lt;strong&gt;相册&lt;/strong&gt;示例目录。
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;index.md&lt;/code&gt; 内通过短代码调用资源（见下“相册使用速记”）。&lt;/li&gt;
+&lt;li&gt;图片资源（&lt;code&gt;.jpg&lt;/code&gt; / &lt;code&gt;.jpeg&lt;/code&gt; / &lt;code&gt;.png&lt;/code&gt; / &lt;code&gt;.JPG&lt;/code&gt; 等）放在同目录即可被短代码读取。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;content/post/begining/index.md&lt;/strong&gt;&lt;br&gt;
+你正在阅读的这篇&lt;strong&gt;仓库结构说明&lt;/strong&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h1 id="layouts"&gt;&lt;code&gt;layouts/&lt;/code&gt;
+&lt;/h1&gt;&lt;p&gt;自定义模板、短代码与局部模板。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;layouts/shortcodes/gallery.html&lt;/strong&gt;&lt;br&gt;
+自定义 &lt;strong&gt;gallery&lt;/strong&gt; 短代码。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;采用“正方形容器 + &lt;code&gt;object-fit: contain&lt;/code&gt;”且&lt;strong&gt;水平/垂直双向居中&lt;/strong&gt;；&lt;/li&gt;
+&lt;li&gt;移动端断点保持每行等分；&lt;/li&gt;
+&lt;li&gt;与 &lt;code&gt;content/post/images/Wallpaper/index.md&lt;/code&gt; 配合使用。&lt;br&gt;
+（你之前反馈的“横图/竖图留白并居中”效果就在这里实现。）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;layouts/images/list.html&lt;/strong&gt;、&lt;strong&gt;layouts/images/single.html&lt;/strong&gt;&lt;br&gt;
+若定义了 &lt;code&gt;images&lt;/code&gt; 内容类型时的列表/详情页面模板（可与 &lt;code&gt;archetypes/images.md&lt;/code&gt; 搭配形成独立图集类型）。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;layouts/partials/head/custom.html&lt;/strong&gt;&lt;br&gt;
+头部注入点（可引入外部 CSS/JS、自定义 meta 等）。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;layouts/private/list.json.json&lt;/strong&gt;&lt;br&gt;
+私密区的 JSON 列表模板（配合搜索/过滤用）。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h1 id="static"&gt;&lt;code&gt;static/&lt;/code&gt;
+&lt;/h1&gt;&lt;p&gt;原样拷贝到发布目录 &lt;code&gt;public/&lt;/code&gt;，&lt;strong&gt;不走资源管线&lt;/strong&gt;。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;static/js/secret-entrance.js&lt;/strong&gt;&lt;br&gt;
+私密入口脚本（多击触发 + 密码校验 + DEBUG 开关等）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;static/css/custom.css&lt;/strong&gt;&lt;br&gt;
+直接加载的额外样式（覆盖主题或做特定页面的补充）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;static/others/kemu3-exam.html&lt;/strong&gt;&lt;br&gt;
+独立的前端页面（科目三灯光考试交互页，文章末尾可直接外链）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;static/bookmarks_10_27_25.html、favicon.png&lt;/strong&gt;&lt;br&gt;
+书签 HTML 与站点图标等静态资源。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;提醒：&lt;strong&gt;模板/短代码/Archetype 不应放在 &lt;code&gt;static/&lt;/code&gt;&lt;/strong&gt;，否则会被当作静态文件暴露，而不会被 Hugo 识别为构建期资源。若确需改变物理位置，请考虑使用 &lt;strong&gt;Hugo Modules mounts&lt;/strong&gt; 做目录映射。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;hr&gt;
+&lt;h1 id="相册gallery使用速记"&gt;相册（Gallery）使用速记
+&lt;/h1&gt;&lt;p&gt;在某个文章目录（例如 &lt;code&gt;content/post/images/YourAlbum/&lt;/code&gt;）放入图片与 &lt;code&gt;index.md&lt;/code&gt;，然后在 &lt;code&gt;index.md&lt;/code&gt; 写入：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;span class="lnt"&gt;5
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-text" data-lang="text"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;---
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;title: &amp;#34;Your Album&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;date: 2025-11-04
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;---
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;style&gt;
+.gallery-grid{
+display:grid;
+grid-template-columns:repeat(4,minmax(0,1fr));
+gap:12px;
+}
+@media (max-width:1024px){ .gallery-grid{ grid-template-columns:repeat(3,minmax(0,1fr)); } }
+@media (max-width:768px){ .gallery-grid{ grid-template-columns:repeat(2,minmax(0,1fr)); } }
+@media (max-width:480px){ .gallery-grid{ grid-template-columns:repeat(1,minmax(0,1fr)); } }
+.gallery-grid .gallery-item{
+position:relative;
+aspect-ratio:1/1;
+border-radius:10px;
+overflow:hidden;
+display:flex;
+align-items:center;
+justify-content:center;
+background:rgba(0,0,0,.2);
+text-decoration:none;
+}
+.gallery-grid .gallery-item &gt; img{
+width:100% !important;
+height:100% !important;
+max-width:none !important;
+max-height:none !important;
+object-fit:contain !important;
+object-position:center center !important;
+display:block;
+}
+&lt;/style&gt;
+&lt;div class="gallery-grid"&gt;&lt;/div&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;</description></item></channel></rss>
