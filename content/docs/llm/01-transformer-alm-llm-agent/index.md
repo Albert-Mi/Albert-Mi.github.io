@@ -12,6 +12,7 @@ toc: false
 aliases:
   - "/p/from-transformer-to-agent/"
 ---
+<p><a href="https://albert-5.gitbook.io/albert-docs/" target="_blank" rel="noopener">在 GitBook 中打开本专题</a></p>
 <div class="fta-document">
 <article class="fta-post">
 <h2 id="section-1">Transformer、ALM、LLM和Agent</h2>
