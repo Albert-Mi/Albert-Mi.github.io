@@ -9,6 +9,7 @@ toc: true
 tags: ["Transformer", "LLM", "Agent", "Titans"]
 categories: ["Research"]
 ---
+<p><a href="https://albert-5.gitbook.io/albert-docs/" target="_blank" rel="noopener">在 GitBook 中阅读：从 Transformer 到 Agent</a></p>
 <link rel="stylesheet" href="from-transformer-to-agent.css">
 <div class="fta-document">
 <nav class="fta-toc" aria-label="Table of contents">
