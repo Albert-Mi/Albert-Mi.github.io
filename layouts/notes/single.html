@@ -1,0 +1,53 @@
+{{ define "body-class" }}native-notes-page{{ end }}
+{{ define "left-sidebar" }}{{ end }}
+{{ define "right-sidebar" }}{{ end }}
+{{ define "head" }}
+  {{ $style := resources.Get "css/native-notes.css" | minify | fingerprint }}
+  {{ $script := resources.Get "js/native-notes.js" | minify | fingerprint }}
+  <link rel="stylesheet" href="{{ $style.RelPermalink }}" integrity="{{ $style.Data.Integrity }}">
+  <script defer src="{{ $script.RelPermalink }}" integrity="{{ $script.Data.Integrity }}"></script>
+  <script>
+    window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$'], ['\\[', '\\]']], processEscapes: true }, options: { skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'] } };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+{{ end }}
+{{ define "main" }}
+  {{ $book := .Parent }}
+  {{ $pages := $book.RegularPages.ByWeight }}
+  <div class="native-notes-mobile-tools">
+    <button class="native-notes-menu" type="button" aria-expanded="false" aria-controls="native-notes-sidebar">&#20027;&#30446;&#24405;</button>
+    <button class="native-notes-toc-menu" type="button" aria-expanded="false" aria-controls="native-notes-toc-panel">&#23567;&#33410;&#30446;&#24405;</button>
+  </div>
+  <div class="native-notes-shell">
+    <aside id="native-notes-sidebar" class="native-notes-sidebar" aria-label="&#30446;&#24405;&#30446;&#24405;">
+      <a class="native-notes-brand" href="{{ $book.RelPermalink }}">LLM Notes</a>
+      <p>&#20174; Transformer &#21040; Agent</p>
+      <div class="native-notes-fallback">
+        <a href="/p/from-transformer-to-agent-full/">GitHub &#38271;&#25991;</a>
+        <a href="https://albert-5.gitbook.io/albert-docs/" target="_blank" rel="noopener">GitBook &#29256;</a>
+      </div>
+      {{ range slice "13" "14" }}
+        {{ $chapter := . }}
+        {{ $chapterPages := where $pages "Params.chapter" $chapter }}
+        {{ with $chapterPages }}
+          {{ $first := index . 0 }}
+          <section class="native-notes-chapter">
+            <h2>{{ $first.Params.chapter_title }}</h2>
+            <ol>
+              {{ range . }}
+                <li><a href="{{ .RelPermalink }}" {{ if eq .RelPermalink $.RelPermalink }}aria-current="page"{{ end }}><span>{{ .Params.page_number }}</span>{{ .Title }}</a></li>
+              {{ end }}
+            </ol>
+          </section>
+        {{ end }}
+      {{ end }}
+    </aside>
+    <article class="native-notes-content" data-page-number="{{ .Params.page_number }}" data-root-heading-level="{{ .Params.root_heading_level }}">
+      <nav class="native-notes-breadcrumb"><a href="{{ $book.RelPermalink }}">LLM Notes</a><span>/</span><span>{{ .Params.chapter_title }}</span></nav>
+      <h1>{{ .Title }}</h1>
+      <div class="native-notes-prose">{{ .Content }}</div>
+      <nav class="native-notes-pagination"><span>{{ with .PrevInSection }}<a href="{{ .RelPermalink }}">&#30446;&#24405;&#30446;&#24405;{{ .Title }}</a>{{ end }}</span><span>{{ with .NextInSection }}<a href="{{ .RelPermalink }}">&#30446;&#24405;&#30446;&#24405;{{ .Title }}</a>{{ end }}</span></nav>
+    </article>
+    <aside id="native-notes-toc-panel" class="native-notes-toc" aria-label="&#26412;&#39029;&#30446;&#24405;"><p>&#26412;&#39029;&#30446;&#24405;</p><nav id="native-notes-toc"></nav></aside>
+  </div>
+{{ end }}

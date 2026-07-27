@@ -2,7 +2,7 @@
 title: "From Transformer to Agent"
 date: 2026-07-17
 url: /p/from-transformer-to-agent-full/
-listLink: https://albert-5.gitbook.io/albert-docs/readme/13-transformer/02
+listLink: /notes/transformer-agent/13-transformer/01/
 draft: false
 math: true
 toc: true
