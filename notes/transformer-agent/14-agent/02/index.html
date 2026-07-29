@@ -1,0 +1,199 @@
+<!doctype html><html lang=en-us dir=ltr><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><meta name=description content="2.2.1 概率建模基础回顾 在深入 LLM 的训练和推理之前，我们简要回顾第一章建立的核心概率结构。给定 token 序列 $x_{1:T}=(x_1,\\dots,x_T)$，自回归语言模型将其联合概率分解为条件概率的乘积（链式法则）： $$ P_\\theta(x_{1:T}) = \\prod_{t=1}^{T} P_\\theta(x_t \\mid x_{\\lt t}). $$训练目标是最小化负对数似然（Negative Log-Likelihood, NLL）： $$ \\mathcal{L}_{\\rm NLL}(\\theta) = -\\frac{1}{N}\\sum_{i=1}^{N}\\sum_{t=1}^{T_i} \\log P_\\theta(x_t^{(i)}\\mid x_{\\lt t}^{(i)}). $$每个 $P_\\theta(x_t\\mid x_{\\lt t})$ 由 softmax 从 logit $z_t$ 计算得到： $$ P_\\theta(x_t=j\\mid x_{\\lt t}) = \\frac{\\exp(z_{t,j})}{\\sum_{k=1}^{V}\\exp(z_{t,k})}, \\qquad j=1,\\dots,V. $$Softmax 交叉熵梯度的核心结果（已在第一章详细推导）为： $$ \\frac{\\partial\\ell}{\\partial z_j} = p_j - \\mathbb{1}_{j=y}. $$即梯度 = 模型概率 - 真实标签。这一简洁形式贯穿所有 LLM 训练。\n从信息论角度，NLL 的最小化等价于最小化模型分布与数据分布之间的 KL 散度： $$ D_{KL}(P_{\\rm data}\\Vert P_\\theta) = \\mathbb{E}_{x\\sim P_{\\rm data}}\\log\\frac{P_{\\rm data}(x)}{P_\\theta(x)} \\ge 0. $$ Note\n"><title>2.2 第一层：LLM 作为概率生成模型</title><link rel=canonical href=https://albert-mi.github.io/notes/transformer-agent/14-agent/02/><link rel=stylesheet href=/scss/style.min.a99fe54029218fdc1c9075a9e89e670944c6f0e07062da10a9e2344ce161ca7f.css><meta property='og:title' content="2.2 第一层：LLM 作为概率生成模型"><meta property='og:description' content="2.2.1 概率建模基础回顾 在深入 LLM 的训练和推理之前，我们简要回顾第一章建立的核心概率结构。给定 token 序列 $x_{1:T}=(x_1,\\dots,x_T)$，自回归语言模型将其联合概率分解为条件概率的乘积（链式法则）： $$ P_\\theta(x_{1:T}) = \\prod_{t=1}^{T} P_\\theta(x_t \\mid x_{\\lt t}). $$训练目标是最小化负对数似然（Negative Log-Likelihood, NLL）： $$ \\mathcal{L}_{\\rm NLL}(\\theta) = -\\frac{1}{N}\\sum_{i=1}^{N}\\sum_{t=1}^{T_i} \\log P_\\theta(x_t^{(i)}\\mid x_{\\lt t}^{(i)}). $$每个 $P_\\theta(x_t\\mid x_{\\lt t})$ 由 softmax 从 logit $z_t$ 计算得到： $$ P_\\theta(x_t=j\\mid x_{\\lt t}) = \\frac{\\exp(z_{t,j})}{\\sum_{k=1}^{V}\\exp(z_{t,k})}, \\qquad j=1,\\dots,V. $$Softmax 交叉熵梯度的核心结果（已在第一章详细推导）为： $$ \\frac{\\partial\\ell}{\\partial z_j} = p_j - \\mathbb{1}_{j=y}. $$即梯度 = 模型概率 - 真实标签。这一简洁形式贯穿所有 LLM 训练。\n从信息论角度，NLL 的最小化等价于最小化模型分布与数据分布之间的 KL 散度： $$ D_{KL}(P_{\\rm data}\\Vert P_\\theta) = \\mathbb{E}_{x\\sim P_{\\rm data}}\\log\\frac{P_{\\rm data}(x)}{P_\\theta(x)} \\ge 0. $$ Note\n"><meta property='og:url' content='https://albert-mi.github.io/notes/transformer-agent/14-agent/02/'><meta property='og:site_name' content='WebHome of Xuan'><meta property='og:type' content='article'><meta property='article:section' content='Notes'><meta name=twitter:title content="2.2 第一层：LLM 作为概率生成模型"><meta name=twitter:description content="2.2.1 概率建模基础回顾 在深入 LLM 的训练和推理之前，我们简要回顾第一章建立的核心概率结构。给定 token 序列 $x_{1:T}=(x_1,\\dots,x_T)$，自回归语言模型将其联合概率分解为条件概率的乘积（链式法则）： $$ P_\\theta(x_{1:T}) = \\prod_{t=1}^{T} P_\\theta(x_t \\mid x_{\\lt t}). $$训练目标是最小化负对数似然（Negative Log-Likelihood, NLL）： $$ \\mathcal{L}_{\\rm NLL}(\\theta) = -\\frac{1}{N}\\sum_{i=1}^{N}\\sum_{t=1}^{T_i} \\log P_\\theta(x_t^{(i)}\\mid x_{\\lt t}^{(i)}). $$每个 $P_\\theta(x_t\\mid x_{\\lt t})$ 由 softmax 从 logit $z_t$ 计算得到： $$ P_\\theta(x_t=j\\mid x_{\\lt t}) = \\frac{\\exp(z_{t,j})}{\\sum_{k=1}^{V}\\exp(z_{t,k})}, \\qquad j=1,\\dots,V. $$Softmax 交叉熵梯度的核心结果（已在第一章详细推导）为： $$ \\frac{\\partial\\ell}{\\partial z_j} = p_j - \\mathbb{1}_{j=y}. $$即梯度 = 模型概率 - 真实标签。这一简洁形式贯穿所有 LLM 训练。\n从信息论角度，NLL 的最小化等价于最小化模型分布与数据分布之间的 KL 散度： $$ D_{KL}(P_{\\rm data}\\Vert P_\\theta) = \\mathbb{E}_{x\\sim P_{\\rm data}}\\log\\frac{P_{\\rm data}(x)}{P_\\theta(x)} \\ge 0. $$ Note\n"><link rel="shortcut icon" href=/favicon.png><script defer src="/js/secret-entrance.js?v=20251101"></script><link rel=stylesheet href=/css/native-notes.min.34dc4edfc0362070aed3a2553b2af1306a5f332a3ca882cfbf302286019c450c.css integrity="sha256-NNxO38A2IHCu06JVOyrxMGpfMyo8qILPvzAihgGcRQw="><script defer src=/js/native-notes.min.fce02e874867ee8745598f8d30f62bedac088ca14b155cd92472aedb92266395.js integrity="sha256-/OAuh0hn7odFWY+NMPYr7awIjKFLFVzZJHKu25ImY5U="></script><script>window.MathJax={tex:{inlineMath:[["$","$"],["\\(","\\)"]],displayMath:[["$$","$$"],["\\[","\\]"]],processEscapes:!0},options:{skipHtmlTags:["script","noscript","style","textarea","pre","code"]}}</script><script defer src=https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js></script></head><body class=native-notes-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky"><button class="hamburger hamburger--spin" type=button id=toggle-menu aria-label="Toggle Menu">
+<span class=hamburger-box><span class=hamburger-inner></span></span></button><header><figure class=site-avatar><a href=/><img src=/img/Portrait_hu_f58ed74a4d3066f7.png width=300 height=301 class=site-logo loading=lazy alt=Avatar>
+</a><span class=emoji>🚀</span></figure><div class=site-meta><h1 class=site-name><a href=/>WebHome of Xuan</a></h1><h2 class=site-description>Xuan の小窝</h2></div></header><ol class=menu-social><li><a href=https://github.com/Albert-Mi target=_blank title=GitHub rel=me><svg class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6.0 00-1.3-3.2 4.2 4.2.0 00-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3.0 00-6.2.0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2.0 00-.1 3.2A4.6 4.6.0 004 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg></a></li><li><a href=https://twitter.com target=_blank title=Twitter rel=me><svg class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M22 4.01c-1 .49-1.98.689-3 .99-1.121-1.265-2.783-1.335-4.38-.737S11.977 6.323 12 8v1c-3.245.083-6.135-1.395-8-4 0 0-4.182 7.433 4 11-1.872 1.247-3.739 2.088-6 2 3.308 1.803 6.913 2.423 10.034 1.517 3.58-1.04 6.522-3.723 7.651-7.742a13.84 13.84.0 00.497-3.753C20.18 7.773 21.692 5.25 22 4.009z"/></svg></a></li></ol><ol class=menu id=main-menu><li><a href=/secret/><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-1a7 7 0 00-7-7h-2a7 7 0 00-7 7v1"/><circle cx="12" cy="7" r="4"/></svg>
+<span>🔒 Secret Area</span></a></li><li><a href=/><svg class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="5 12 3 12 12 3 21 12 19 12"/><path d="M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/><path d="M9 21v-6a2 2 0 012-2h2a2 2 0 012 2v6"/></svg>
+<span>Home</span></a></li><li><a href=/bookmarks/><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bookmark-icon lucide-bookmark"><path d="m19 21-7-4-7 4V5a2 2 0 012-2h10a2 2 0 012 2v16z"/></svg>
+<span>Bookmarks</span></a></li><li><a href=/archives/><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-archive-icon lucide-archive"><rect width="20" height="5" x="2" y="3" rx="1"/><path d="M4 8v11a2 2 0 002 2h12a2 2 0 002-2V8"/><path d="M10 12h4"/></svg>
+<span>Archives</span></a></li><li><a href=/search/><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search-icon lucide-search"><path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/></svg>
+<span>Search</span></a></li><li class=menu-bottom-section><ol class=menu><li id=dark-mode-toggle><svg class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<svg class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<span>Dark Mode</span></li></ol></li></ol></aside><main class="main full-width"><div class=native-notes-mobile-tools><button class=native-notes-menu type=button aria-expanded=false aria-controls=native-notes-sidebar>&#20027;&#30446;&#24405;</button>
+<button class=native-notes-toc-menu type=button aria-expanded=false aria-controls=native-notes-toc-panel>&#23567;&#33410;&#30446;&#24405;</button></div><div class=native-notes-shell><aside id=native-notes-sidebar class=native-notes-sidebar aria-label=&#30446;&#24405;&#30446;&#24405;><a class=native-notes-brand href=/notes/transformer-agent/>LLM Notes</a><p>&#20174; Transformer &#21040; Agent</p><div class=native-notes-fallback><a href=/p/from-transformer-to-agent-full/>GitHub &#38271;&#25991;</a>
+<a href=https://albert-5.gitbook.io/albert-docs/ target=_blank rel=noopener>GitBook &#29256;</a></div><section class=native-notes-chapter><h2>1. Transformer</h2><ol><li><a href=/notes/transformer-agent/13-transformer/01/><span>1.1</span>1.1 总览：Transformer 与 Titans 的核心差异</a></li><li><a href=/notes/transformer-agent/13-transformer/02/><span>1.2</span>1.2 Transformer 的标准流程</a></li><li><a href=/notes/transformer-agent/13-transformer/03/><span>1.3</span>1.3 Transformer 的长上下文瓶颈</a></li><li><a href=/notes/transformer-agent/13-transformer/04/><span>1.4</span>1.4 记忆视角：Attention、KV Cache、线性记忆</a></li><li><a href=/notes/transformer-agent/13-transformer/05/><span>1.5</span>1.5 Titans 的长期神经记忆</a></li><li><a href=/notes/transformer-agent/13-transformer/06/><span>1.6</span>1.6 Titans 三种架构</a></li><li><a href=/notes/transformer-agent/13-transformer/07/><span>1.7</span>1.7 为什么 Titans 适合长链推理</a></li><li><a href=/notes/transformer-agent/13-transformer/08/><span>1.8</span>1.8 实验结果与适用边界</a></li><li><a href=/notes/transformer-agent/13-transformer/09/><span>1.9</span>1.9 局限、开放问题与总结</a></li><li><a href=/notes/transformer-agent/13-transformer/10/><span>1.10</span>1.10 数学附录</a></li><li><a href=/notes/transformer-agent/13-transformer/11/><span>1.11</span>1.11 参考文献</a></li></ol></section><section class=native-notes-chapter><h2>2. Agent</h2><ol><li><a href=/notes/transformer-agent/14-agent/01/><span>2.1</span>2.1 本章总览：为什么 LLM 需要变成 Agent</a></li><li><a href=/notes/transformer-agent/14-agent/02/ aria-current=page><span>2.2</span>2.2 第一层：LLM 作为概率生成模型</a></li><li><a href=/notes/transformer-agent/14-agent/03/><span>2.3</span>2.3 第二层：Agent 作为闭环决策系统</a></li><li><a href=/notes/transformer-agent/14-agent/04/><span>2.4</span>2.4 第三层：LLM Agent 的六步工作流</a></li><li><a href=/notes/transformer-agent/14-agent/05/><span>2.5</span>2.5 RAG 与外部知识</a></li><li><a href=/notes/transformer-agent/14-agent/06/><span>2.6</span>2.6 安全、对齐与可靠性</a></li><li><a href=/notes/transformer-agent/14-agent/07/><span>2.7</span>2.7 实现一个最小 Agent</a></li><li><a href=/notes/transformer-agent/14-agent/08/><span>2.8</span>2.8 结论：概率层、推理层、控制层</a></li><li><a href=/notes/transformer-agent/14-agent/09/><span>2.9</span>2.9 数学附录：几个常用推导</a></li><li><a href=/notes/transformer-agent/14-agent/10/><span>2.10</span>2.10 Softmax 雅可比矩阵</a></li><li><a href=/notes/transformer-agent/14-agent/11/><span>2.11</span>2.11 KL 散度非负性证明</a></li><li><a href=/notes/transformer-agent/14-agent/12/><span>2.12</span>2.12 经验风险与真实风险</a></li><li><a href=/notes/transformer-agent/14-agent/13/><span>2.13</span>2.13 数值方法的局部截断误差</a></li><li><a href=/notes/transformer-agent/14-agent/14/><span>2.14</span>2.14 Euler和RK4解法对比</a></li><li><a href=/notes/transformer-agent/14-agent/15/><span>2.15</span>2.15 符号表</a></li><li><a href=/notes/transformer-agent/14-agent/16/><span>2.16</span>2.16 学习路线与实践作业</a></li><li><a href=/notes/transformer-agent/14-agent/17/><span>2.17</span>2.17 参考文献</a></li></ol></section></aside><article class=native-notes-content data-page-number=2.2 data-root-heading-level=1><nav class=native-notes-breadcrumb><a href=/notes/transformer-agent/>LLM Notes</a><span>/</span><span>2. Agent</span></nav><h1>2.2 第一层：LLM 作为概率生成模型</h1><div class=native-notes-prose><h2 id=221-概率建模基础回顾>2.2.1 概率建模基础回顾</h2><p>在深入 LLM 的训练和推理之前，我们简要回顾第一章建立的核心概率结构。给定 token 序列 $x_{1:T}=(x_1,\dots,x_T)$，自回归语言模型将其联合概率分解为条件概率的乘积（链式法则）：</p>$$
+P_\theta(x_{1:T}) = \prod_{t=1}^{T} P_\theta(x_t \mid x_{\lt t}).
+$$<p>训练目标是最小化负对数似然（Negative Log-Likelihood, NLL）：</p>$$
+\mathcal{L}_{\rm NLL}(\theta) = -\frac{1}{N}\sum_{i=1}^{N}\sum_{t=1}^{T_i} \log P_\theta(x_t^{(i)}\mid x_{\lt t}^{(i)}).
+$$<p>每个 $P_\theta(x_t\mid x_{\lt t})$ 由 softmax 从 logit $z_t$ 计算得到：</p>$$
+P_\theta(x_t=j\mid x_{\lt t}) = \frac{\exp(z_{t,j})}{\sum_{k=1}^{V}\exp(z_{t,k})}, \qquad j=1,\dots,V.
+$$<p>Softmax 交叉熵梯度的核心结果（已在第一章详细推导）为：</p>$$
+\frac{\partial\ell}{\partial z_j} = p_j - \mathbb{1}_{j=y}.
+$$<p>即<strong>梯度 = 模型概率 - 真实标签</strong>。这一简洁形式贯穿所有 LLM 训练。</p><p>从信息论角度，NLL 的最小化等价于最小化模型分布与数据分布之间的 KL 散度：</p>$$
+D_{KL}(P_{\rm data}\Vert P_\theta) = \mathbb{E}_{x\sim P_{\rm data}}\log\frac{P_{\rm data}(x)}{P_\theta(x)} \ge 0.
+$$<blockquote><p><strong>Note</strong></p><p>第一章的重点是 Transformer 如何将上下文编码为向量并计算条件概率得到自回归模型——这是"计算引擎"层面的问题。</p><p>本章的重点是：（1）如何训练这个概率模型（预训练、指令微调、RLHF）；（2）如何从这个概率模型中生成文本（推理策略）；（3）如何将这个概率模型嵌入更大的闭环系统（Agent）。两者互补：第一章讲"引擎内部如何运转"，本章讲"引擎如何被训练、如何使用、如何接入外部世界"。</p></blockquote><blockquote><p><strong>Example</strong></p><p>在我们的谐振子数值分析例子中，用户请求 &ldquo;我想用数值方法分析一维谐振子的运动&mldr;&rdquo; 经过 tokenization 后成为 token 序列。LLM 对每个 token 计算其在上下文中的条件概率。例如，在 &ldquo;一维谐振子的运动，并比较&rdquo; 之后，模型需要判断下一个 token 是 &ldquo;Euler&rdquo; 的概率——这取决于模型在预训练中是否见过足够多的数值方法相关文本。</p><p>如果模型在大量物理数值计算文本上训练过，它会给出 $P_\theta(\text{Euler}\mid\text{上下文})\approx 0.7$（因为 Euler 法是最基础的数值积分方法），而 $P_\theta(\text{Verlet}\mid\text{上下文})\approx 0.1$（Verlet 法虽然也是数值积分方法但不如 Euler 基础）。这个概率分布的质量直接决定了 Agent 后续生成的代码是否合理。</p></blockquote><blockquote><p><strong>Note</strong></p><p>语言模型 = 自回归条件概率分解 + softmax 输出 + NLL 训练。这是本章所有讨论的基础。第一章讲过的东西（Transformer 内部机制）不再重复，本章聚焦于这个概率模型如何被训练、使用和嵌入更大的系统。</p></blockquote><h2 id=222-llm-的训练预训练指令微调与偏好优化>2.2.2 LLM 的训练：预训练、指令微调与偏好优化</h2><p>LLM 的训练通常分三个阶段。每一阶段改变模型的不同性质。</p><h3 id=2221-预训练学习语言的统计结构>2.2.2.1 预训练：学习语言的统计结构</h3><p>设训练语料包含 $N$ 条序列，第 $i$ 条序列长度为 $T_i$。自回归预训练损失以每个 token 为一次预测任务：
+$$
+\mathcal{L}<em>{\rm pre}(\theta) = -\frac{1}{\sum</em>{i=1}^{N} T_i}
+\sum_{i=1}^{N}\sum_{t=1}^{T_i} \log P_{\theta}(x_t^{(i)}\mid x_{\lt t}^{(i)}).</p><p>$$</p><p>分母使用 token 总数，使高频序列不会过度主导训练。$P_\theta$ 来自 Transformer 输出的 softmax；$\theta$ 包含所有嵌入、注意力、FFN、归一化和输出层参数。</p><p>预训练的本质是拟合一个巨大的条件概率模型。数据不直接存储为可寻址记录，而是通过梯度分布式地改变参数。一个事实（如"谐振子能量 $E=\frac{1}{2}mv^2+\frac{1}{2}kx^2$"）被无数相关文本片段共同编码进参数中——类似凝聚态中宏观性质由大量自由度的集体行为决定。</p><p><strong>尺度律（Scaling Laws）：</strong> 经验研究发现，语言模型性能与参数量 $N$、数据量 $D$、计算量 $C$ 之间常呈现近似幂律关系 ：</p>$$
+\mathcal{L}(N,D,C) \approx \mathcal{L}_{\infty} + a N^{-\alpha} + b D^{-\beta} + c C^{-\gamma}.
+$$<p>这不是第一性原理定律，而是在某些范围内描述经验趋势。揭示宏观趋势但不替代微观机制。</p><blockquote><p><strong>Example</strong></p><p>在我们的谐振子例子中，预训练阶段对 Agent 的能力有决定性影响：</p><ul><li><strong>物理知识：</strong> 模型在大量物理教材、论文、习题解答上训练后，知道谐振子方程 $\ddot x + \omega^2 x = 0$ 的解析解为 $x(t)=A\cos(\omega t+\phi)$，能量守恒为 $E=\frac{1}{2}v^2+\frac{1}{2}\omega^2 x^2$。 > - <strong>数值方法：</strong> 模型在数值分析教材和代码仓库（如 SciPy、NumPy 文档）上训练后，知道 Euler 法是一阶方法、RK4 是四阶方法，二者的局部截断误差分别为 $O(\Delta t^2)$ 和 $O(\Delta t^5)$。</li><li><strong>编程能力：</strong> 模型在 Python 代码上训练后，能够生成正确的 <code>numpy</code> 数组操作和 <code>matplotlib</code> 绘图代码。</li></ul><p>如果预训练语料中缺少数值方法的系统性内容，模型可能写出语法正确但算法错误的 RK4 代码——这恰恰说明预训练阶段的知识覆盖对下游任务至关重要。</p></blockquote><h3 id=2222-指令微调让模型学会按指令办事>2.2.2.2 指令微调：让模型学会"按指令办事"</h3><p>预训练模型主要学会"续写文本"——给定前文，生成最可能的后续内容。但用户需要的是"按照指令完成任务"。例如 &ldquo;帮我写一段谐振子 Euler 积分的 Python 代码&rdquo;，模型需要理解这是代码生成请求而非对话续写。</p><p>指令微调（Instruction Tuning）使用 <code>(instruction, input)</code>$\to$ <code>response</code> 格式的数据集继续训练模型。训练方式与预训练相同（下一个 token 的交叉熵），但数据分布不同：</p><ul><li><strong>预训练数据：</strong> 例如语料中出现的文本：&ldquo;谐振子是物理学中最基本的模型之一。一维谐振子的运动方程为&mldr;&rdquo;</li><li><strong>指令微调数据：</strong> 使用 (指令, 输入) $\to$ 输出 的格式配对。例如：</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span><span class=lnt>9
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-text data-lang=text><span class=line><span class=cl>[指令] 用 Python 实现一维谐振子的 Euler 法数值积分。
+</span></span><span class=line><span class=cl>[输入] 初始条件 x0=1, v0=0, omega=1, 步长 dt=0.01。
+</span></span><span class=line><span class=cl>[输出] &#34;&#34;&#34;用 Euler 法求解一维谐振子&#34;&#34;&#34;
+</span></span><span class=line><span class=cl>      import numpy as np
+</span></span><span class=line><span class=cl>      def euler_harmonic_oscillator(x0, v0, omega, dt, n_steps):
+</span></span><span class=line><span class=cl>      t = np.zeros(n_steps + 1)
+</span></span><span class=line><span class=cl>      x = np.zeros(n_steps + 1)
+</span></span><span class=line><span class=cl>      v = np.zeros(n_steps + 1)
+</span></span><span class=line><span class=cl>    ...
+</span></span></code></pre></td></tr></table></div></div><p>指令微调不引入新的模型架构或损失函数——它只是改变了条件分布 $P_\theta(\text{response}\mid\text{instruction})$ 的统计性质，使模型学会将指令映射到有用的输出格式。</p><h3 id=2223-rlhf用人类偏好校准模型reinforcement-learning-from-human-feedback->2.2.2.3 RLHF：用人类偏好校准模型（Reinforcement Learning from Human Feedback ）</h3><p>即使指令微调后的模型能完成任务，其输出未必符合人类偏好。例如，对于 &ldquo;实现谐振子数值积分&rdquo; 指令：</p><ul><li>回答 A：代码有文档字符串、变量名清晰、包含能量守恒检验（$y^+$偏好） - 回答 B：代码无注释、变量名随意、只画图不检验能量（$y^-$非偏好）</li></ul><p>基于人类反馈的强化学习（RLHF）通过以下流程引入偏好信号 ：</p><p><strong>步骤1——收集偏好数据：</strong> 对同一提示 $x$，生成两个回答 $y^+$和 $y^-$，由人类标注者做出选择。</p><p><strong>步骤2——训练奖励模型：</strong> 使用 Bradley-Terry 模型将偏好概率参数化为</p>$$
+P(y^+ \succ y^- \mid x) = \sigma(r_\phi(x, y^+) - r_\phi(x, y^-)),
+$$<p>其中 $r_\phi$ 是奖励模型（reward model），$\sigma(u)=\frac{1}{1+e^{-u}}$ 是 sigmoid 函数。通过最大化偏好数据的对数似然$L_{\text{RM}} = -\log \sigma\left(r_\phi(x,y^+) - r_\phi(x,y^-)\right)$来训练 $r_\phi$。</p><p><strong>步骤3——强化学习微调：</strong> 使用 近端策略优化（Proximal Policy Optimization，PPO）等算法微调 LLM，使其生成高奖励回答，同时用 KL 散度惩罚防止模型偏离指令微调后的分布太远：</p>$$
+\underbrace{\mathcal{L}_{\rm RL}(\theta)}_{\text{强化学习的损失}} = \underbrace{-\mathbb{E}_{y\sim P_\theta}\!\left[r_\phi(x,y)\right]}_{\text{奖励项}} + \underbrace{\beta\,D_{KL}(P_\theta(y\mid x) \,\Vert\, P_{\theta_{\rm SFT}}(y\mid x))}_{\text{约束项}}.
+$$<p>其中 $P_{\theta_{\rm SFT}}$ 是指令微调后的模型，$\beta$ 控制惩罚强度。</p><p>如果只最大化奖励而不加约束，模型可能退化：它可能学会生成奖励模型给高分但毫无意义的文本（奖励模型也是可被"欺骗"的神经网络）。KL 惩罚确保模型不会偏离"基本合理"的行为模式太远——这类似于正则化项防止过拟合。</p><blockquote><p><strong>Example</strong></p><p>用户提示 $x$：</p></blockquote><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-text data-lang=text><span class=line><span class=cl>分析一维谐振子：x&#39;&#39; + w²x = 0。初始条件 x0 = 1, v0 = 0, w = 1。
+</span></span><span class=line><span class=cl>模拟 10 个周期，比较 Euler 法和 RK4 法的能量守恒表现。
+</span></span><span class=line><span class=cl>请给出代码和分析。
+</span></span></code></pre></td></tr></table></div></div><blockquote><p>物理上：$\dot{x} = v , \dot{v} = -\omega^2 x$. 因为 $\omega=1$，所以：$\dot{v} = -x$ > 能量是：$E(t) = \frac{1}{2}v(t)^2 + \frac{1}{2}\omega^2 x(t)^2$.</p><p>初始能量：$E_0 = 0.5$. 真实解析解中，谐振子能量应该严格守恒。</p><p>% &mdash;&mdash;&mdash;&mdash;&mdash; 步骤 1 &mdash;&mdash;&mdash;&mdash;&mdash;</p><ul><li>步骤 1：收集偏好数据</li></ul><p>RLHF 第一步不是直接训练模型，而是先让模型对同一个 prompt 生成多个回答，然后让人类比较哪个（收集偏好对）。对于这个提示 $x$，模型可能生成两个：</p><pre><code>回答 A：人类偏好的回答 $y^+$
+</code></pre></blockquote><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-text data-lang=text><span class=line><span class=cl>1. 正确写出 dx/dt = v, dv/dt = -ω²x
+</span></span><span class=line><span class=cl>2. 同时实现 Euler 和 RK4
+</span></span><span class=line><span class=cl>3. 计算能量 E(t) = 1/2 v² + 1/2 ω²x²
+</span></span><span class=line><span class=cl>4. 计算相对能量误差
+</span></span><span class=line><span class=cl>5. 画出 x(t)、相图、能量误差曲线
+</span></span><span class=line><span class=cl>6. 如果 Euler 能量漂移超过 1%，主动提醒
+</span></span><span class=line><span class=cl>7. 解释 Euler 不守恒，RK4 更稳定
+</span></span></code></pre></td></tr></table></div></div><blockquote><pre><code>这类回答符合物理任务的核心要求：
+
+**不只是生成代码，还要检查守恒量。**
+
+
+回答 B：非偏好的回答 $y^-$
+</code></pre></blockquote><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-text data-lang=text><span class=line><span class=cl>1. 只实现 Euler 法
+</span></span><span class=line><span class=cl>2. 只画 x(t)
+</span></span><span class=line><span class=cl>3. 没有 RK4
+</span></span><span class=line><span class=cl>4. 没有能量计算
+</span></span><span class=line><span class=cl>5. 没有能量守恒误差
+</span></span><span class=line><span class=cl>6. 没有指出 Euler 法能量漂移
+</span></span></code></pre></td></tr></table></div></div><blockquote><pre><code>它可能“看起来能跑”，但对于物理数值分析来说是不完整的。
+</code></pre><p>% &mdash;&mdash;&mdash;&mdash;&mdash; 步骤 2 &mdash;&mdash;&mdash;&mdash;&mdash;</p><ul><li><p>步骤 2：训练奖励模型</p></li><li><p>RLHF 的第二步是训练一个奖励模型：$r_\phi(x,y)$. > 它输入 prompt $x$ 和回答 $y$，输出一个分数。分数越高，表示这个回答越符合人类偏好。</p><p>文档中用 Bradley-Terry 模型（$\sigma(u) = \frac{1}{1+e^{-u}}$）：</p>$$
+P(y^+ \succ y^- | x) = \sigma\left(r_\phi(x,y^+) - r_\phi(x,y^-)\right)
+$$</li><li><p>给奖励模型设计一个教学版特征</p><p>为了手算，我们假设奖励模型不是复杂神经网络，而是一个线性打分器：</p>$$
+r_\phi(x,y) = w \cdot f(x,y)
+$$<p>其中 $f(x,y)$ 是回答的特征。设 6 个特征：</p></li></ul><table><thead><tr><th>特征</th><th>含义</th><th>特征</th><th>含义</th></tr></thead><tbody><tr><td>$f_1$</td><td>物理方程是否正确</td><td>$f_4$</td><td>是否计算相对能量误差</td></tr></tbody></table><pre><code>回答 A 的特征：$f^+ = [1,1,1,1,1,1]$,  &gt;     回答 B 的特征：$ f^- = [1,0,0,0,0,0.4]$
+
+解释：回答 B 至少方程可能是对的，所以 $f_1=1$；但它没有 RK4、没有能量、没有误差、没有警告；代码清晰度勉强给 0.4。
+
+设初始权重：$w = [0.2,0.2,0.2,0.2,0.2,0.2]$
+
+那么奖励模型给 A 的分数是：$r_\phi(x,y^+) = 1.2$ &gt;     给 B 的分数是：$r_\phi(x,y^-) = 0.28$
+
+所以分数差：$\Delta r = r_\phi(x,y^+) - r_\phi(x,y^-) = 1.2 - 0.28 = 0.92$
+
+偏好概率：
+</code></pre></blockquote>$$
+P(y^+ \succ y^- | x) = \sigma(0.92) = \frac{1}{1+e^{-0.92}} \approx 0.715
+$$<blockquote><pre><code>也就是说，当前奖励模型认为：&quot;A 比 B 好的概率约为 71.5%&quot;; 但人类标签是：&quot;A 确实比 B 好&quot;. 所以我们希望这个概率更接近 1。
+
+奖励模型的损失是：
+</code></pre></blockquote>$$
+L_{\text{RM}} = -\log \sigma\left(r_\phi(x,y^+) - r_\phi(x,y^-)\right)\approx 0.335
+$$<blockquote><pre><code>    训练奖励模型的目标就是降低这个损失。
+</code></pre><ul><li><p>一次梯度更新的直觉</p><p>因为人类选择了 A，所以训练会让：</p>$$
+r_\phi(x,y^+) \ \text{变大}, \quad r_\phi(x,y^-) \ \text{变小}
+$$<p>注意 A 和 B 的差别主要在：</p></li></ul></blockquote><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-text data-lang=text><span class=line><span class=cl>是否有 RK4, 能量检查, 相对误差, 能量漂移警告, 代码清晰
+</span></span></code></pre></td></tr></table></div></div><blockquote><pre><code>所以训练后，奖励模型会提高这些特征的权重。
+
+例如更新后权重可能变成：
+</code></pre></blockquote>$$
+w' = [0.2,\ 0.343,\ 0.343,\ 0.343,\ 0.343,\ 0.286]
+$$<blockquote><pre><code>这时：$r_{\phi'}(x,y^+) =  1.858, &gt;     r_{\phi'}(x,y^-) =  0.314$
+
+分数差：$\Delta r' = 1.858 - 0.314 = 1.544$
+
+偏好概率变成：$\sigma(1.544) \approx 0.824$
+
+损失变成：$L_{RM}=-\log(0.824) \approx 0.194$
+
+所以训练后奖励模型更确信：&quot;包含能量守恒检查、RK4 对比、误差分析的答案更好&quot;.
+</code></pre><p>% &mdash;&mdash;&mdash;&mdash;&mdash; 步骤 3 &mdash;&mdash;&mdash;&mdash;&mdash;</p><ul><li><p>步骤 3：用奖励模型强化学习微调 LLM</p></li><li><p>第三步把 LLM 看成一个策略：$P_\theta(y|x)$.给定提示$x$，模型生成回答$y$的概率。</p><p>RLHF 希望模型更常生成高奖励回答。</p><p>文档里的目标函数是：</p>$$
+L_{\text{RL}}(\theta) = -\mathbb{E}_{y\sim P_\theta}[r_\phi(x,y)] + \beta \, D_{KL}\left( P_\theta(y|x) \| P_{\theta_{\text{SFT}}}(y|x) \right)
+$$<p>这有两部分：</p><table><thead><tr><th>项</th><th>含义</th></tr></thead><tbody><tr><td>$-\mathbb{E}[r_\phi]$</td><td>希望奖励越高越好，所以损失里加负号</td></tr></tbody></table></li><li><p>简化成三个候选回答</p><p>为了手算，我们假设模型只可能生成三类回答：</p><table><thead><tr><th>回答</th><th>内容</th><th>奖励 $r_\phi(x,y)$</th></tr></thead><tbody><tr><td>$y_A$</td><td>高质量：Euler + RK4 + 能量误差 + 警告</td><td>4.8</td></tr></tbody></table><p>指令微调后的 SFT 模型分布为：$P_{\theta_{\text{SFT}}} = [0.30,\ 0.60,\ 0.10]$, 意思是：</p></li></ul></blockquote><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-text data-lang=text><span class=line><span class=cl>SFT 模型有 30% 概率生成高质量回答 A，
+</span></span><span class=line><span class=cl>60% 概率生成普通回答 B，
+</span></span><span class=line><span class=cl>10% 概率生成花哨但不严谨回答 C。
+</span></span></code></pre></td></tr></table></div></div><blockquote><pre><code>RLHF 后，我们希望模型更多生成 A。
+
+假设当前 RLHF 模型分布为：$P_\theta = [0.70,\ 0.20,\ 0.10]$, 也就是：
+</code></pre></blockquote><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-text data-lang=text><span class=line><span class=cl>A 的概率从 30% 提高到 70%,B 的概率从 60% 降到 20%,C 保持 10%
+</span></span></code></pre></td></tr></table></div></div><blockquote><ul><li><p>计算期望奖励</p>$$
+\mathbb{E}_{y\sim P_\theta}[r_\phi(x,y)] = 0.70 \cdot 4.8 + 0.20 \cdot 1.0 + 0.10 \cdot 2.8= 3.84
+$$<p>所以奖励项是：$-\mathbb{E}[r_\phi] = -3.84$, 模型越偏向 A，这一项越小，训练越喜欢。</p></li><li><p>计算 KL 惩罚（代入三类回答）</p>$$
+D_{KL}(P_\theta \| P_{\text{SFT}}) = \sum_y P_\theta(y|x) \log\frac{P_\theta(y|x)}{P_{\text{SFT}}(y|x)}
+=0.373
+$$<pre><code>  如果取：$\beta = 0.2$, 则 KL 惩罚为：$\beta D_{KL} = 0.2 \times 0.373 = 0.0746$, 最终 RLHF 损失：
+</code></pre></li></ul></blockquote>$$
+L_{\text{RL}} = -3.84 + 0.0746 = -3.7654
+$$<blockquote><pre><code>这个损失比原来的 SFT 分布更低。
+
+原 SFT 分布: 期望奖励是：$\mathbb{E}_{y\sim P_\theta}[r_\phi(x,y)] = P_{\theta_{SFT}}\cdot r_\phi=2.32$, $D_{KL}=0$.
+
+所以：$L_{\text{SFT-like}} = -2.32$, &gt;     RLHF 后：$L_{\text{RLHF}} \approx -3.765$
+
+因为我们在最小化损失，所以 RLHF 更偏好新的分布。
+</code></pre><p>% &mdash;&mdash;&mdash;&mdash;&mdash; 总结 &mdash;&mdash;&mdash;&mdash;&mdash;</p><ul><li><p>这个过程到底改变了什么？</p></li><li><p>RLHF 后，模型不是“更懂谐振子方程”了。</p><p>1)谐振子的基本知识来自预训练：</p></li></ul></blockquote><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-text data-lang=text><span class=line><span class=cl>x&#39;&#39; + ω²x = 0
+</span></span><span class=line><span class=cl>E = 1/2 v² + 1/2 ω²x²
+</span></span><span class=line><span class=cl>Euler 一阶
+</span></span><span class=line><span class=cl>RK4 四阶
+</span></span></code></pre></td></tr></table></div></div><blockquote><pre><code>2)RLHF 改变的是模型的 **输出偏好**。
+
+它让模型更倾向于输出：
+</code></pre></blockquote><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-text data-lang=text><span class=line><span class=cl>不仅给代码，还要做物理校验；
+</span></span><span class=line><span class=cl>不仅跑数值，还要检查能量守恒；
+</span></span><span class=line><span class=cl>不仅给图，还要指出 Euler 和 RK4 的差异。
+</span></span></code></pre></td></tr></table></div></div><blockquote><pre><code>所以对于谐振子任务，RLHF 学到的是：`高质量物理计算答案应该包含守恒量检查。`
+</code></pre><ul><li><p>三步总结</p><table><thead><tr><th>RLHF 步骤</th><th>在谐振子例子里具体是什么</th><th>数学形式</th></tr></thead><tbody><tr><td>步骤1：收集偏好数据</td><td>人类选择完整物理分析的回答</td><td>$y^+ \succ y^-$</td></tr></tbody></table><p>一句话：</p><p><strong>RLHF 在谐振子例子中的作用，是把模型从“会写一段能跑的代码”，推向“会写一段物理上可信、带能量守恒校验、能比较 Euler 与 RK4 的高质量分析”。</strong></p></li></ul></blockquote><blockquote><p><strong>Note</strong></p><p>LLM 的三阶段训练：</p><ul><li>预训练让模型学会语言的统计结构和领域知识；</li><li>指令微调让模型学会从指令到输出的映射格式；</li><li>RLHF 让模型的输出更符合人类对质量、安全性和实用性的偏好。
+三个阶段分别改变模型的<strong>知识分布</strong>、<strong>行为格式</strong>和<strong>价值偏好</strong>。</li></ul></blockquote><h2 id=223-llm-的推理自回归生成与采样策略>2.2.3 LLM 的推理：自回归生成与采样策略</h2><p>&ldquo;生成"不是一次性吐出完整答案，而是重复执行：给定上下文，计算下一个 token 分布，选择/采样一个 token，加入上下文，再继续。不同采样策略改变输出的稳定性和多样性。</p><h3 id=2231-自回归生成循环>2.2.3.1 自回归生成循环</h3><p>设用户输入 tokenized 后为 $x_{1:n}$。生成循环为： - 计算 $P_{\theta}(x_{n+1}\mid x_{1:n})$——模型对第 $n+1$ 个位置所有可能 token 的概率分布； - 选择一个 token $\hat{x}<em>{n+1}$——通过贪心、采样或搜索策略； - 追加到上下文：$x</em>{1:n+1} = (x_1,\dots,x_n,\hat{x}_{n+1})$；</p><ul><li>重复直到遇到结束 token、达到长度上限或触发停止条件。</li></ul><p>LLM 的回答是一个随机/确定性解码过程。早期 token 的选择会改变后续上下文，从而影响后续所有概率——这被称为"蝴蝶效应&rdquo;：一个早期的采样选择可能完全改变后文的语义方向。</p><h3 id=2232-贪心解码温度采样top-k-与-top-p>2.2.3.2 贪心解码、温度采样、Top-k 与 Top-p</h3><p><strong>贪心解码（Greedy）：</strong> 每步选择概率最高的 token，</p>$$
+\hat{x}_{t+1} = \operatorname*{arg\,max}_v P_{\theta}(v\mid x_{\leq t}).
+$$<p>稳定但可能重复、死板——一旦进入循环模式，&ldquo;贪心"会一直维持同一局部最优路径。</p><p><strong>温度采样（Temperature Sampling）：</strong> 将 logit 除以温度 $\tau>0$ 后做 softmax：</p>$$
+p_j(\tau) = \frac{\exp(z_j/\tau)}{\sum_{k=1}^{V}\exp(z_k/\tau)}.
+$$<p>$\tau\to 0$：分布趋近 one-hot（贪心模式，输出确定但单一）。 $\tau\to\infty$：分布趋近均匀（完全随机，输出多样但可能无意义）。 $\tau=1$：原始 softmax 分布。</p><p>统计物理直觉：logit $z_j$ 类比负能量 $-E_j$，$\tau$ 类比温度 $k_B T$。低温时系统"冻结"到最低能量状态（最可能的 token）；高温时有"热涨落"使低概率 token 也有机会被选中。合理选择 $\tau$ 相当于在不同"温度"下从 Gibbs 分布中采样。</p><p><strong>Top-k 采样：</strong> 只保留概率最高的 $k$ 个 token，重归一化后采样。$k$ 固定——但不同上下文的概率分布形状差异巨大，固定 $k$ 可能不合理。</p><p><strong>Top-p（Nucleus）采样：</strong> 选择最小集合使累计概率达到阈值 $p_0$，动态调整候选集合大小。这比固定 $k$ 更灵活：当分布集中时选少量 token，分布平坦时选较多 token。</p><blockquote><p><strong>Example</strong></p><p>在我们的谐振子例子中，当 Agent 生成代码时：</p><p><strong>场景：</strong> 上下文为</p></blockquote><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-text data-lang=text><span class=line><span class=cl>def harmonic_oscillator_rk4(x0, v0, omega, dt, n_steps):
+</span></span><span class=line><span class=cl>用 RK4 方法求解一维谐振子
+</span></span><span class=line><span class=cl>Args:x0: 初始位置;v0: 初始速度;omega: 角频率;dt: 时间步长
+</span></span><span class=line><span class=cl>n_steps: 步数
+</span></span><span class=line><span class=cl>Returns:t, x, v: 时间、位置、速度数组
+</span></span></code></pre></td></tr></table></div></div><blockquote><p>模型现在需要预测下一个 token。一个合理的下一步是 <code>t = np.zeros</code> 或 <code>x = np.zeros</code>。</p><p>设模型（$\tau=0.8$）对下一个 token 的概率分布（简化到5个候选）为：</p>$$
+p(\text{"t"}) = 0.45,\,
+p(\text{"x"}) = 0.30,\,
+p(\text{"\#"}) = 0.02,\,
+p(\text{"import"}) = 0.05,\,
+p(\text{"def"}) = 0.01.
+$$<p>（其余概率分布在其他 token 上）</p><p>用 Top-p（$p_0=0.9$）采样：累积 &ldquo;t&rdquo;(0.45) + &ldquo;x&rdquo;(0.30) = 0.75。继续加 &ldquo;import&rdquo;(0.05) = 0.80。继续加 &ldquo;#"(0.02) = 0.82。再加 &ldquo;def&rdquo;(0.01) = 0.83 &lt; 0.9，继续加入更多候选直到累计超过 0.9。</p><p>对于代码生成任务，合理的采样策略至关重要：温度太高可能生成语法错误的代码（如随机插入不存在的函数名），温度太低则代码过于模板化（所有函数都写成一模一样的风格，缺少针对具体物理问题的适配）。对于代码生成，使用较低的 $\tau$（0.2&ndash;0.5）和较高的 $p_0$（0.9&ndash;0.95）比较合理。</p></blockquote><blockquote><p><strong>Note</strong></p><p>生成 = 重复采样。贪心 = 确定性最可能路径；温度 = 控制"热涨落"大小；Top-k/Top-p = 截断低概率噪声。采样策略的统计物理直觉：softmax 定义 Gibbs 分布，温度控制熵，截断相当于排除高能态。</p></blockquote><h2 id=224-llm-的能力与局限推理与幻觉>2.2.4 LLM 的能力与局限：推理与幻觉</h2><h3 id=2241-推理能力从何而来>2.2.4.1 推理能力从何而来</h3><p>LLM 可以表现出推理能力，但其基本机制仍是条件概率建模。推理能力来自多个因素的复合：</p><ul><li>大规模语料中的推理示例（数学推导、代码逻辑、因果论证）；</li><li>Transformer 的表示能力（通过注意力建立长程依赖，已在第一章详述）；</li><li>训练目标对序列中远期依赖关系的压力（预测下一 token 需要理解前文的逻辑结构）；</li><li>指令微调中的结构化解题数据（如 Chain-of-Thought 逐步推理 ）；</li><li>解码时显式的 Chain-of-Thought 提示（让模型在生成答案前先生成中间推理步骤）。</li></ul><p>从数学角度看，模型学习的是 $P_{\theta}(\text{答案}\mid\text{题目、上下文、示例})$。如果训练和上下文中有大量正确推导模式，模型可能生成类似推导；但这不等于每一步都经过形式化验证。</p><h3 id=2242-幻觉的概率解释>2.2.4.2 幻觉的概率解释</h3><p>&ldquo;幻觉&rdquo;（hallucination）指模型生成看似合理但事实错误的内容。从概率角度，这是条件概率模型的自然现象：</p>$$
+\hat{x}_{1:T} \sim P_{\theta}(x_{1:T}\mid c).
+$$<p>生成目标只要求序列在模型分布下概率高，而非保证命题真实。高概率序列可能是流畅的、常见的，但未必与真实世界一致。</p><p>为什么模型会在"不懂"的时候仍然自信地生成？因为训练目标（NLL）奖励的是"概率分布接近训练数据分布&rdquo;，而不是"不确定时表达不确定&rdquo;。如果训练数据中很少有"我不知道"的示例，模型就学会了——无论什么输入，都应当输出一个"看起来合理"的回答。</p><blockquote><p><strong>幻觉的统计物理类比</strong></p><p>把 LLM 的生成看作在条件概率曲面上的随机游走。当上下文提供的约束（低能区）不够窄时，有很多条"高概率路径"——其中只有一部分对应事实正确的命题。模型可能在一条高概率但非事实的路径上越走越远，相当于在自由能曲面上滑进了一个"错误但流畅"的局部极小值。</p></blockquote><blockquote><p><strong>Note</strong></p><p>LLM 可以表现出推理能力，但机制仍是条件概率。幻觉源于模型在缺乏证据时仍生成高概率序列。因此，可靠的 LLM Agent 不能把一次生成直接当作最终答案，而需要在后续工作流中引入工具执行、物理量检查、来源验证等外部校验闭环。</p></blockquote></div><nav class=native-notes-pagination><span><a href=/notes/transformer-agent/14-agent/03/>&#30446;&#24405;&#30446;&#24405;2.3 第二层：Agent 作为闭环决策系统</a></span><span><a href=/notes/transformer-agent/14-agent/01/>&#30446;&#24405;&#30446;&#24405;2.1 本章总览：为什么 LLM 需要变成 Agent</a></span></nav></article><aside id=native-notes-toc-panel class=native-notes-toc aria-label=&#26412;&#39029;&#30446;&#24405;><p>&#26412;&#39029;&#30446;&#24405;</p><nav id=native-notes-toc></nav></aside></div></main></div><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=/ts/main.c922af694cc257bf1ecc41c0dd7b0430f9114ec280ccf67cd2c6ad55f5316c4e.js defer></script><script>(function(){const e=document.createElement("link");e.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",e.type="text/css",e.rel="stylesheet",document.head.appendChild(e)})()</script></body></html>

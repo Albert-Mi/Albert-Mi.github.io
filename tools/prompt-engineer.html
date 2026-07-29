@@ -1,0 +1,1554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prompt Engineer - AI Prompt Generator</title>
+    
+    <!-- PDF.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    
+    <!-- Marked.js for Markdown preview -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* ============================================
+           CSS VARIABLES
+           ============================================ */
+        :root {
+            --amber: #f59e0b;
+            --amber-dark: #d97706;
+            --amber-light: #fbbf24;
+            --amber-glow: rgba(245, 158, 11, 0.15);
+            --green: #10b981;
+            --red: #ef4444;
+            --blue: #3b82f6;
+
+            /* Light theme */
+            --bg-main: #faf8f5;
+            --bg-sidebar: #f0ece6;
+            --card-bg: #ffffff;
+            --text: #1a1a1a;
+            --text-secondary: #7a7a7a;
+            --border: #e5ddd0;
+            --border-light: #f0ece6;
+            --shadow: 0 2px 12px rgba(0,0,0,0.06);
+            --code-bg: #1e1e2e;
+            --code-text: #cdd6f4;
+            --input-bg: #faf8f5;
+            --hover-bg: rgba(245,158,11,0.06);
+        }
+
+        [data-theme="dark"] {
+            --bg-main: #0a0a0f;
+            --bg-sidebar: #12121f;
+            --card-bg: #16162a;
+            --text: #e8e8e8;
+            --text-secondary: #888;
+            --border: #2a2a3d;
+            --border-light: #1e1e35;
+            --shadow: 0 2px 12px rgba(0,0,0,0.3);
+            --code-bg: #0a0a14;
+            --code-text: #cdd6f4;
+            --input-bg: #0f0f1a;
+            --hover-bg: rgba(245,158,11,0.08);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html, body { height: 100%; overflow: hidden; }
+
+        body {
+            font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--bg-main);
+            color: var(--text);
+            line-height: 1.5;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        /* ============================================
+           DASHBOARD LAYOUT
+           ============================================ */
+        .dashboard { display: flex; height: 100vh; width: 100vw; overflow: hidden; }
+
+        /* ============================================
+           LEFT SIDEBAR
+           ============================================ */
+        .sidebar {
+            width: 320px;
+            min-width: 280px;
+            max-width: 360px;
+            background: var(--bg-sidebar);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            transition: all 0.3s;
+            flex-shrink: 0;
+        }
+
+        .sidebar-header {
+            padding: 0.9rem 1.1rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-shrink: 0;
+        }
+
+        .sidebar-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.45rem;
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
+
+        .theme-toggle {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            width: 36px; height: 36px;
+            cursor: pointer;
+            font-size: 1.05rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+        .theme-toggle:hover { background: var(--border); transform: scale(1.05); }
+
+        .sidebar-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0.9rem 1.1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.85rem;
+        }
+
+        .sb-section {
+            background: var(--card-bg);
+            border-radius: 10px;
+            padding: 0.85rem;
+            border: 1px solid var(--border);
+        }
+
+        .sb-section h3 {
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            margin-bottom: 0.6rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        /* Provider Buttons */
+        .provider-btns { display: flex; flex-direction: column; gap: 0.4rem; }
+
+        .prov-btn {
+            padding: 0.6rem 0.7rem;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            background: var(--bg-sidebar);
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: left;
+        }
+        .prov-btn:hover { border-color: var(--amber-light); }
+        .prov-btn.active { border-color: var(--amber); background: var(--amber-glow); }
+        .prov-btn h4 { font-size: 0.82rem; font-weight: 600; margin-bottom: 0.1rem; }
+        .prov-btn p { font-size: 0.68rem; color: var(--text-secondary); }
+
+        /* API Key */
+        .api-link { font-size: 0.7rem; color: var(--text-secondary); margin-bottom: 0.4rem; }
+        .api-link a { color: var(--amber); text-decoration: none; }
+        .api-link a:hover { text-decoration: underline; }
+
+        .key-row { display: flex; gap: 0.4rem; }
+        .key-row input {
+            flex: 1;
+            padding: 0.45rem 0.6rem;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 0.78rem;
+            background: var(--input-bg);
+            color: var(--text);
+            font-family: 'JetBrains Mono', monospace;
+            transition: border-color 0.2s;
+        }
+        .key-row input:focus { outline: none; border-color: var(--amber); }
+        .key-row button {
+            padding: 0.45rem 0.7rem;
+            background: var(--amber);
+            color: #000;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            font-weight: 700;
+            white-space: nowrap;
+            font-family: 'DM Sans', sans-serif;
+            transition: background 0.2s;
+        }
+        .key-row button:hover { background: var(--amber-dark); }
+
+        .api-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.2rem;
+            padding: 0.12rem 0.45rem;
+            border-radius: 10px;
+            font-size: 0.65rem;
+            font-weight: 600;
+            margin-top: 0.4rem;
+        }
+        .api-badge.ok { background: rgba(16,185,129,0.15); color: var(--green); }
+        .api-badge.no { background: rgba(245,158,11,0.15); color: var(--amber); }
+
+        /* Language Toggle */
+        .lang-row { display: flex; gap: 0.4rem; }
+        .lang-btn {
+            flex: 1;
+            padding: 0.55rem;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            background: var(--bg-sidebar);
+            cursor: pointer;
+            text-align: center;
+            font-size: 0.8rem;
+            font-weight: 600;
+            transition: all 0.2s;
+            font-family: 'DM Sans', sans-serif;
+            color: var(--text);
+        }
+        .lang-btn:hover { border-color: var(--amber-light); }
+        .lang-btn.active { border-color: var(--amber); background: var(--amber-glow); }
+
+        /* Prompt Style Select */
+        .sb-select {
+            width: 100%;
+            padding: 0.45rem 0.6rem;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            background: var(--input-bg);
+            color: var(--text);
+            font-size: 0.78rem;
+            font-family: 'DM Sans', sans-serif;
+            cursor: pointer;
+        }
+        .sb-select:focus { outline: none; border-color: var(--amber); }
+
+        .sb-check {
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+            font-size: 0.75rem;
+            cursor: pointer;
+            margin-top: 0.4rem;
+        }
+        .sb-check input { width: 14px; height: 14px; accent-color: var(--amber); cursor: pointer; }
+
+        /* Usage Monitor */
+        .usage-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.4rem; margin-bottom: 0.5rem; }
+        .usage-cell {
+            background: var(--bg-sidebar);
+            padding: 0.4rem;
+            border-radius: 6px;
+            text-align: center;
+        }
+        .usage-label { font-size: 0.58rem; color: var(--text-secondary); text-transform: uppercase; }
+        .usage-val { font-size: 0.9rem; font-weight: 700; color: var(--amber); font-family: 'JetBrains Mono', monospace; }
+
+        .prog-wrap { margin-bottom: 0.35rem; }
+        .prog-top { display: flex; justify-content: space-between; font-size: 0.6rem; color: var(--text-secondary); margin-bottom: 0.15rem; }
+        .prog-track { height: 5px; background: var(--border); border-radius: 3px; overflow: hidden; }
+        .prog-fill { height: 100%; border-radius: 3px; transition: width 0.3s; background: var(--green); }
+        .prog-fill.warn { background: var(--amber); }
+        .prog-fill.danger { background: var(--red); }
+
+        .reset-btn {
+            background: var(--border);
+            color: var(--text-secondary);
+            border: none;
+            padding: 0.15rem 0.35rem;
+            border-radius: 4px;
+            font-size: 0.58rem;
+            cursor: pointer;
+            margin-left: auto;
+            font-family: 'DM Sans', sans-serif;
+        }
+        .reset-btn:hover { background: var(--text-secondary); color: #fff; }
+
+        .sidebar-foot {
+            padding: 0.7rem 1.1rem;
+            border-top: 1px solid var(--border);
+            flex-shrink: 0;
+        }
+        .free-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            background: linear-gradient(135deg, var(--green), #059669);
+            color: #fff;
+            padding: 0.3rem 0.7rem;
+            border-radius: 16px;
+            font-size: 0.72rem;
+            font-weight: 700;
+        }
+
+        /* ============================================
+           MAIN PANEL
+           ============================================ */
+        .main-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            background: var(--bg-main);
+            transition: background 0.3s;
+        }
+
+        .main-head {
+            padding: 0.8rem 1.3rem;
+            border-bottom: 1px solid var(--border);
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .main-head h1 {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--amber);
+        }
+        .main-head p { font-size: 0.82rem; color: var(--text-secondary); }
+
+        .pills { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+        .pill {
+            padding: 0.22rem 0.55rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            font-size: 0.67rem;
+            color: var(--text-secondary);
+        }
+
+        /* Mobile sidebar toggle */
+        .menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.3rem;
+            cursor: pointer;
+            padding: 0.3rem;
+        }
+
+        .main-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem 1.3rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.85rem;
+        }
+
+        /* Content Row */
+        .row { display: flex; gap: 0.85rem; flex-wrap: wrap; }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            padding: 0.85rem;
+            transition: all 0.3s;
+        }
+
+        .card-label {
+            font-size: 0.78rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        /* Upload Zone */
+        .upload-card { flex: 1; min-width: 280px; }
+
+        .drop-zone {
+            border: 2px dashed var(--border);
+            border-radius: 8px;
+            padding: 1.2rem 0.8rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .drop-zone:hover, .drop-zone.over {
+            border-color: var(--amber);
+            background: var(--hover-bg);
+        }
+        .drop-zone .icon { font-size: 1.8rem; margin-bottom: 0.3rem; }
+        .drop-zone h3 { font-size: 0.85rem; margin-bottom: 0.15rem; }
+        .drop-zone p { font-size: 0.72rem; color: var(--text-secondary); }
+
+        .paste-tip {
+            margin-top: 0.5rem;
+            padding: 0.35rem 0.5rem;
+            background: var(--amber-glow);
+            border-radius: 5px;
+            font-size: 0.68rem;
+        }
+        .paste-tip kbd {
+            background: var(--card-bg);
+            padding: 0.1rem 0.25rem;
+            border-radius: 3px;
+            border: 1px solid var(--border);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.62rem;
+        }
+
+        .file-input { display: none; }
+
+        .flist { margin-top: 0.5rem; max-height: 100px; overflow-y: auto; }
+        .fitem {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.35rem 0.5rem;
+            background: var(--bg-main);
+            border-radius: 5px;
+            margin-bottom: 0.25rem;
+            font-size: 0.75rem;
+        }
+        .fitem-thumb { width: 32px; height: 32px; object-fit: cover; border-radius: 3px; border: 1px solid var(--border); }
+        .fitem-icon { font-size: 1rem; }
+        .fitem-info { flex: 1; }
+        .fitem-name { font-weight: 600; font-size: 0.72rem; }
+        .fitem-size { font-size: 0.62rem; color: var(--text-secondary); }
+        .fitem-tag {
+            padding: 0.1rem 0.35rem;
+            border-radius: 8px;
+            font-size: 0.6rem;
+            font-weight: 600;
+        }
+        .tag-ok { background: rgba(16,185,129,0.15); color: var(--green); }
+        .tag-wait { background: rgba(245,158,11,0.15); color: var(--amber); }
+        .tag-err { background: rgba(239,68,68,0.15); color: var(--red); }
+        .fitem-del {
+            background: none;
+            border: none;
+            cursor: pointer;
+            opacity: 0.5;
+            font-size: 0.85rem;
+        }
+        .fitem-del:hover { opacity: 1; }
+
+        /* Goal Card */
+        .goal-card { flex: 1; min-width: 260px; display: flex; flex-direction: column; }
+
+        .goal-area {
+            flex: 1;
+            width: 100%;
+            min-height: 100px;
+            padding: 0.6rem;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-family: 'DM Sans', sans-serif;
+            background: var(--input-bg);
+            color: var(--text);
+            resize: vertical;
+            transition: border-color 0.2s;
+            line-height: 1.5;
+        }
+        .goal-area:focus { outline: none; border-color: var(--amber); }
+        .goal-area::placeholder { color: var(--text-secondary); }
+
+        .goal-opts {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-top: 0.5rem;
+        }
+        .goal-opts select {
+            padding: 0.35rem 0.5rem;
+            border: 1px solid var(--border);
+            border-radius: 5px;
+            background: var(--input-bg);
+            color: var(--text);
+            font-size: 0.72rem;
+            font-family: 'DM Sans', sans-serif;
+        }
+        .goal-opts label {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            font-size: 0.72rem;
+            cursor: pointer;
+        }
+        .goal-opts input[type="checkbox"] { width: 13px; height: 13px; accent-color: var(--amber); }
+
+        /* Action Row */
+        .actions { display: flex; gap: 0.6rem; align-items: center; flex-wrap: wrap; }
+
+        .btn {
+            padding: 0.55rem 1.1rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            font-family: 'DM Sans', sans-serif;
+        }
+        .btn-go {
+            background: var(--amber);
+            color: #000;
+        }
+        .btn-go:hover { background: var(--amber-dark); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(245,158,11,0.25); }
+        .btn-go:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
+        .btn-alt {
+            background: var(--card-bg);
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+        .btn-alt:hover { background: var(--border); }
+
+        .spinner {
+            display: inline-block;
+            width: 14px; height: 14px;
+            border: 2px solid rgba(0,0,0,0.2);
+            border-radius: 50%;
+            border-top-color: #000;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Progress */
+        .progress-bar-section {
+            display: none;
+            background: var(--card-bg);
+            border-radius: 8px;
+            padding: 0.65rem 0.85rem;
+            border: 1px solid var(--border);
+        }
+        .progress-bar-section.on { display: block; }
+        .pb-head { display: flex; justify-content: space-between; font-size: 0.78rem; margin-bottom: 0.3rem; }
+        .pb-track { height: 7px; background: var(--border); border-radius: 4px; overflow: hidden; }
+        .pb-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--amber), #ef4444);
+            border-radius: 4px;
+            transition: width 0.3s;
+            width: 0%;
+        }
+
+        /* ============================================
+           RESULTS SECTION
+           ============================================ */
+        .results {
+            display: none;
+            flex: 1;
+            min-height: 200px;
+            background: var(--card-bg);
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+            flex-direction: column;
+        }
+        .results.on { display: flex; }
+
+        .res-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.6rem 0.85rem;
+            border-bottom: 1px solid var(--border);
+            flex-shrink: 0;
+        }
+        .res-title { font-size: 0.85rem; font-weight: 600; display: flex; align-items: center; gap: 0.4rem; }
+        .res-stats { display: flex; gap: 0.8rem; font-size: 0.68rem; color: var(--text-secondary); }
+        .res-stats strong { color: var(--amber); font-family: 'JetBrains Mono', monospace; }
+
+        .tabs {
+            display: flex;
+            gap: 0.2rem;
+            padding: 0.4rem 0.85rem;
+            background: var(--bg-main);
+            flex-shrink: 0;
+        }
+        .tab {
+            padding: 0.32rem 0.65rem;
+            border: none;
+            background: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 0.78rem;
+            border-radius: 5px;
+            transition: all 0.2s;
+            font-family: 'DM Sans', sans-serif;
+        }
+        .tab:hover { color: var(--text); background: var(--card-bg); }
+        .tab.on { background: var(--amber); color: #000; font-weight: 600; }
+
+        .tab-pane { display: none; flex: 1; overflow: hidden; }
+        .tab-pane.on { display: flex; flex-direction: column; }
+
+        .out-wrap { position: relative; flex: 1; overflow: hidden; }
+        .out-area { height: 100%; overflow-y: auto; padding: 0.85rem; background: var(--bg-main); }
+
+        .code-out {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.78rem;
+            white-space: pre-wrap;
+            word-break: break-word;
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .preview-out {
+            line-height: 1.7;
+            font-size: 0.82rem;
+        }
+        .preview-out h1, .preview-out h2, .preview-out h3 { margin: 0.6rem 0 0.3rem; }
+        .preview-out p { margin-bottom: 0.4rem; }
+        .preview-out ul, .preview-out ol { margin-left: 1.2rem; margin-bottom: 0.4rem; }
+        .preview-out code { background: var(--border); padding: 0.12rem 0.25rem; border-radius: 3px; font-size: 0.72rem; font-family: 'JetBrains Mono', monospace; }
+        .preview-out pre { background: var(--code-bg); color: var(--code-text); border-radius: 6px; padding: 0.7rem; overflow-x: auto; font-size: 0.72rem; }
+        .preview-out pre code { background: none; padding: 0; color: inherit; }
+        .preview-out blockquote { border-left: 3px solid var(--amber); padding-left: 0.7rem; margin: 0.4rem 0; color: var(--text-secondary); }
+        .preview-out table { width: 100%; border-collapse: collapse; margin: 0.5rem 0; font-size: 0.78rem; }
+        .preview-out th, .preview-out td { border: 1px solid var(--border); padding: 0.35rem; text-align: left; }
+        .preview-out th { background: var(--border-light); }
+
+        .copy-float {
+            position: absolute;
+            top: 0.4rem;
+            right: 0.4rem;
+            padding: 0.3rem 0.5rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.68rem;
+            z-index: 10;
+            color: var(--text);
+            transition: background 0.2s;
+            font-family: 'DM Sans', sans-serif;
+        }
+        .copy-float:hover { background: var(--border); }
+
+        .res-foot {
+            display: flex;
+            gap: 0.4rem;
+            padding: 0.55rem 0.85rem;
+            border-top: 1px solid var(--border);
+            flex-shrink: 0;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 1.2rem;
+            right: 1.2rem;
+            padding: 0.6rem 1rem;
+            background: var(--card-bg);
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            border-left: 4px solid var(--green);
+            transform: translateX(130%);
+            transition: transform 0.3s;
+            z-index: 2000;
+            color: var(--text);
+            font-size: 0.82rem;
+        }
+        .toast.show { transform: translateX(0); }
+        .toast.err { border-left-color: var(--red); }
+
+        /* Context Menu */
+        .ctx-menu {
+            position: fixed;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            padding: 0.3rem 0;
+            z-index: 2000;
+            display: none;
+        }
+        .ctx-menu.show { display: block; }
+        .ctx-item {
+            padding: 0.4rem 0.85rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.78rem;
+        }
+        .ctx-item:hover { background: var(--bg-main); }
+
+        /* Mobile sidebar overlay */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 900;
+        }
+        .sidebar-overlay.on { display: block; }
+
+        /* ============================================
+           RESPONSIVE
+           ============================================ */
+        @media (max-width: 768px) {
+            html, body { overflow: auto; }
+
+            .dashboard { flex-direction: column; height: auto; min-height: 100vh; }
+
+            .sidebar {
+                position: fixed;
+                top: 0; left: 0;
+                height: 100vh;
+                z-index: 1000;
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+                width: 300px;
+                max-width: 85vw;
+            }
+            .sidebar.open { transform: translateX(0); }
+
+            .menu-btn { display: block; }
+
+            .main-panel { min-height: 100vh; }
+
+            .main-body { padding: 0.75rem; }
+
+            .row { flex-direction: column; }
+
+            .upload-card, .goal-card { min-width: auto; }
+
+            .main-head { padding: 0.6rem 0.9rem; }
+            .main-head h1 { font-size: 1.1rem; }
+            .pills { display: none; }
+        }
+
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .sidebar { width: 280px; min-width: 260px; }
+            .pills { display: none; }
+        }
+
+        @media (max-height: 650px) and (min-width: 769px) {
+            .sidebar-body { padding: 0.5rem 0.8rem; gap: 0.5rem; }
+            .sb-section { padding: 0.5rem; }
+            .main-body { padding: 0.6rem 1rem; gap: 0.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <!-- SIDEBAR OVERLAY (mobile) -->
+        <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+        <!-- LEFT SIDEBAR -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-brand">⚙️ Settings</div>
+                <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn" title="Toggle theme">🌙</button>
+            </div>
+
+            <div class="sidebar-body">
+                <!-- Provider -->
+                <div class="sb-section">
+                    <h3>🤖 AI Provider</h3>
+                    <div class="provider-btns">
+                        <div class="prov-btn active" data-p="gemini" onclick="selectProvider('gemini')">
+                            <h4>✨ Google Gemini 3 Flash</h4>
+                            <p>FREE — 60 req/min · 1M tokens/min</p>
+                        </div>
+                        <div class="prov-btn" data-p="deepseek" onclick="selectProvider('deepseek')">
+                            <h4>🔍 DeepSeek</h4>
+                            <p>OpenAI-compatible API</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- API Key: Gemini -->
+                <div class="sb-section" id="secGemini">
+                    <h3>🔑 Gemini API Key (FREE)</h3>
+                    <p class="api-link">Get from <a href="https://aistudio.google.com/app/apikey" target="_blank">Google AI Studio</a></p>
+                    <div class="key-row">
+                        <input type="password" id="keyGemini" placeholder="Paste API key...">
+                        <button onclick="saveKey('gemini')">Save</button>
+                    </div>
+                    <span class="api-badge no" id="badgeGemini">⚪ Not configured</span>
+                </div>
+
+                <!-- API Key: DeepSeek -->
+                <div class="sb-section" id="secDeepseek" style="display:none;">
+                    <h3>🔑 DeepSeek API Key</h3>
+                    <p class="api-link">Get from <a href="https://platform.deepseek.com/api_keys" target="_blank">DeepSeek Platform</a></p>
+                    <div class="key-row">
+                        <input type="password" id="keyDeepseek" placeholder="Paste API key...">
+                        <button onclick="saveKey('deepseek')">Save</button>
+                    </div>
+                    <span class="api-badge no" id="badgeDeepseek">⚪ Not configured</span>
+                </div>
+
+                <!-- Language -->
+                <div class="sb-section">
+                    <h3>🌐 Prompt Language</h3>
+                    <div class="lang-row">
+                        <button class="lang-btn active" data-l="en" onclick="selectLang('en')">🇬🇧 English</button>
+                        <button class="lang-btn" data-l="zh" onclick="selectLang('zh')">🇨🇳 中文</button>
+                    </div>
+                </div>
+
+                <!-- Prompt Style -->
+                <div class="sb-section">
+                    <h3>📋 Prompt Style</h3>
+                    <select class="sb-select" id="promptStyle">
+                        <option value="structured">Structured (Role + Context + Task)</option>
+                        <option value="cot">Chain-of-Thought (Step-by-Step)</option>
+                        <option value="few-shot">Few-Shot (with Examples)</option>
+                        <option value="system">System Prompt (for API use)</option>
+                        <option value="simple">Simple & Direct</option>
+                    </select>
+                    <label class="sb-check"><input type="checkbox" id="optCoT" checked> Include Chain-of-Thought</label>
+                    <label class="sb-check"><input type="checkbox" id="optExamples"> Include Examples</label>
+                    <label class="sb-check"><input type="checkbox" id="optConstraints" checked> Include Constraints</label>
+                    <label class="sb-check"><input type="checkbox" id="optFormat" checked> Specify Output Format</label>
+                </div>
+
+                <!-- Usage -->
+                <div class="sb-section">
+                    <h3>📊 Usage Monitor <button class="reset-btn" onclick="resetUsage()">Reset</button></h3>
+                    <div class="usage-grid">
+                        <div class="usage-cell">
+                            <div class="usage-label">Requests</div>
+                            <div class="usage-val" id="uReqs">0</div>
+                        </div>
+                        <div class="usage-cell">
+                            <div class="usage-label">Tokens</div>
+                            <div class="usage-val" id="uTokens">0</div>
+                        </div>
+                    </div>
+                    <div class="prog-wrap">
+                        <div class="prog-top"><span>Daily</span><span id="uDailyTxt">0 / 1,500</span></div>
+                        <div class="prog-track"><div class="prog-fill" id="uDailyBar" style="width:0%"></div></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar-foot">
+                <span class="free-tag">🆓 100% FREE</span>
+            </div>
+        </aside>
+
+        <!-- MAIN PANEL -->
+        <main class="main-panel">
+            <header class="main-head">
+                <div style="display:flex;align-items:center;gap:0.6rem;">
+                    <button class="menu-btn" onclick="openSidebar()">☰</button>
+                    <div>
+                        <h1>🧠 Prompt Engineer</h1>
+                        <p>Upload files → Describe goal → Generate scientific prompts</p>
+                    </div>
+                </div>
+                <div class="pills">
+                    <span class="pill">📎 File Context</span>
+                    <span class="pill">🧪 Scientific</span>
+                    <span class="pill">🌐 Bilingual</span>
+                    <span class="pill">⚡ Fast</span>
+                </div>
+            </header>
+
+            <div class="main-body">
+                <div class="row">
+                    <!-- Upload -->
+                    <div class="card upload-card">
+                        <div class="card-label">📤 Upload Context Files</div>
+                        <div class="drop-zone" id="dropZone" tabindex="0">
+                            <div class="icon">📁</div>
+                            <h3>Drop files, click, or paste</h3>
+                            <p>PNG, JPG, PDF, TXT, MD, Code files</p>
+                            <div class="paste-tip">💡 <kbd>Ctrl</kbd>+<kbd>V</kbd> or <kbd>⌘</kbd>+<kbd>V</kbd> to paste screenshots</div>
+                            <input type="file" id="fileInput" class="file-input" multiple
+                                   accept=".png,.jpg,.jpeg,.gif,.webp,.pdf,.txt,.md,.py,.js,.ts,.html,.css,.json,.csv,.xml,.yaml,.yml,.java,.cpp,.c,.go,.rs,.rb,.r,.m,image/*">
+                        </div>
+                        <div class="flist" id="fileList"></div>
+                    </div>
+
+                    <!-- Goal -->
+                    <div class="card goal-card">
+                        <div class="card-label">🎯 Describe Your Goal</div>
+                        <textarea class="goal-area" id="goalInput" 
+                            placeholder="Describe what you want the AI to do with your files.&#10;&#10;Examples:&#10;• &quot;Analyze this research paper and write a literature review&quot;&#10;• &quot;Based on this code, generate unit tests&quot;&#10;• &quot;Summarize this document in 3 bullet points&quot;&#10;• &quot;根据这篇论文，生成一份详细的综述报告&quot;"></textarea>
+                        <div class="goal-opts">
+                            <select id="targetAI">
+                                <option value="general">Target: General AI</option>
+                                <option value="chatgpt">Target: ChatGPT</option>
+                                <option value="claude">Target: Claude</option>
+                                <option value="gemini">Target: Gemini</option>
+                                <option value="deepseek">Target: DeepSeek</option>
+                            </select>
+                            <select id="complexity">
+                                <option value="auto">Complexity: Auto</option>
+                                <option value="simple">Simple</option>
+                                <option value="medium">Medium</option>
+                                <option value="detailed">Detailed</option>
+                                <option value="expert">Expert</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="actions">
+                    <button class="btn btn-go" id="genBtn" onclick="generatePrompt()" disabled>
+                        <span id="genTxt">🚀 Generate Prompt</span>
+                    </button>
+                    <button class="btn btn-alt" onclick="clearAll()">🗑️ Clear All</button>
+                </div>
+
+                <!-- Progress -->
+                <div class="progress-bar-section" id="progSec">
+                    <div class="pb-head">
+                        <span id="progStatus">Processing...</span>
+                        <span id="progPct">0%</span>
+                    </div>
+                    <div class="pb-track"><div class="pb-fill" id="progFill"></div></div>
+                </div>
+
+                <!-- Results -->
+                <div class="results" id="resSec">
+                    <div class="res-head">
+                        <div class="res-title">📋 Generated Prompt</div>
+                        <div class="res-stats">
+                            <span><strong id="sChars">0</strong> chars</span>
+                            <span><strong id="sTime">0s</strong></span>
+                        </div>
+                    </div>
+                    <div class="tabs">
+                        <button class="tab on" onclick="switchTab('code')">📝 Code</button>
+                        <button class="tab" onclick="switchTab('preview')">👁️ Preview</button>
+                    </div>
+                    <div class="tab-pane on" id="paneCode">
+                        <div class="out-wrap">
+                            <button class="copy-float" onclick="copyResult()">📋 Copy</button>
+                            <div class="out-area"><pre class="code-out" id="codeOut"></pre></div>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="panePreview">
+                        <div class="out-area preview-out" id="previewOut"></div>
+                    </div>
+                    <div class="res-foot">
+                        <button class="btn btn-go" onclick="downloadResult()">💾 Download</button>
+                        <button class="btn btn-alt" onclick="copyResult()">📋 Copy</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Context Menu -->
+    <div class="ctx-menu" id="ctxMenu">
+        <div class="ctx-item" onclick="pasteClip()">📋 Paste Image</div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <script>
+        /* ============================================
+           STATE
+           ============================================ */
+        let files = [];
+        let provider = 'gemini';
+        let lang = 'en';
+        let resultText = '';
+        let keys = {
+            gemini: localStorage.getItem('pe_key_gemini') || '',
+            deepseek: localStorage.getItem('pe_key_deepseek') || ''
+        };
+        let theme = localStorage.getItem('pe_theme') || 'auto';
+        let usage = JSON.parse(localStorage.getItem('pe_usage') || '{"reqs":0,"tokens":0,"date":""}');
+
+        const GEMINI = { model: 'gemini-3-flash-preview', url: 'https://generativelanguage.googleapis.com/v1beta' };
+        const DEEPSEEK = { model: 'deepseek-chat', url: 'https://api.deepseek.com/v1' };
+        const LIMITS = { gemini: 1500, deepseek: 500 };
+
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+        const $ = id => document.getElementById(id);
+
+        /* ============================================
+           INIT
+           ============================================ */
+        document.addEventListener('DOMContentLoaded', () => {
+            if (keys.gemini) { $('keyGemini').value = keys.gemini; badge('gemini', true); }
+            if (keys.deepseek) { $('keyDeepseek').value = keys.deepseek; badge('deepseek', true); }
+            initTheme();
+            checkDate();
+            updateUsageUI();
+            updateGenBtn();
+        });
+
+        /* ============================================
+           THEME
+           ============================================ */
+        function initTheme() {
+            const saved = localStorage.getItem('pe_theme');
+            if (saved === 'dark') setTheme('dark');
+            else if (saved === 'light') setTheme('light');
+            else setTheme(window.matchMedia('(prefers-color-scheme:dark)').matches ? 'dark' : 'light');
+            window.matchMedia('(prefers-color-scheme:dark)').addEventListener('change', e => {
+                if (!localStorage.getItem('pe_theme')) setTheme(e.matches ? 'dark' : 'light');
+            });
+        }
+        function setTheme(t) {
+            theme = t;
+            document.documentElement.setAttribute('data-theme', t);
+            $('themeBtn').textContent = t === 'dark' ? '☀️' : '🌙';
+        }
+        function toggleTheme() {
+            const t = theme === 'dark' ? 'light' : 'dark';
+            setTheme(t);
+            localStorage.setItem('pe_theme', t);
+            toast(`${t === 'dark' ? '🌙 Dark' : '☀️ Light'} mode`);
+        }
+
+        /* ============================================
+           MOBILE SIDEBAR
+           ============================================ */
+        function openSidebar() { $('sidebar').classList.add('open'); $('sidebarOverlay').classList.add('on'); }
+        function closeSidebar() { $('sidebar').classList.remove('open'); $('sidebarOverlay').classList.remove('on'); }
+
+        /* ============================================
+           PROVIDER / KEY / LANG
+           ============================================ */
+        function selectProvider(p) {
+            provider = p;
+            document.querySelectorAll('.prov-btn').forEach(b => b.classList.toggle('active', b.dataset.p === p));
+            $('secGemini').style.display = p === 'gemini' ? '' : 'none';
+            $('secDeepseek').style.display = p === 'deepseek' ? '' : 'none';
+            updateGenBtn();
+            updateUsageUI();
+        }
+
+        function saveKey(p) {
+            const v = $(p === 'gemini' ? 'keyGemini' : 'keyDeepseek').value.trim();
+            keys[p] = v;
+            if (v) { localStorage.setItem('pe_key_' + p, v); badge(p, true); toast('✅ Key saved!'); }
+            else { localStorage.removeItem('pe_key_' + p); badge(p, false); }
+            updateGenBtn();
+        }
+
+        function badge(p, ok) {
+            const el = $('badge' + p.charAt(0).toUpperCase() + p.slice(1));
+            el.className = 'api-badge ' + (ok ? 'ok' : 'no');
+            el.textContent = ok ? '🟢 Ready' : '⚪ Not configured';
+        }
+
+        function selectLang(l) {
+            lang = l;
+            document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.dataset.l === l));
+        }
+
+        function getKey() { return keys[provider]; }
+
+        function updateGenBtn() {
+            const ok = getKey() && ($('goalInput').value.trim() || files.length > 0);
+            $('genBtn').disabled = !ok;
+            $('genTxt').textContent = !getKey() ? '🔑 Enter API Key First' : '🚀 Generate Prompt';
+        }
+
+        /* ============================================
+           USAGE
+           ============================================ */
+        function checkDate() {
+            const today = new Date().toDateString();
+            if (usage.date !== today) { usage = { reqs: 0, tokens: 0, date: today }; saveUsage(); }
+        }
+        function saveUsage() { localStorage.setItem('pe_usage', JSON.stringify(usage)); }
+        function recordUse(pt, rt) {
+            usage.reqs++;
+            usage.tokens += pt + rt;
+            saveUsage();
+            updateUsageUI();
+        }
+        function updateUsageUI() {
+            checkDate();
+            $('uReqs').textContent = usage.reqs;
+            $('uTokens').textContent = usage.tokens > 1000 ? (usage.tokens/1000).toFixed(1) + 'K' : usage.tokens;
+            const lim = LIMITS[provider];
+            const pct = Math.min((usage.reqs / lim) * 100, 100);
+            $('uDailyBar').style.width = pct + '%';
+            $('uDailyBar').className = 'prog-fill' + (pct >= 90 ? ' danger' : pct >= 70 ? ' warn' : '');
+            $('uDailyTxt').textContent = `${usage.reqs} / ${lim.toLocaleString()}`;
+        }
+        function resetUsage() {
+            if (!confirm('Reset usage stats?')) return;
+            usage = { reqs: 0, tokens: 0, date: new Date().toDateString() };
+            saveUsage(); updateUsageUI(); toast('Stats reset!');
+        }
+
+        /* ============================================
+           FILE HANDLING
+           ============================================ */
+        const dropZone = $('dropZone');
+        const fileInput = $('fileInput');
+
+        dropZone.addEventListener('click', () => fileInput.click());
+        dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('over'); });
+        dropZone.addEventListener('dragleave', () => dropZone.classList.remove('over'));
+        dropZone.addEventListener('drop', e => { e.preventDefault(); dropZone.classList.remove('over'); addFiles(Array.from(e.dataTransfer.files)); });
+        fileInput.addEventListener('change', e => addFiles(Array.from(e.target.files)));
+
+        document.addEventListener('paste', e => {
+            const items = e.clipboardData?.items;
+            if (!items) return;
+            for (const item of items) {
+                if (item.type.startsWith('image/')) {
+                    e.preventDefault();
+                    const blob = item.getAsFile();
+                    if (blob) {
+                        addFiles([new File([blob], `screenshot-${Date.now()}.png`, { type: blob.type })]);
+                        toast('📷 Screenshot pasted!');
+                    }
+                    return;
+                }
+            }
+        });
+
+        document.addEventListener('contextmenu', e => {
+            e.preventDefault();
+            const m = $('ctxMenu');
+            m.style.left = e.clientX + 'px';
+            m.style.top = e.clientY + 'px';
+            m.classList.add('show');
+        });
+        document.addEventListener('click', () => $('ctxMenu').classList.remove('show'));
+
+        async function pasteClip() {
+            try {
+                const items = await navigator.clipboard.read();
+                for (const item of items) {
+                    for (const type of item.types) {
+                        if (type.startsWith('image/')) {
+                            const blob = await item.getType(type);
+                            addFiles([new File([blob], `screenshot-${Date.now()}.png`, { type: blob.type })]);
+                            toast('📷 Pasted!');
+                            return;
+                        }
+                    }
+                }
+                toast('No image found', true);
+            } catch { toast('Try Ctrl+V', true); }
+        }
+
+        function addFiles(newF) {
+            const exts = ['png','jpg','jpeg','gif','webp','pdf','txt','md','py','js','ts','html','css','json','csv','xml','yaml','yml','java','cpp','c','go','rs','rb','r','m','tex','docx'];
+            newF.forEach(f => {
+                const ext = f.name.split('.').pop().toLowerCase();
+                const isImg = f.type.startsWith('image/');
+                if (isImg || exts.includes(ext)) {
+                    let type = 'text';
+                    if (isImg) type = 'image';
+                    else if (ext === 'pdf') type = 'pdf';
+                    files.push({ file: f, name: f.name, size: f.size, type, status: 'ready', preview: isImg ? URL.createObjectURL(f) : null });
+                }
+            });
+            renderFiles();
+            updateGenBtn();
+        }
+
+        function renderFiles() {
+            $('fileList').innerHTML = files.map((f, i) => `
+                <div class="fitem">
+                    ${f.preview ? `<img src="${f.preview}" class="fitem-thumb">` : `<span class="fitem-icon">${f.type==='pdf'?'📄':f.type==='image'?'🖼️':'📝'}</span>`}
+                    <div class="fitem-info">
+                        <div class="fitem-name">${f.name.length > 28 ? f.name.slice(0,25)+'...' : f.name}</div>
+                        <div class="fitem-size">${fmtSize(f.size)}</div>
+                    </div>
+                    <span class="fitem-tag tag-${f.status === 'ready' ? 'ok' : f.status === 'error' ? 'err' : 'wait'}">${f.status}</span>
+                    <button class="fitem-del" onclick="removeFile(${i})">✕</button>
+                </div>
+            `).join('');
+        }
+
+        function fmtSize(b) {
+            if (b < 1024) return b + ' B';
+            if (b < 1048576) return (b/1024).toFixed(1) + ' KB';
+            return (b/1048576).toFixed(1) + ' MB';
+        }
+
+        function removeFile(i) {
+            if (files[i].preview) URL.revokeObjectURL(files[i].preview);
+            files.splice(i, 1);
+            renderFiles();
+            updateGenBtn();
+        }
+
+        function clearAll() {
+            files.forEach(f => { if (f.preview) URL.revokeObjectURL(f.preview); });
+            files = [];
+            resultText = '';
+            $('goalInput').value = '';
+            renderFiles();
+            updateGenBtn();
+            $('resSec').classList.remove('on');
+            $('progSec').classList.remove('on');
+        }
+
+        $('goalInput').addEventListener('input', updateGenBtn);
+
+        /* ============================================
+           READ FILES AS TEXT / BASE64
+           ============================================ */
+        function readAsText(file) {
+            return new Promise((res, rej) => {
+                const r = new FileReader();
+                r.onload = () => res(r.result);
+                r.onerror = rej;
+                r.readAsText(file);
+            });
+        }
+
+        function readAsBase64(file) {
+            return new Promise((res, rej) => {
+                const r = new FileReader();
+                r.onload = () => res(r.result.split(',')[1]);
+                r.onerror = rej;
+                r.readAsDataURL(file);
+            });
+        }
+
+        async function extractPdfText(file) {
+            const buf = await file.arrayBuffer();
+            const pdf = await pdfjsLib.getDocument(buf).promise;
+            let text = '';
+            for (let i = 1; i <= Math.min(pdf.numPages, 10); i++) {
+                const page = await pdf.getPage(i);
+                const content = await page.getTextContent();
+                text += content.items.map(it => it.str).join(' ') + '\n\n';
+            }
+            return text.trim();
+        }
+
+        /* ============================================
+           GENERATE PROMPT
+           ============================================ */
+        async function generatePrompt() {
+            const goal = $('goalInput').value.trim();
+            const key = getKey();
+            if (!key) return toast('Enter API key first', true);
+            if (!goal && files.length === 0) return toast('Enter a goal or upload files', true);
+
+            $('genBtn').disabled = true;
+            $('genTxt').innerHTML = '<span class="spinner"></span> Generating...';
+            $('progSec').classList.add('on');
+            $('resSec').classList.remove('on');
+
+            const t0 = Date.now();
+
+            try {
+                // 1. Gather file context
+                updateProg(20, 'Reading files...');
+                let fileContexts = [];
+                let imageFiles = [];
+
+                for (const f of files) {
+                    try {
+                        if (f.type === 'text') {
+                            const txt = await readAsText(f.file);
+                            fileContexts.push(`--- File: ${f.name} ---\n${txt.slice(0, 8000)}`);
+                        } else if (f.type === 'pdf') {
+                            const txt = await extractPdfText(f.file);
+                            fileContexts.push(`--- File: ${f.name} (PDF) ---\n${txt.slice(0, 8000)}`);
+                        } else if (f.type === 'image') {
+                            const b64 = await readAsBase64(f.file);
+                            imageFiles.push({ name: f.name, b64, mime: f.file.type });
+                        }
+                    } catch (e) {
+                        fileContexts.push(`--- File: ${f.name} ---\n[Could not read: ${e.message}]`);
+                    }
+                }
+
+                updateProg(40, 'Building meta-prompt...');
+                const metaPrompt = buildMetaPrompt(goal, fileContexts, imageFiles);
+
+                updateProg(60, 'Calling AI...');
+
+                let result;
+                if (provider === 'gemini') {
+                    result = await callGemini(metaPrompt, imageFiles, key);
+                } else {
+                    result = await callDeepseek(metaPrompt, imageFiles, key);
+                }
+
+                updateProg(100, 'Done!');
+                resultText = cleanOutput(result);
+                const elapsed = ((Date.now() - t0) / 1000).toFixed(1);
+                showResult(elapsed);
+                toast(`✅ Generated in ${elapsed}s!`);
+
+            } catch (err) {
+                toast('Error: ' + err.message, true);
+                console.error(err);
+            }
+
+            $('genTxt').textContent = '🚀 Generate Prompt';
+            $('genBtn').disabled = false;
+        }
+
+        /* ============================================
+           BUILD META-PROMPT
+           ============================================ */
+        function buildMetaPrompt(goal, fileContexts, imageFiles) {
+            const style = $('promptStyle').value;
+            const cot = $('optCoT').checked;
+            const examples = $('optExamples').checked;
+            const constraints = $('optConstraints').checked;
+            const outputFmt = $('optFormat').checked;
+            const target = $('targetAI').value;
+            const complexity = $('complexity').value;
+            const isZh = lang === 'zh';
+
+            const langInstr = isZh
+                ? '请用中文生成提示词。所有内容必须是中文。'
+                : 'Generate the prompt in English.';
+
+            const styleGuide = {
+                structured: isZh
+                    ? '使用结构化格式：# 角色、# 背景/上下文、# 任务、# 约束条件、# 输出格式、# 示例（如适用）。每个部分都要详细展开。'
+                    : 'Use structured format with clear sections: # Role, # Context, # Task, # Constraints, # Output Format, # Examples (if applicable). Expand each section with full detail.',
+                cot: isZh
+                    ? '使用链式思考(Chain-of-Thought)格式，引导AI逐步推理。包含"让我们一步步思考"的指令，并提供推理框架。'
+                    : 'Use Chain-of-Thought format. Guide the AI to reason step-by-step. Include "Let\'s think step by step" instruction and provide a reasoning framework.',
+                'few-shot': isZh
+                    ? '使用少样本(Few-Shot)提示格式。提供2-3个输入输出示例对，然后给出实际任务。'
+                    : 'Use Few-Shot prompting format. Provide 2-3 input-output example pairs, then present the actual task.',
+                system: isZh
+                    ? '生成一个适合作为系统提示词(System Prompt)的内容，适用于API调用。定义AI的身份、能力边界、行为准则和响应格式。'
+                    : 'Generate content suitable as a System Prompt for API use. Define the AI\'s identity, capability boundaries, behavioral guidelines, and response format.',
+                simple: isZh
+                    ? '生成简洁直接的提示词，保持清晰但不过于复杂。'
+                    : 'Generate a concise, direct prompt. Keep it clear but not overly complex.'
+            }[style];
+
+            const complexGuide = {
+                simple: isZh ? '保持简短，200-400字。' : 'Keep it brief, 200-400 words.',
+                medium: isZh ? '中等详细度，400-800字。' : 'Medium detail, 400-800 words.',
+                detailed: isZh ? '非常详细，800-1500字，涵盖边界情况。' : 'Very detailed, 800-1500 words, covering edge cases.',
+                expert: isZh ? '专家级，1500字以上，包含完整的推理框架、评估标准和错误处理。' : 'Expert-level, 1500+ words with complete reasoning frameworks, evaluation criteria, and error handling.',
+                auto: isZh ? '根据任务复杂度自动决定详细程度。' : 'Automatically decide detail level based on task complexity.'
+            }[complexity];
+
+            let optionalSections = [];
+            if (cot) optionalSections.push(isZh ? '- 包含逐步推理指引（Chain-of-Thought）' : '- Include step-by-step reasoning guidance (Chain-of-Thought)');
+            if (examples) optionalSections.push(isZh ? '- 包含具体的输入输出示例' : '- Include concrete input/output examples');
+            if (constraints) optionalSections.push(isZh ? '- 包含明确的约束条件和限制' : '- Include explicit constraints and limitations');
+            if (outputFmt) optionalSections.push(isZh ? '- 指定详细的输出格式要求' : '- Specify detailed output format requirements');
+
+            const targetNote = target !== 'general'
+                ? (isZh ? `提示词的目标AI是 ${target}，请根据该AI的特点优化提示词。` : `The target AI is ${target}. Optimize the prompt for this specific AI's strengths.`)
+                : '';
+
+            const fileNote = fileContexts.length > 0
+                ? (isZh
+                    ? `\n\n以下是用户提供的参考文件内容，请基于这些内容生成提示词：\n\n${fileContexts.join('\n\n')}`
+                    : `\n\nBelow are the user's reference files. Generate the prompt based on this content:\n\n${fileContexts.join('\n\n')}`)
+                : '';
+
+            const imageNote = imageFiles.length > 0
+                ? (isZh
+                    ? `\n\n用户还上传了 ${imageFiles.length} 张图片（${imageFiles.map(f=>f.name).join(', ')}）。请在提示词中合理引用这些视觉内容。`
+                    : `\n\nThe user also uploaded ${imageFiles.length} image(s) (${imageFiles.map(f=>f.name).join(', ')}). Reference this visual content in the prompt appropriately.`)
+                : '';
+
+            return `You are a world-class Prompt Engineering expert. Your task is to generate a comprehensive, scientifically-structured AI prompt based on the user's goal and provided context.
+
+${langInstr}
+
+## User's Goal
+${goal || (isZh ? '（用户未提供明确目标，请基于上传的文件内容推断合理的任务目标）' : '(No explicit goal provided. Infer a reasonable task goal from the uploaded file content.)')}
+
+## Prompt Style
+${styleGuide}
+
+## Complexity Level
+${complexGuide}
+
+## Required Elements
+${optionalSections.join('\n')}
+
+${targetNote}
+
+## Prompt Engineering Best Practices to Apply
+1. Be specific and unambiguous — avoid vague instructions
+2. Define the AI's role/persona clearly with domain expertise
+3. Provide sufficient context for the AI to understand the task
+4. Break complex tasks into subtasks or steps
+5. Specify the desired output format, length, and structure
+6. Include quality criteria and evaluation standards
+7. Anticipate edge cases and provide handling instructions
+8. Use delimiters (XML tags, markdown headers) to organize sections
+9. If applicable, include negative examples (what NOT to do)
+10. End with a clear call-to-action
+${fileNote}
+${imageNote}
+
+## CRITICAL INSTRUCTIONS
+- Output ONLY the generated prompt itself. No meta-commentary, no explanations about what you did.
+- Do NOT wrap the output in code blocks or quotes.
+- The prompt must be immediately usable — copy-paste ready.
+- Make the prompt comprehensive, professional, and scientifically rigorous.
+- ${isZh ? '输出必须全部使用中文，包括所有标题、说明和示例。' : 'Output must be entirely in English.'}`;
+        }
+
+        /* ============================================
+           API CALLS
+           ============================================ */
+        async function callGemini(prompt, images, key) {
+            const parts = [];
+
+            // Add images first
+            for (const img of images) {
+                parts.push({ inline_data: { mime_type: img.mime, data: img.b64 } });
+            }
+            parts.push({ text: prompt });
+
+            const url = `${GEMINI.url}/models/${GEMINI.model}:generateContent?key=${key}`;
+            const res = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    contents: [{ parts }],
+                    generationConfig: { maxOutputTokens: 64000, temperature: 0.4, topP: 0.95 }
+                })
+            });
+
+            if (!res.ok) {
+                const err = await res.json();
+                throw new Error(err.error?.message || 'Gemini API error');
+            }
+
+            const data = await res.json();
+            let text = '';
+            if (data.candidates?.[0]?.content?.parts) {
+                for (const p of data.candidates[0].content.parts) {
+                    if (p.text && !p.thought) text += p.text;
+                }
+            }
+
+            const pt = data.usageMetadata?.promptTokenCount || 500;
+            const rt = data.usageMetadata?.candidatesTokenCount || 500;
+            recordUse(pt, rt);
+
+            return text;
+        }
+
+        async function callDeepseek(prompt, images, key) {
+            const content = [];
+            for (const img of images) {
+                content.push({ type: 'image_url', image_url: { url: `data:${img.mime};base64,${img.b64}` } });
+            }
+            content.push({ type: 'text', text: prompt });
+
+            const res = await fetch(`${DEEPSEEK.url}/chat/completions`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${key}` },
+                body: JSON.stringify({
+                    model: DEEPSEEK.model,
+                    messages: [{ role: 'user', content: images.length > 0 ? content : prompt }],
+                    max_tokens: 8192,
+                    temperature: 0.4
+                })
+            });
+
+            if (!res.ok) {
+                const err = await res.json();
+                throw new Error(err.error?.message || 'DeepSeek API error');
+            }
+
+            const data = await res.json();
+            const pt = data.usage?.prompt_tokens || 500;
+            const rt = data.usage?.completion_tokens || 500;
+            recordUse(pt, rt);
+
+            return data.choices?.[0]?.message?.content || '';
+        }
+
+        /* ============================================
+           OUTPUT
+           ============================================ */
+        function cleanOutput(t) {
+            return t.replace(/^```[a-z]*\n?/gi, '').replace(/\n?```$/gi, '').trim();
+        }
+
+        function updateProg(pct, status) {
+            $('progStatus').textContent = status;
+            $('progPct').textContent = pct + '%';
+            $('progFill').style.width = pct + '%';
+        }
+
+        function showResult(elapsed) {
+            $('resSec').classList.add('on');
+            $('sChars').textContent = resultText.length.toLocaleString();
+            $('sTime').textContent = elapsed + 's';
+            $('codeOut').textContent = resultText;
+
+            try { $('previewOut').innerHTML = marked.parse(resultText); }
+            catch { $('previewOut').innerHTML = `<pre>${escHtml(resultText)}</pre>`; }
+        }
+
+        function escHtml(t) {
+            const d = document.createElement('div');
+            d.textContent = t;
+            return d.innerHTML;
+        }
+
+        function switchTab(tab) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('on'));
+            document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('on'));
+            document.querySelector(`.tab:nth-child(${tab === 'code' ? 1 : 2})`).classList.add('on');
+            $(tab === 'code' ? 'paneCode' : 'panePreview').classList.add('on');
+        }
+
+        function copyResult() {
+            navigator.clipboard.writeText(resultText)
+                .then(() => toast('📋 Copied!'))
+                .catch(() => toast('Copy failed', true));
+        }
+
+        function downloadResult() {
+            const blob = new Blob([resultText], { type: 'text/plain;charset=utf-8' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `prompt-${lang}-${Date.now()}.md`;
+            a.click();
+            URL.revokeObjectURL(a.href);
+            toast('💾 Downloaded!');
+        }
+
+        function toast(msg, err = false) {
+            const t = $('toast');
+            t.textContent = msg;
+            t.className = 'toast' + (err ? ' err' : '');
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 3000);
+        }
+    </script>
+</body>
+</html>
