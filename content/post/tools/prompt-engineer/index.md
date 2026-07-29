@@ -11,8 +11,6 @@ tags:
     - Gemini
 categories:
     - Tools
-image: cover.png
-weight: 1
 math: true
 draft: false
 ---
